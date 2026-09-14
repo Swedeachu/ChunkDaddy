@@ -1,0 +1,21 @@
+name: Build and smoke test
+on:
+  push:
+  pull_request:
+  workflow_dispatch:
+jobs:
+  build:
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [windows-2022, ubuntu-24.04]
+    runs-on: ${{ matrix.os }}
+    steps:
+      - uses: actions/checkout@v4
+      - name: Windows setup, build and tests
+        if: runner.os == 'Windows'
+        shell: cmd
+        run: setup.cmd
+      - name: Linux setup, build and tests
+        if: runner.os == 'Linux'
+        run: bash setup.sh

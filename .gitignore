@@ -1,0 +1,26 @@
+# Build output
+build/
+out/
+cmake-build-*/
+.gradle/
+worker/build/
+worker/.gradle/
+
+# IDE
+.idea/
+.vs/
+.vscode/
+*.user
+CMakeUserPresets.json
+__pycache__/
+*.pyc
+
+# Local caches / staging
+/local/
+/third_party/chunker/
+*.chunkdaddy-workspace/
+
+# Test worlds and large fixtures are not distributed
+tests/fixtures/worlds/
+tests/fixtures/schematics/*.schem
+!tests/fixtures/schematics/tiny-*.schem

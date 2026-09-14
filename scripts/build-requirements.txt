@@ -1,0 +1,3 @@
+aqtinstall==3.3.0
+cmake==3.31.6
+ninja==1.11.1.3
