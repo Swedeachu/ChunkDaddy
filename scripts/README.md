@@ -12,6 +12,22 @@ Run from this folder:
 | Windows x64 | Double-click `build-windows.bat` | `build-windows.bat -Run` |
 | Linux | `bash build-linux.sh` | `bash build-linux.sh --run` |
 
+## Release archives
+
+When you are ready to publish, these build and then write exactly one archive per
+platform. That file is the entire GitHub release asset; nothing else needs uploading.
+
+| Platform | Command | Produces |
+| --- | --- | --- |
+| Windows x64 | Double-click `release-windows.bat` | `../dist/ChunkDaddy-<version>-windows-x64.zip` |
+| Linux | `bash release-linux.sh` | `../dist/ChunkDaddy-<version>-linux-<arch>.zip` |
+
+The archive holds the app, the conversion worker, a bundled Java runtime, the Qt runtime
+and the licences, and nothing from the build tree. The version comes from the `project()`
+declaration in `CMakeLists.txt`; pass `--version 1.2.0` to override it for a one-off.
+Linux bundles Qt when it can and falls back to requiring system Qt if that bundle does
+not verify, which the archive's `README.txt` then says. `--system-qt` forces the fallback.
+
 The launchers find the repository relative to their own location, so the current
 working directory does not matter. Windows needs no preinstalled Python or developer
 terminal. Missing Visual Studio tools can require administrator approval; Linux

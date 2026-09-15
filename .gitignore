@@ -15,6 +15,9 @@ CMakeUserPresets.json
 __pycache__/
 *.pyc
 
+# Release archives are uploaded to GitHub, never committed
+dist/
+
 # Local caches / staging
 /local/
 /worker/local/

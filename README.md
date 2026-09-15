@@ -62,17 +62,25 @@ approval if Visual Studio C++ Build Tools are missing. Git for Windows is requir
 Launch `build/windows-release/chunkdaddy.exe` or `build/linux-release/chunkdaddy`.
 See [`docs/BuildAndRun.md`](docs/BuildAndRun.md) for prerequisites, manual builds and troubleshooting.
 
+## Releasing
+
+Double-click `scripts\release-windows.bat`, or run `bash scripts/release-linux.sh`. Each
+builds and then writes exactly one archive into `dist/`, and that file is the whole GitHub
+release asset for its platform: the app, the conversion worker, a bundled Java runtime, the
+Qt runtime and the licences, with nothing from the build tree.
+
 ## Compatibility
 
 Exports load in the vanilla Bedrock client and in Bedrock Dedicated Server. The one thing
-to get right is the **target profile**, which decides the version stamped into
-`level.dat`.
+to get right is the **target profile**, which decides the version stamped into `level.dat`.
 
 Bedrock writes `MinimumCompatibleClientVersion` into every world. A client older than that
-value refuses to open the world with *"a newer version of the game saved this world"* —
-the world is fine, the client is simply older than the profile it was written for. So pick
-a profile at or below the oldest client and server build you intend to load it with, not
-the newest profile available. `docs/TargetProfiles.md` lists what each profile stamps.
+value refuses to open it with *"a newer version of the game saved this world"* - the world
+is fine, the client is simply older than the profile it was written for. So pick a profile
+at or below the oldest client and server build you intend to load it with, not the newest
+profile available. The export dialog lets you change it and re-export without rebuilding
+the composition. [`docs/TargetProfiles.md`](docs/TargetProfiles.md) lists what each profile
+stamps.
 
 Project saving (`.chunkdaddy` files) is specified in the design guide but not implemented
 in this build. Exporting writes a manifest that records template hashes, instance
@@ -83,4 +91,5 @@ exported world.
 
 ChunkDaddy is MIT licensed; see [`LICENSE`](LICENSE). It builds Chunker (MIT) into its
 conversion worker and links Qt 6 (LGPLv3) dynamically. What has to ship with a binary
-build is spelled out in [`third_party/NOTICES.md`](third_party/NOTICES.md).
+build is spelled out in [`third_party/NOTICES.md`](third_party/NOTICES.md), and the release
+scripts put all of it in the archive's `LICENSES/` folder.
