@@ -24,7 +24,8 @@ public final class ConversionReport {
     public static String render(WorldDocument document,
                                 TemplateRegistry templates,
                                 WorldConverter converter,
-                                List<String> warnings) {
+                                List<String> warnings,
+                                LevelDataPreserver.Result preserved) {
         StringBuilder out = new StringBuilder();
         out.append("ChunkDaddy conversion report\n");
         out.append("============================\n\n");
@@ -32,6 +33,29 @@ public final class ConversionReport {
         out.append("Document revision: ").append(document.revision()).append('\n');
         out.append("Target profile: ").append(document.targetProfileId()).append('\n');
         out.append("Chunker revision: ").append(TargetProfile.CHUNKER_COMMIT).append("\n\n");
+
+        out.append("Level settings\n--------------\n");
+        out.append("  Game mode: ").append(document.levelSettings().GameType)
+                .append(", difficulty ").append(document.levelSettings().Difficulty)
+                .append(", commands ")
+                .append(document.levelSettings().commandsEnabled ? "on" : "off").append('\n');
+        int[] spawn = document.worldSpawn();
+        out.append("  World spawn: ").append(spawn[0]).append(", ").append(spawn[1])
+                .append(", ").append(spawn[2]).append('\n');
+        if (preserved.carried().isEmpty()) {
+            out.append("  No level.dat tags were carried over from a source world.\n");
+            if (document.canPreserveSourceLevelData()) {
+                out.append("  (A source world was opened, but it held nothing this export did not\n")
+                        .append("   already write for itself.)\n");
+            }
+        } else {
+            out.append("  Carried from the source world's level.dat: ")
+                    .append(String.join(", ", preserved.carried())).append('\n');
+            for (String note : preserved.notes()) {
+                out.append("      - ").append(note).append('\n');
+            }
+        }
+        out.append('\n');
 
         if (!warnings.isEmpty()) {
             out.append("Warnings\n--------\n");

@@ -2,6 +2,7 @@
 
 #include "app/ExportDialog.h"
 #include "app/InspectorPanel.h"
+#include "app/WorldSettingsPanel.h"
 #include "app/NewWorldDialog.h"
 #include "app/OpenWorldRootDialog.h"
 #include "app/ReportPanel.h"
@@ -341,6 +342,23 @@ void MainWindow::buildDocks() {
         }
     });
 
+    m_settingsPanel = new WorldSettingsPanel(&m_workspace, this);
+    auto* settingsDock = new QDockWidget(tr("World settings"), this);
+    settingsDock->setWidget(m_settingsPanel);
+    settingsDock->setObjectName(QStringLiteral("worldSettingsDock"));
+    addDockWidget(Qt::RightDockWidgetArea, settingsDock);
+    // Tabbed behind the inspector rather than stacked under it: both want the full height
+    // of the dock area, and world settings are a thing you go to, not a thing you watch.
+    tabifyDockWidget(inspectorDock, settingsDock);
+    inspectorDock->raise();
+
+    connect(m_settingsPanel, &WorldSettingsPanel::settingsChanged, this, [this] {
+        // The spawn lives in the level settings, and the viewport draws it.
+        refreshActions();
+        refreshTabTitles();
+        m_view->update();
+    });
+
     m_reportPanel = new ReportPanel(this);
     auto* reportDock = new QDockWidget(tr("Reports"), this);
     reportDock->setWidget(m_reportPanel);
@@ -417,6 +435,7 @@ void MainWindow::onTabChanged(int index) {
     m_view->setDocument(document);
     m_templatePanel->setDocument(document);
     m_inspectorPanel->setDocument(document);
+    m_settingsPanel->setDocument(document);
     if (document) {
         m_inspectorPanel->setProfile(m_workspace.profile(document->profileId()));
     }

@@ -5,8 +5,11 @@ import com.hivemc.chunker.conversion.encoding.base.reader.LevelReader;
 import com.hivemc.chunker.conversion.encoding.bedrock.BedrockEncoders;
 import com.hivemc.chunker.conversion.encoding.java.JavaEncoders;
 import com.hivemc.chunker.conversion.intermediate.column.ChunkerColumn;
+import com.hivemc.chunker.conversion.intermediate.level.ChunkerLevelSettings;
 import com.hivemc.chunker.conversion.intermediate.world.Dimension;
+import com.hivemc.chunker.nbt.tags.collection.CompoundTag;
 import com.hivemc.chunker.scheduling.task.TrackedTask;
+import gg.swim.chunkdaddy.worker.bedrock.LevelDataPreserver;
 import gg.swim.chunkdaddy.worker.bedrock.TargetProfile;
 
 import java.nio.file.Path;
@@ -15,6 +18,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
+import org.jetbrains.annotations.Nullable;
 import java.util.UUID;
 
 /**
@@ -29,7 +33,10 @@ public final class WorldImporter {
     /** Result of an import, including what could not be brought across. */
     public record Result(Map<Long, ChunkerColumn> columns,
                          List<String> otherDimensions,
-                         List<String> notices) {
+                         List<String> notices,
+                         @Nullable ChunkerLevelSettings sourceSettings,
+                         @Nullable CompoundTag sourceLevelData,
+                         boolean bedrockSource) {
     }
 
     private WorldImporter() {
@@ -70,11 +77,25 @@ public final class WorldImporter {
         notices.add("Ordinary entities were not imported. If the source relies on them, "
                 + "re-import with entity processing enabled and review the result.");
 
+        boolean bedrockSource = edition == SourceInspector.Edition.BEDROCK;
+        CompoundTag levelData = writer.capturedLevelData();
+        List<String> experiments = LevelDataPreserver.enabledExperiments(bedrockSource ? levelData : null);
+        if (!experiments.isEmpty()) {
+            notices.add("This world has experiments switched on (" + String.join(", ", experiments)
+                    + "). They are preserved exactly as they are and written into the export. "
+                    + "Leave gametest on if any behaviour pack here asks for a beta script module.");
+        } else if (bedrockSource && levelData != null) {
+            notices.add("This world has no experiments switched on. If you later add a behaviour "
+                    + "pack whose manifest asks for a beta module, turn gametest (Beta APIs) on in "
+                    + "the source world first; the game refuses such a pack's scripts silently.");
+        }
+
         // Packed (x,z) longs have heavily colliding hashes on rectangular grids.
         // Map.copyOf uses linear probing and becomes quadratic here; HashMap's
         // collision trees keep large imports fast while the wrapper stays read-only.
         return new Result(Collections.unmodifiableMap(new HashMap<>(writer.columns())),
-                List.copyOf(writer.otherDimensionsSeen()), notices);
+                List.copyOf(writer.otherDimensionsSeen()), notices,
+                writer.capturedSettings(), levelData, bedrockSource);
     }
 
     /** A fresh converter per import job, so missing-mapping reports stay per source. */

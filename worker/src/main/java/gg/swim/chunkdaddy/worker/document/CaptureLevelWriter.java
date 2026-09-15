@@ -11,6 +11,7 @@ import com.hivemc.chunker.conversion.intermediate.level.ChunkerLevel;
 import com.hivemc.chunker.conversion.intermediate.level.ChunkerLevelSettings;
 import com.hivemc.chunker.conversion.intermediate.world.ChunkerWorld;
 import com.hivemc.chunker.conversion.intermediate.world.Dimension;
+import com.hivemc.chunker.nbt.tags.collection.CompoundTag;
 import gg.swim.chunkdaddy.worker.util.Checked;
 import org.jetbrains.annotations.Nullable;
 
@@ -31,6 +32,7 @@ public final class CaptureLevelWriter implements LevelWriter {
     private final Map<Long, ChunkerColumn> columns = new ConcurrentHashMap<>();
     private final Set<String> otherDimensionsSeen = ConcurrentHashMap.newKeySet();
     private volatile @Nullable ChunkerLevelSettings capturedSettings;
+    private volatile @Nullable CompoundTag capturedLevelData;
 
     public CaptureLevelWriter(Version version, Dimension captureDimension) {
         this.version = version;
@@ -49,9 +51,21 @@ public final class CaptureLevelWriter implements LevelWriter {
         return capturedSettings;
     }
 
+    /**
+     * The source world's level.dat exactly as it was read.
+     *
+     * <p>Chunker's settings object only models the fields it knows about, so anything else
+     * the world carried - most importantly the {@code experiments} compound - exists only
+     * here. Keeping it is what lets the export put those tags back.
+     */
+    public @Nullable CompoundTag capturedLevelData() {
+        return capturedLevelData;
+    }
+
     @Override
     public WorldWriter writeLevel(ChunkerLevel chunkerLevel) {
         capturedSettings = chunkerLevel.getSettings();
+        capturedLevelData = chunkerLevel.getOriginalLevelData();
         return new WorldWriter() {
             @Override
             public ColumnWriter writeWorld(ChunkerWorld chunkerWorld) {

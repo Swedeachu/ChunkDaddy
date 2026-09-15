@@ -2,6 +2,8 @@ package gg.swim.chunkdaddy.worker.document;
 
 import com.hivemc.chunker.conversion.encoding.base.resolver.blockentity.BlockEntityResolver;
 import com.hivemc.chunker.conversion.intermediate.column.ChunkerColumn;
+import com.hivemc.chunker.conversion.intermediate.level.ChunkerGeneratorType;
+import com.hivemc.chunker.conversion.intermediate.level.ChunkerLevelSettings;
 import com.hivemc.chunker.nbt.tags.collection.CompoundTag;
 import gg.swim.chunkdaddy.worker.util.Checked;
 import gg.swim.chunkdaddy.worker.util.ChunkRect;
@@ -42,8 +44,32 @@ public final class WorldDocument {
 
     private @Nullable ChunkRect explicitExportRectangle;
     private int exportBorderChunks;
-    private int[] worldSpawn = {0, 64, 0};
     private boolean dirty;
+
+    /**
+     * The level settings this document will export with.
+     *
+     * <p>This is the single source of truth for the world spawn and for every game setting,
+     * so the settings panel and the spawn control cannot disagree about what gets written.
+     * It starts from Chunker's defaults; opening a world replaces it with that world's own.
+     */
+    private ChunkerLevelSettings levelSettings = defaultSettings();
+
+    /**
+     * The settings exactly as the source world had them, kept so "revert to source" is
+     * always available. Null for a document that was not opened from a world.
+     */
+    private @Nullable ChunkerLevelSettings sourceLevelSettings;
+
+    /**
+     * The source world's raw {@code level.dat}, kept so tags Chunker has no field for can be
+     * carried into the export. The {@code experiments} compound is why this exists; see
+     * {@link gg.swim.chunkdaddy.worker.bedrock.LevelDataPreserver}.
+     */
+    private @Nullable CompoundTag sourceLevelData;
+
+    /** True when {@link #sourceLevelData} came from a Bedrock world, so its tags transfer. */
+    private boolean sourceLevelDataIsBedrock;
 
     public WorldDocument(String name, String targetProfileId, TemplateRegistry templates) {
         this.name = name;
@@ -52,6 +78,86 @@ public final class WorldDocument {
         history.add(WorldSnapshot.empty());
         revisionIds.add(0L);
         historyIndex = 0;
+    }
+
+    /** Chunker's defaults, with a spawn height a platform can plausibly sit at. */
+    private static ChunkerLevelSettings defaultSettings() {
+        ChunkerLevelSettings settings = new ChunkerLevelSettings();
+        settings.GeneratorType = ChunkerGeneratorType.VOID;
+        settings.SpawnX = 0;
+        settings.SpawnY = 64;
+        settings.SpawnZ = 0;
+        return settings;
+    }
+
+    /**
+     * The live settings object. Mutating it is how the settings panel applies a change, so it
+     * is deliberately not copied on the way out; there is exactly one per document.
+     */
+    public ChunkerLevelSettings levelSettings() {
+        return levelSettings;
+    }
+
+    public @Nullable ChunkerLevelSettings sourceLevelSettings() {
+        return sourceLevelSettings;
+    }
+
+    public @Nullable CompoundTag sourceLevelData() {
+        return sourceLevelData;
+    }
+
+    /** True when the source world's level.dat can be merged into a Bedrock export. */
+    public boolean canPreserveSourceLevelData() {
+        return sourceLevelData != null && sourceLevelDataIsBedrock;
+    }
+
+    /** Names the caller can show for what the source world had switched on. */
+    public boolean hasSourceLevelSettings() {
+        return sourceLevelSettings != null;
+    }
+
+    public void markLevelSettingsChanged() {
+        dirty = true;
+    }
+
+    /**
+     * Record what the source world had.
+     *
+     * <p>Called once, when a world is opened. The settings are adopted as the document's own
+     * and a second copy is kept untouched so the user can always get back to them. Raw level
+     * data is retained only for a Bedrock source: a Java level.dat has a different shape
+     * entirely, and carrying its tags into a Bedrock world would be worse than dropping them.
+     */
+    public void adoptSourceLevel(@Nullable ChunkerLevelSettings settings,
+                                 @Nullable CompoundTag levelData,
+                                 boolean bedrockSource) {
+        if (settings != null) {
+            this.levelSettings = ChunkerLevelSettings.fromJSON(settings.toJSON());
+            this.sourceLevelSettings = ChunkerLevelSettings.fromJSON(settings.toJSON());
+            // ChunkDaddy composes a void world whatever the source generated with; leaving a
+            // NORMAL generator here would have the game generate terrain around the arenas.
+            this.levelSettings.GeneratorType = ChunkerGeneratorType.VOID;
+        }
+        boolean keep = bedrockSource && levelData != null;
+        this.sourceLevelData = keep ? levelData.clone() : null;
+        this.sourceLevelDataIsBedrock = keep;
+        dirty = false;
+    }
+
+    /** Restore the settings the source world had. False for a document with no source. */
+    public boolean revertLevelSettingsToSource() {
+        if (sourceLevelSettings == null) return false;
+        levelSettings = ChunkerLevelSettings.fromJSON(sourceLevelSettings.toJSON());
+        levelSettings.GeneratorType = ChunkerGeneratorType.VOID;
+        dirty = true;
+        return true;
+    }
+
+    /** Take another open document's settings, for building several worlds the same way. */
+    public void adoptLevelSettingsFrom(WorldDocument other) {
+        levelSettings = ChunkerLevelSettings.fromJSON(other.levelSettings.toJSON());
+        levelSettings.GeneratorType = ChunkerGeneratorType.VOID;
+        dirty = true;
     }
 
     public UUID id() {
@@ -96,12 +202,15 @@ public final class WorldDocument {
         return instanceRegistry;
     }
 
+    /** The world spawn, read straight off the level settings so only one copy of it exists. */
     public int[] worldSpawn() {
-        return worldSpawn.clone();
+        return new int[]{levelSettings.SpawnX, levelSettings.SpawnY, levelSettings.SpawnZ};
     }
 
     public void setWorldSpawn(int x, int y, int z) {
-        worldSpawn = new int[]{x, y, z};
+        levelSettings.SpawnX = x;
+        levelSettings.SpawnY = y;
+        levelSettings.SpawnZ = z;
         dirty = true;
     }
 

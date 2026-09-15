@@ -69,6 +69,25 @@ builds and then writes exactly one archive into `dist/`, and that file is the wh
 release asset for its platform: the app, the conversion worker, a bundled Java runtime, the
 Qt runtime and the licences, with nothing from the build tree.
 
+## World settings and experiments
+
+Opening a world brings its settings across with it: spawn point, game mode, difficulty,
+permissions and every game rule. They are editable in the **World settings** dock, which is
+tabbed behind the inspector and is generated from whatever the conversion worker reports,
+so it always matches what can actually be written rather than a fixed list. Nothing is sent
+until Apply, only fields you changed are sent, and the panel redisplays whatever the world
+ends up holding rather than what you typed.
+
+The source world's raw `level.dat` matters too, because Chunker only models the settings it
+has fields for. The `experiments` compound is the important one: its `gametest` entry is the
+**Beta APIs** switch, and a behaviour pack whose manifest asks for `"@minecraft/server":
+"beta"` has its script module refused outright when that switch is missing. The pack then
+loads with no scripts, no scenes and no errors, and the server looks perfectly healthy. So
+when the source is a Bedrock world, its experiments compound and every other tag this export
+does not decide for itself are copied across untouched. Version stamps are the exception:
+those always come from the target profile, or the world would be unopenable by the client you
+chose it for. The export's conversion report lists exactly what was carried over.
+
 ## Compatibility
 
 Exports load in the vanilla Bedrock client and in Bedrock Dedicated Server. The one thing

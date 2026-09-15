@@ -96,6 +96,22 @@ public:
     void setWorldSpawn(Document* document, const BlockPos& spawn, Callback done);
     void renameDocument(Document* document, const QString& name, Callback done);
 
+    // --- level settings ---
+    //
+    // These four all reply with the same payload: the schema plus the settings as they
+    // now actually are. The panel redisplays that reply rather than its own idea of what
+    // it asked for, so a value the worker clamped or refused is visible immediately.
+    //
+    // Every mutating call also refreshes the document afterwards, because the world spawn
+    // lives in these settings and the viewport draws it.
+    void requestLevelSettings(Document* document, Callback done);
+    void applyLevelSettings(Document* document, const QJsonObject& values, Callback done);
+    void revertLevelSettingsToSource(Document* document, Callback done);
+    void adoptLevelSettings(Document* target, Document* source, Callback done);
+
+    /// Re-read a document's state from the worker without changing anything.
+    void refreshDocument(Document* document, Callback done);
+
     // --- output ---
     void validateExport(Document* document, Callback done);
     /// `profileId` empty keeps the document's current target profile.

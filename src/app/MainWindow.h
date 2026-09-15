@@ -20,6 +20,7 @@ class InspectorPanel;
 class ReportPanel;
 class SpawnMarkerDialog;
 class TemplatePanel;
+class WorldSettingsPanel;
 class ImportProgressDialog;
 class OperationProgressDialog;
 
@@ -85,6 +86,7 @@ private:
     QTabBar* m_tabs = nullptr;
     TemplatePanel* m_templatePanel = nullptr;
     InspectorPanel* m_inspectorPanel = nullptr;
+    WorldSettingsPanel* m_settingsPanel = nullptr;
     ReportPanel* m_reportPanel = nullptr;
     SpawnMarkerDialog* m_spawnDialog = nullptr;
     ImportProgressDialog* m_importProgress = nullptr;

@@ -79,6 +79,7 @@ public final class BedrockExporter {
 
         long contentColumns;
         long voidColumns;
+        LevelDataPreserver.Result preserved = new LevelDataPreserver.Result(List.of(), List.of());
         try {
             WorldConverter converter = new WorldConverter(UUID.randomUUID());
             converterHandle.set(converter);
@@ -92,7 +93,7 @@ public final class BedrockExporter {
                                 + " at the pinned revision " + TargetProfile.CHUNKER_COMMIT);
             }
 
-            ChunkerLevelSettings settings = buildSettings(request);
+            ChunkerLevelSettings settings = buildSettings(document, request);
             ColumnComposer composer = new ColumnComposer(
                     templates,
                     resolverFactory,
@@ -125,13 +126,23 @@ public final class BedrockExporter {
             foldWriteAheadLogs(worldDirectory.resolve("db"), warnings);
             validateWorldDirectory(worldDirectory);
 
+            // Put back the parts of the source world's level.dat that Chunker has no field
+            // for. This happens after the writer has finished, so the version stamps this
+            // export chose for its target profile are already in place and are never
+            // overwritten; see LevelDataPreserver for why that ordering matters.
+            preserved = LevelDataPreserver.merge(
+                    worldDirectory.resolve("level.dat"),
+                    document.canPreserveSourceLevelData() ? document.sourceLevelData() : null,
+                    warnings);
+
             Files.writeString(worldDirectory.resolve("levelname.txt"), request.worldName(), StandardCharsets.UTF_8);
             Files.writeString(worldDirectory.resolve(ARENA_JSON), arenaJsonText, StandardCharsets.UTF_8);
             Files.writeString(worldDirectory.resolve(MANIFEST_JSON),
                     ManifestWriter.serialize(ManifestWriter.build(document, request, templates, rectangle,
                             contentColumns, voidColumns)), StandardCharsets.UTF_8);
             Files.writeString(worldDirectory.resolve(REPORT),
-                    ConversionReport.render(document, templates, converter, warnings), StandardCharsets.UTF_8);
+                    ConversionReport.render(document, templates, converter, warnings, preserved),
+                    StandardCharsets.UTF_8);
 
             WorldPackager.publish(worldDirectory, request.destination(), request.mode());
         } finally {
@@ -158,7 +169,8 @@ public final class BedrockExporter {
         return new ExportResult(
                 request.destination().toString(),
                 contentColumns, voidColumns, contentColumns + voidColumns,
-                arenas, arenas * 2, companion, warnings);
+                arenas, arenas * 2, companion, warnings,
+                preserved.carried(), preserved.notes());
     }
 
     // ------------------------------------------------------------------
@@ -198,19 +210,42 @@ public final class BedrockExporter {
         converter.setLevelDBCompaction(false);
     }
 
-    private ChunkerLevelSettings buildSettings(ExportRequest request) {
-        ChunkerLevelSettings settings = new ChunkerLevelSettings();
+    /**
+     * The level settings to write, built from the document rather than from nothing.
+     *
+     * <p>A fresh settings object would quietly discard everything the source world was
+     * configured with - its game mode, difficulty, permissions and game rules - and replace
+     * it with Chunker's defaults. The document's settings are the user's, so they are the
+     * starting point; this method only overlays the few things the export itself decides.
+     *
+     * <p>The copy is deliberate: an export must not be able to mutate the open document, so
+     * cancelling or re-running one leaves the settings panel showing exactly what it showed
+     * before.
+     */
+    private ChunkerLevelSettings buildSettings(WorldDocument document, ExportRequest request) {
+        ChunkerLevelSettings settings;
+        try {
+            settings = ChunkerLevelSettings.fromJSON(document.levelSettings().toJSON());
+        } catch (Throwable e) {
+            // Never fail an export over the settings round-trip; a default world with the
+            // right blocks is far better than no world at all.
+            settings = new ChunkerLevelSettings();
+        }
+        if (settings == null) settings = new ChunkerLevelSettings();
+
         settings.LevelName = request.worldName();
+        // ChunkDaddy generates every column in the export rectangle itself, so anything other
+        // than a void generator would have the game fill the gaps with its own terrain.
         settings.GeneratorType = ChunkerGeneratorType.VOID;
         settings.SpawnX = request.worldSpawn()[0];
         settings.SpawnY = request.worldSpawn()[1];
         settings.SpawnZ = request.worldSpawn()[2];
-        settings.commandsEnabled = true;
 
         if (request.arenaPreset()) {
             // These settings are proposed and shown to the user before export; they are not
             // a claim that the world is frozen. randomTickSpeed=0 does not stop scheduled
             // ticks, gravity, fluid flow or player-triggered neighbour updates.
+            settings.commandsEnabled = true;
             settings.randomtickspeed = 0;
             settings.domobspawning = false;
             settings.spawnMobs = false;

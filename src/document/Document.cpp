@@ -128,6 +128,17 @@ void Document::applyState(const QJsonObject& state) {
                                 spawn.value(QStringLiteral("z")).toInt()};
     }
 
+    m_hasSourceLevelSettings =
+        state.value(QStringLiteral("hasSourceLevelSettings")).toBool(m_hasSourceLevelSettings);
+    m_preservesSourceLevelData =
+        state.value(QStringLiteral("preservesSourceLevelData")).toBool(m_preservesSourceLevelData);
+    if (state.contains(QStringLiteral("sourceExperiments"))) {
+        m_sourceExperiments.clear();
+        for (const QJsonValue& value : state.value(QStringLiteral("sourceExperiments")).toArray()) {
+            m_sourceExperiments.append(value.toString());
+        }
+    }
+
     if (state.contains(QStringLiteral("templates"))) {
         m_templates.clear();
         for (const QJsonValue& value : state.value(QStringLiteral("templates")).toArray()) {

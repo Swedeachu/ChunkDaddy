@@ -355,6 +355,69 @@ void Workspace::renameDocument(Document* document, const QString& name, Callback
     });
 }
 
+void Workspace::refreshDocument(Document* document, Callback done) {
+    QJsonObject request = Protocol::request(QStringLiteral("document_info"));
+    request.insert(QStringLiteral("documentId"), document->documentId());
+    m_worker->send(request, [document, done](const WorkerReply& reply) {
+        if (reply.ok) {
+            document->applyState(reply.result);
+        }
+        if (done) {
+            done(reply);
+        }
+    });
+}
+
+void Workspace::requestLevelSettings(Document* document, Callback done) {
+    QJsonObject request = Protocol::request(QStringLiteral("get_level_settings"));
+    request.insert(QStringLiteral("documentId"), document->documentId());
+    m_worker->send(request, std::move(done));
+}
+
+/// Send a settings change, then refresh the document so the spawn marker and the title
+/// bar's modified flag follow it. The caller's callback runs on the settings reply, which
+/// is the one that says what was applied and what was refused.
+void Workspace::applyLevelSettings(Document* document, const QJsonObject& values, Callback done) {
+    QJsonObject request = Protocol::request(QStringLiteral("set_level_settings"));
+    request.insert(QStringLiteral("documentId"), document->documentId());
+    request.insert(QStringLiteral("values"), values);
+    m_worker->send(request, [this, document, done](const WorkerReply& reply) {
+        if (reply.ok) {
+            refreshDocument(document, nullptr);
+        }
+        if (done) {
+            done(reply);
+        }
+    });
+}
+
+void Workspace::revertLevelSettingsToSource(Document* document, Callback done) {
+    QJsonObject request = Protocol::request(QStringLiteral("reset_level_settings"));
+    request.insert(QStringLiteral("documentId"), document->documentId());
+    m_worker->send(request, [this, document, done](const WorkerReply& reply) {
+        if (reply.ok) {
+            refreshDocument(document, nullptr);
+        }
+        if (done) {
+            done(reply);
+        }
+    });
+}
+
+void Workspace::adoptLevelSettings(Document* target, Document* source, Callback done) {
+    QJsonObject request = Protocol::request(QStringLiteral("adopt_level_settings"));
+    request.insert(QStringLiteral("documentId"), target->documentId());
+    request.insert(QStringLiteral("fromDocumentId"), source->documentId());
+    m_worker->send(request, [this, target, done](const WorkerReply& reply) {
+        if (reply.ok) {
+            refreshDocument(target, nullptr);
+        }
+        if (done) {
+            done(reply);
+        }
+    });
+}
+
 void Workspace::validateExport(Document* document, Callback done) {
     QJsonObject request = Protocol::request(QStringLiteral("validate_export"));
     request.insert(QStringLiteral("documentId"), document->documentId());

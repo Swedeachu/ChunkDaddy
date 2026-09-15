@@ -62,6 +62,7 @@ if (CHUNKDADDY_BUILD_GUI)
         src/app/ExportDialog.cpp
         src/app/ReportPanel.cpp
         src/app/InspectorPanel.cpp
+        src/app/WorldSettingsPanel.cpp
         src/app/TemplatePanel.cpp
         src/view/ChunkView.cpp
         src/view/TileCache.cpp

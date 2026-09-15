@@ -17,7 +17,11 @@ public record ExportResult(String worldPath,
                            int arenaCount,
                            int spawnPointCount,
                            boolean companionJsonWritten,
-                           List<String> warnings) {
+                           List<String> warnings,
+                           /** level.dat tag names carried across from the source world. */
+                           List<String> preservedTags,
+                           /** Readable notes about the carried tags that matter most. */
+                           List<String> preservedNotes) {
     public long expectedColumns() {
         return contentColumns + voidColumns;
     }

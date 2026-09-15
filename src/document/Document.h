@@ -88,6 +88,17 @@ public:
     int exportBorderChunks() const noexcept { return m_exportBorderChunks; }
     BlockPos worldSpawn() const noexcept { return m_worldSpawn; }
 
+    /// True when this world was opened from an existing one, so its settings can be
+    /// reverted to whatever that world had.
+    bool hasSourceLevelSettings() const noexcept { return m_hasSourceLevelSettings; }
+
+    /// True when the source world's raw level.dat will be merged into the export. This is
+    /// what carries tags Chunker has no field for, the experiments compound above all.
+    bool preservesSourceLevelData() const noexcept { return m_preservesSourceLevelData; }
+
+    /// Experiments the source world had switched on, by their level.dat names.
+    const QStringList& sourceExperiments() const noexcept { return m_sourceExperiments; }
+
     Selection& selection() noexcept { return m_selection; }
     const Selection& selection() const noexcept { return m_selection; }
 
@@ -124,6 +135,9 @@ private:
     bool m_hasExplicitExportRectangle = false;
     int m_exportBorderChunks = 0;
     BlockPos m_worldSpawn{0, 64, 0};
+    bool m_hasSourceLevelSettings = false;
+    bool m_preservesSourceLevelData = false;
+    QStringList m_sourceExperiments;
     std::optional<ChunkRect> m_contentBounds;
     std::optional<ChunkRect> m_exportRectangle;
     QVector<TemplateInfo> m_templates;

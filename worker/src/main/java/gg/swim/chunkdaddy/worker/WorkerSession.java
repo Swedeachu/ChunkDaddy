@@ -8,6 +8,7 @@ import gg.swim.chunkdaddy.worker.bedrock.ArenaJsonWriter;
 import gg.swim.chunkdaddy.worker.bedrock.BedrockExporter;
 import gg.swim.chunkdaddy.worker.bedrock.ExportRequest;
 import gg.swim.chunkdaddy.worker.bedrock.ExportResult;
+import gg.swim.chunkdaddy.worker.bedrock.LevelDataPreserver;
 import gg.swim.chunkdaddy.worker.bedrock.TargetProfile;
 import gg.swim.chunkdaddy.worker.bedrock.WorldPackager;
 import gg.swim.chunkdaddy.worker.conversion.ArenaTemplate;
@@ -18,6 +19,7 @@ import gg.swim.chunkdaddy.worker.document.ArenaInstance;
 import gg.swim.chunkdaddy.worker.document.ChunkSelection;
 import gg.swim.chunkdaddy.worker.document.ClipboardContent;
 import gg.swim.chunkdaddy.worker.document.EditResult;
+import gg.swim.chunkdaddy.worker.document.LevelSettingsSchema;
 import gg.swim.chunkdaddy.worker.document.SourceInspector;
 import gg.swim.chunkdaddy.worker.document.TemplateRegistry;
 import gg.swim.chunkdaddy.worker.document.WorldDocument;
@@ -93,6 +95,10 @@ public final class WorkerSession {
                 case "redo" -> redo(request);
                 case "set_export_rectangle" -> setExportRectangle(request);
                 case "set_world_spawn" -> setWorldSpawn(request);
+                case "get_level_settings" -> getLevelSettings(request);
+                case "set_level_settings" -> setLevelSettings(request);
+                case "reset_level_settings" -> resetLevelSettings(request);
+                case "adopt_level_settings" -> adoptLevelSettings(request);
                 case "set_document_name" -> setDocumentName(request);
                 case "preview_tiles" -> previewTiles(request);
                 case "validate_export" -> validateExport(request);
@@ -233,11 +239,17 @@ public final class WorkerSession {
         WorldDocument document = new WorldDocument(name, profile.id(), templates);
         documents.put(document.id(), document);
         EditResult edit = document.importColumns(imported.columns());
+        // The source world's own configuration comes across with it: its spawn, game mode,
+        // difficulty and game rules, plus the raw level.dat tags Chunker has no field for.
+        // Losing those silently is exactly the failure this handles.
+        document.adoptSourceLevel(imported.sourceSettings(), imported.sourceLevelData(), imported.bedrockSource());
         // An imported source is a starting point, not unsaved work the user did.
         document.markSaved();
 
         JsonObject result = describeDocument(document);
         result.addProperty("importedColumns", imported.columns().size());
+        result.add("sourceExperiments", Json.ofStrings(
+                LevelDataPreserver.enabledExperiments(document.sourceLevelData())));
         result.add("notices", Json.ofStrings(imported.notices()));
         result.add("otherDimensions", Json.ofStrings(imported.otherDimensions()));
         if (edit.changedBounds() != null) {
@@ -473,6 +485,77 @@ public final class WorkerSession {
         return describeDocument(document);
     }
 
+    /**
+     * The level settings, described well enough for a generic panel to build controls.
+     *
+     * <p>The schema travels with the values, so the panel never has a hard-coded idea of
+     * which settings exist; a field Chunker gains at a later pinned revision shows up on its
+     * own rather than being quietly uneditable.
+     */
+    private JsonObject getLevelSettings(JsonObject request) {
+        WorldDocument document = document(request);
+        JsonObject result = LevelSettingsSchema.describe(document.levelSettings());
+        result.addProperty("documentId", document.id().toString());
+        result.addProperty("revision", document.revision());
+        result.addProperty("hasSource", document.hasSourceLevelSettings());
+        result.addProperty("preservesSourceLevelData", document.canPreserveSourceLevelData());
+        result.add("sourceExperiments", Json.ofStrings(
+                LevelDataPreserver.enabledExperiments(document.sourceLevelData())));
+        return result;
+    }
+
+    /**
+     * Apply edited settings.
+     *
+     * <p>Fields are applied individually and a value that cannot be used is refused by name,
+     * so a panel that is out of step with the worker cannot corrupt the rest of the settings
+     * or fail the request. The reply always carries the settings as they now actually are,
+     * which is what the panel re-displays, so what is on screen is never a guess.
+     */
+    private JsonObject setLevelSettings(JsonObject request) {
+        WorldDocument document = document(request);
+        JsonObject values = Json.optionalObject(request, "values");
+        LevelSettingsSchema.ApplyResult applied =
+                LevelSettingsSchema.apply(document.levelSettings(), values == null ? new JsonObject() : values);
+        if (!applied.applied().isEmpty()) {
+            document.markLevelSettingsChanged();
+        }
+        JsonObject result = getLevelSettings(request);
+        result.add("applied", Json.ofStrings(applied.applied()));
+        result.add("rejected", Json.ofStrings(applied.rejected()));
+        return result;
+    }
+
+    /** Put the settings back to whatever the source world had. */
+    private JsonObject resetLevelSettings(JsonObject request) {
+        WorldDocument document = document(request);
+        boolean reverted = document.revertLevelSettingsToSource();
+        JsonObject result = getLevelSettings(request);
+        result.addProperty("reverted", reverted);
+        if (!reverted) {
+            result.add("rejected", Json.ofStrings(List.of(
+                    "This world was not opened from an existing world, so it has no source settings to go back to.")));
+        }
+        return result;
+    }
+
+    /** Copy another open world's settings, for building several worlds the same way. */
+    private JsonObject adoptLevelSettings(JsonObject request) {
+        WorldDocument document = document(request);
+        UUID sourceId = Json.uuid(request, "fromDocumentId");
+        WorldDocument source = documents.get(sourceId);
+        if (source == null) {
+            throw new WorkerException("document.missing", "No open document " + sourceId);
+        }
+        if (source.id().equals(document.id())) {
+            throw new WorkerException("settings.self", "That is the same world.");
+        }
+        document.adoptLevelSettingsFrom(source);
+        JsonObject result = getLevelSettings(request);
+        result.addProperty("adoptedFrom", source.name());
+        return result;
+    }
+
     private JsonObject previewTiles(JsonObject request) throws Exception {
         WorldDocument document = document(request);
         ChunkRect area = Json.chunkRect(request, "area");
@@ -583,6 +666,8 @@ public final class WorkerSession {
         result.addProperty("spawnPointCount", exported.spawnPointCount());
         result.addProperty("companionJsonWritten", exported.companionJsonWritten());
         result.add("warnings", Json.ofStrings(exported.warnings()));
+        result.add("preservedTags", Json.ofStrings(exported.preservedTags()));
+        result.add("preservedNotes", Json.ofStrings(exported.preservedNotes()));
         result.addProperty("revision", document.revision());
         return result;
     }
@@ -688,6 +773,13 @@ public final class WorkerSession {
         spawnObject.addProperty("y", spawn[1]);
         spawnObject.addProperty("z", spawn[2]);
         result.add("worldSpawn", spawnObject);
+        result.addProperty("gameType", document.levelSettings().GameType);
+        result.addProperty("difficulty", document.levelSettings().Difficulty);
+        result.addProperty("commandsEnabled", document.levelSettings().commandsEnabled);
+        result.addProperty("hasSourceLevelSettings", document.hasSourceLevelSettings());
+        result.addProperty("preservesSourceLevelData", document.canPreserveSourceLevelData());
+        result.add("sourceExperiments", Json.ofStrings(
+                LevelDataPreserver.enabledExperiments(document.sourceLevelData())));
 
         JsonArray arenas = new JsonArray();
         for (ArenaInstance instance : document.snapshot().instances()) {
