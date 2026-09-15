@@ -56,6 +56,8 @@ if (CHUNKDADDY_BUILD_GUI)
         src/app/NewWorldDialog.cpp
         src/app/OpenWorldRootDialog.cpp
         src/app/SchematicImportDialog.cpp
+        src/app/ImportProgressDialog.cpp
+        src/app/OperationProgressDialog.cpp
         src/app/SpawnMarkerDialog.cpp
         src/app/ExportDialog.cpp
         src/app/ReportPanel.cpp

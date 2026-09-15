@@ -163,7 +163,9 @@ public final class WorldSnapshot {
         }
 
         public WorldSnapshot build() {
-            return new WorldSnapshot(Map.copyOf(columns), Map.copyOf(instances));
+            // Keep HashMap's collision trees for packed chunk-coordinate keys.
+            // Map.copyOf's linear probing is quadratic for large rectangular worlds.
+            return new WorldSnapshot(Collections.unmodifiableMap(new HashMap<>(columns)), Map.copyOf(instances));
         }
     }
 }

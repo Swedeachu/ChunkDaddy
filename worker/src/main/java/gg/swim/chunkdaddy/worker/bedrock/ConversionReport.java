@@ -55,7 +55,8 @@ public final class ConversionReport {
             out.append("      distinct block identifiers: ").append(template.usedBlockIdentifiers().size())
                     .append(", block entities: ").append(template.blockEntities().size()).append('\n');
             out.append("      spawn markers: ")
-                    .append(template.spawnsConfirmed() ? "confirmed" : "NOT CONFIRMED").append('\n');
+                    .append(template.spawnsAutomatic() ? "automatic centre/surface fallback (both entries share a position)"
+                            : template.spawnsConfirmed() ? "confirmed" : "NOT CONFIRMED").append('\n');
             if (!template.issues().isEmpty()) {
                 for (MappingIssue issue : template.issues()) {
                     out.append("      [").append(issue.severity()).append("] ")

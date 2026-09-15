@@ -1,5 +1,5 @@
 [CmdletBinding()]
-param([switch]$Run)
+param([switch]$Run, [string]$BuildDir)
 $ErrorActionPreference = 'Stop'
 Set-StrictMode -Version Latest
 $root = Split-Path $PSScriptRoot -Parent
@@ -34,7 +34,7 @@ if (-not $vs) {
         throw 'Visual Studio installer signature verification failed.'
     }
     $process = Start-Process $installer -Wait -PassThru -WindowStyle Hidden -ArgumentList '--passive --wait --norestart --add Microsoft.VisualStudio.Workload.VCTools --includeRecommended'
-    if ($process.ExitCode -eq 3010) { throw 'Visual Studio requires a reboot. Restart Windows, then run setup.cmd again.' }
+    if ($process.ExitCode -eq 3010) { throw 'Visual Studio requires a reboot. Restart Windows, then run scripts\build-windows.bat again.' }
     if ($process.ExitCode -ne 0) { throw "Visual Studio installation failed: $($process.ExitCode)" }
     $vs = & $vswhere -latest -products '*' -version '[17.0,)' -requires Microsoft.VisualStudio.Component.VC.Tools.x86.x64 -property installationPath
     if (-not $vs) { throw 'Visual Studio C++ tools were not found after installation.' }
@@ -54,6 +54,7 @@ if (-not (Test-Path $python)) {
 }
 Invoke-Checked $uv @('pip', 'install', '--python', $python, '-r', "$root\scripts\build-requirements.txt")
 $env:PATH = "$root\local\tools\Scripts;$env:PATH"
-$arguments = @("$root\scripts\build.py")
+$arguments = @("$root\scripts\build.py", '--prepared')
 if ($Run) { $arguments += '--run' }
+if ($BuildDir) { $arguments += @('--build-dir', $BuildDir) }
 Invoke-Checked $python $arguments

@@ -45,9 +45,14 @@ packaging/                          Windows and Linux distribution definitions
 
 ## Building
 
-**Windows:** double-click `setup.cmd` (or run `setup.cmd -Run` to launch afterwards).
+**Windows:** double-click `scripts\build-windows.bat` (or run `scripts\build-windows.bat -Run` to launch afterwards).
 
-**Linux:** run `bash setup.sh` (add `--run` to launch afterwards).
+**Linux:** run `bash scripts/build-linux.sh` (add `--run` to launch afterwards).
+
+Use the same command after source changes. With Python installed, `python scripts/build.py
+--run` also performs setup, an incremental build, tests and launch (use `python3` on Linux).
+Direct invocation initializes the Windows compiler and SDK environment automatically.
+Use `--build-dir build/windows-dev` for a separate build while another app session is open.
 
 Setup fetches the pinned Chunker sources, installs the build dependencies, builds and tests
 both halves, and stages the worker, Java runtime and Windows Qt runtime next to the app.

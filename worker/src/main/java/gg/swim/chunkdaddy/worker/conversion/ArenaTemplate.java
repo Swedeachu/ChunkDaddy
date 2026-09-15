@@ -33,11 +33,12 @@ public final class ArenaTemplate {
     private final List<MappingIssue> issues;
     private final boolean aggregateCandidate;
 
-    /** Local player-feet spawn positions, or null until the user authors them. */
+    /** Local player-feet positions, authored or generated from the centre surface. */
     private @Nullable double[] spawnPoint1;
     private @Nullable double[] spawnPoint2;
     private boolean spawnsConfirmed;
-    /** Hash the markers were confirmed against; a new source hash invalidates them. */
+    private boolean spawnsAutomatic;
+    /** Hash the markers were authored/generated against; a new source invalidates them. */
     private @Nullable String spawnsConfirmedForSha256;
 
     ArenaTemplate(String slug,
@@ -141,6 +142,57 @@ public final class ArenaTemplate {
         return spawnsConfirmed && sourceSha256.equals(spawnsConfirmedForSha256);
     }
 
+    public boolean spawnsAutomatic() {
+        return spawnsAutomatic && sourceSha256.equals(spawnsConfirmedForSha256);
+    }
+
+    public boolean spawnsReady() {
+        return spawnsConfirmed() || spawnsAutomatic();
+    }
+
+    /**
+     * Supply a centre/surface fallback when no markers were authored. Both required
+     * duel entries intentionally share this location until the user edits them.
+     * An empty centre column searches outward; an entirely empty template stays unresolved.
+     */
+    public boolean generateFallbackSpawns() {
+        if (spawnPoint1 != null || spawnPoint2 != null) return false;
+        int centreX = sizeX() / 2;
+        int centreZ = sizeZ() / 2;
+        if (useSurfaceSpawn(centreX, centreZ, true)) return true;
+        for (int radius = 1; radius < Math.max(sizeX(), sizeZ()); radius++) {
+            int left = centreX - radius, right = centreX + radius;
+            int near = centreZ - radius, far = centreZ + radius;
+            // Visit only the perimeter, once per column, even for long narrow schematics.
+            if (near >= 0 || far < sizeZ()) {
+                for (int x = Math.max(0, left); x <= Math.min(sizeX() - 1, right); x++) {
+                    if (useSurfaceSpawn(x, near, false) || useSurfaceSpawn(x, far, false)) return true;
+                }
+            }
+            if (left >= 0 || right < sizeX()) {
+                for (int z = Math.max(0, near + 1); z <= Math.min(sizeZ() - 1, far - 1); z++) {
+                    if (useSurfaceSpawn(left, z, false) || useSurfaceSpawn(right, z, false)) return true;
+                }
+            }
+        }
+        return false;
+    }
+
+    private boolean useSurfaceSpawn(int x, int z, boolean exactCentre) {
+        if (x < 0 || x >= sizeX() || z < 0 || z >= sizeZ()) return false;
+        for (int y = sizeY() - 1; y >= 0; y--) {
+            if (blockAt(x, y, z).isAir()) continue;
+            double[] spawn = {exactCentre ? sizeX() / 2.0 : x + 0.5,
+                              y + 1.0, exactCentre ? sizeZ() / 2.0 : z + 0.5};
+            spawnPoint1 = spawn;
+            spawnPoint2 = spawn.clone();
+            spawnsAutomatic = true;
+            spawnsConfirmedForSha256 = sourceSha256;
+            return true;
+        }
+        return false;
+    }
+
     /**
      * Set the two local spawn markers.
      *
@@ -150,6 +202,7 @@ public final class ArenaTemplate {
      * lose their confirmed state.
      */
     public void setSpawns(@Nullable double[] one, @Nullable double[] two, boolean confirmed) {
+        this.spawnsAutomatic = false;
         this.spawnPoint1 = one == null ? null : one.clone();
         this.spawnPoint2 = two == null ? null : two.clone();
         this.spawnsConfirmed = confirmed && one != null && two != null;

@@ -15,7 +15,7 @@ jobs:
       - name: Windows setup, build and tests
         if: runner.os == 'Windows'
         shell: cmd
-        run: setup.cmd
+        run: scripts\build-windows.bat
       - name: Linux setup, build and tests
         if: runner.os == 'Linux'
-        run: bash setup.sh
+        run: bash scripts/build-linux.sh

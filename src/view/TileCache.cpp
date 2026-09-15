@@ -42,7 +42,7 @@ bool TileCache::loadTileFile(const QString& path, QString* error) {
         }
         return false;
     }
-    if (version != kFormatVersion) {
+    if (version != kFormatVersion && version != 2) {
         if (error) {
             *error = QStringLiteral("Tile file %1 is format version %2; this build reads version %3. "
                                     "The worker and the application are out of step.")
@@ -50,7 +50,15 @@ bool TileCache::loadTileFile(const QString& path, QString* error) {
         }
         return false;
     }
-    if (widthChunks <= 0 || lengthChunks <= 0 || widthChunks > 4096 || lengthChunks > 4096) {
+    qint32 pixels = 16;
+    if (version == 2) stream >> pixels;
+    if ((pixels != 1 && pixels != 4 && pixels != 16) || pixels != m_pixelsPerChunk) {
+        if (error) *error = QStringLiteral("Preview resolution does not match the current view.");
+        return false;
+    }
+    if (widthChunks <= 0 || lengthChunks <= 0 || qint64(widthChunks) * lengthChunks > 4096
+        || qint64(minChunkX) + widthChunks > std::numeric_limits<int>::max()
+        || qint64(minChunkZ) + lengthChunks > std::numeric_limits<int>::max()) {
         if (error) {
             *error = QStringLiteral("Tile file %1 declares an implausible area of %2 x %3 chunks.")
                          .arg(path).arg(widthChunks).arg(lengthChunks);
@@ -58,6 +66,7 @@ bool TileCache::loadTileFile(const QString& path, QString* error) {
         return false;
     }
 
+    QHash<quint64, Tile> decoded;
     for (int chunkX = minChunkX; chunkX < minChunkX + widthChunks; ++chunkX) {
         for (int chunkZ = minChunkZ; chunkZ < minChunkZ + lengthChunks; ++chunkZ) {
             quint8 rawState = 0;
@@ -69,11 +78,15 @@ bool TileCache::loadTileFile(const QString& path, QString* error) {
                 return false;
             }
             Tile tile;
+            if (rawState > 2) {
+                if (error) *error = QStringLiteral("Invalid preview column state.");
+                return false;
+            }
             tile.state = static_cast<ColumnState>(rawState);
             if (tile.state == ColumnState::Content) {
-                QImage image(16, 16, QImage::Format_ARGB32);
-                for (int z = 0; z < 16; ++z) {
-                    for (int x = 0; x < 16; ++x) {
+                QImage image(pixels, pixels, QImage::Format_ARGB32);
+                for (int z = 0; z < pixels; ++z) {
+                    for (int x = 0; x < pixels; ++x) {
                         quint32 argb = 0;
                         stream >> argb;
                         image.setPixel(x, z, argb);
@@ -87,13 +100,16 @@ bool TileCache::loadTileFile(const QString& path, QString* error) {
                 }
                 tile.image = image;
             }
-            m_tiles.insert(chunkKey(chunkX, chunkZ), tile);
+            decoded.insert(chunkKey(chunkX, chunkZ), tile);
         }
     }
 
     const ChunkRect area = ChunkRect::ofSize(minChunkX, minChunkZ, widthChunks, lengthChunks);
-    // Pages overlapping the new tiles have to be rebuilt.
-    m_pages.clear();
+    for (auto it = decoded.cbegin(); it != decoded.cend(); ++it) m_tiles.insert(it.key(), it.value());
+    // Rebuild only pages touched by this batch; keep other painted pages warm.
+    for (int px = area.minX() >> 4; px <= area.maxX() >> 4; ++px)
+        for (int pz = area.minZ() >> 4; pz <= area.maxZ() >> 4; ++pz)
+            m_pages.remove(chunkKey(px, pz));
     emit tilesChanged(area);
     return true;
 }
@@ -101,6 +117,32 @@ bool TileCache::loadTileFile(const QString& path, QString* error) {
 void TileCache::clear() {
     m_tiles.clear();
     m_pages.clear();
+}
+
+void TileCache::setPixelsPerChunk(int pixels) {
+    if (pixels == m_pixelsPerChunk) return;
+    m_pixelsPerChunk = pixels;
+    clear();
+}
+
+bool TileCache::hasRegion(const ChunkRect& area) const {
+    for (int x = area.minX(); x <= area.maxX(); ++x)
+        for (int z = area.minZ(); z <= area.maxZ(); ++z)
+            if (!hasChunk(x, z)) return false;
+    return true;
+}
+
+void TileCache::retain(const ChunkRect& area) {
+    for (auto it = m_tiles.begin(); it != m_tiles.end();) {
+        if (!area.contains(chunkKeyX(it.key()), chunkKeyZ(it.key()))) it = m_tiles.erase(it);
+        else ++it;
+    }
+    for (auto it = m_pages.begin(); it != m_pages.end();) {
+        const auto page = ChunkRect::ofSize(chunkKeyX(it.key()) * kPageChunks,
+                                          chunkKeyZ(it.key()) * kPageChunks, kPageChunks, kPageChunks);
+        if (!area.intersects(page)) it = m_pages.erase(it);
+        else ++it;
+    }
 }
 
 void TileCache::invalidate(const ChunkRect& area) {
@@ -133,7 +175,13 @@ QImage TileCache::pageImage(int pageX, int pageZ) const {
         return cached.value();
     }
 
-    QImage page(kPageChunks * 16, kPageChunks * 16, QImage::Format_ARGB32_Premultiplied);
+    // Do not allocate empty images for the unbounded space outside the world.
+    bool known = false;
+    for (int dx = 0; dx < kPageChunks && !known; ++dx)
+        for (int dz = 0; dz < kPageChunks && !known; ++dz)
+            known = hasChunk(pageX * kPageChunks + dx, pageZ * kPageChunks + dz);
+    if (!known) return {};
+    QImage page(kPageChunks * m_pixelsPerChunk, kPageChunks * m_pixelsPerChunk, QImage::Format_ARGB32_Premultiplied);
     page.fill(Qt::transparent);
     {
         QPainter painter(&page);
@@ -141,7 +189,10 @@ QImage TileCache::pageImage(int pageX, int pageZ) const {
             for (int dz = 0; dz < kPageChunks; ++dz) {
                 const QImage tile = chunkImage(pageX * kPageChunks + dx, pageZ * kPageChunks + dz);
                 if (!tile.isNull()) {
-                    painter.drawImage(dx * 16, dz * 16, tile);
+                    painter.drawImage(dx * m_pixelsPerChunk, dz * m_pixelsPerChunk, tile);
+                } else if (state(pageX * kPageChunks + dx, pageZ * kPageChunks + dz) == ColumnState::GeneratedVoid) {
+                    painter.fillRect(dx * m_pixelsPerChunk, dz * m_pixelsPerChunk,
+                                     m_pixelsPerChunk, m_pixelsPerChunk, QColor(38, 40, 52));
                 }
             }
         }

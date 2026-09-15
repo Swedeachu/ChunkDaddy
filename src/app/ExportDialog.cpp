@@ -153,6 +153,12 @@ void ExportDialog::updateSummary() {
     QStringList lines;
 
     const QJsonArray problems = m_validation.value(QStringLiteral("problems")).toArray();
+    const int automaticArenas = m_validation.value(QStringLiteral("automaticSpawnArenaCount")).toInt();
+    if (automaticArenas > 0) {
+        lines << tr("%1 arena(s) use automatic centre/surface spawn markers. Both spawn entries "
+                    "share a position in each arena. You can edit them for separate duel positions.")
+                     .arg(automaticArenas);
+    }
     if (!problems.isEmpty()) {
         lines << tr("<b style='color:#c04040'>%1 problem(s) block this export:</b>").arg(problems.size());
         int shown = 0;

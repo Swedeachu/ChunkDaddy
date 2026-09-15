@@ -61,7 +61,7 @@ void Settings::setDefaultCopyCount(int count) {
 }
 
 int Settings::defaultGapChunks() {
-    return settings().value(QString::fromLatin1(kDefaultGapChunks), 4).toInt();
+    return settings().value(QString::fromLatin1(kDefaultGapChunks), 8).toInt();
 }
 
 void Settings::setDefaultGapChunks(int chunks) {

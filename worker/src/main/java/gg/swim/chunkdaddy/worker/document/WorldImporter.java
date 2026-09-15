@@ -10,6 +10,8 @@ import com.hivemc.chunker.scheduling.task.TrackedTask;
 import gg.swim.chunkdaddy.worker.bedrock.TargetProfile;
 
 import java.nio.file.Path;
+import java.util.Collections;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
@@ -68,7 +70,11 @@ public final class WorldImporter {
         notices.add("Ordinary entities were not imported. If the source relies on them, "
                 + "re-import with entity processing enabled and review the result.");
 
-        return new Result(Map.copyOf(writer.columns()), List.copyOf(writer.otherDimensionsSeen()), notices);
+        // Packed (x,z) longs have heavily colliding hashes on rectangular grids.
+        // Map.copyOf uses linear probing and becomes quadratic here; HashMap's
+        // collision trees keep large imports fast while the wrapper stays read-only.
+        return new Result(Collections.unmodifiableMap(new HashMap<>(writer.columns())),
+                List.copyOf(writer.otherDimensionsSeen()), notices);
     }
 
     /** A fresh converter per import job, so missing-mapping reports stay per source. */

@@ -59,6 +59,26 @@ behind the job it is cancelling.
 | `cancel` | Cancel a running job |
 | `shutdown` | Finish and exit |
 
+## Schematic import progress
+
+Imports with no authored markers generate centre/surface fallback markers. Template
+descriptors expose `spawnsAutomatic` separately from `spawnsConfirmed`; either state
+permits arena JSON export for the current source hash. Both automatic entries initially
+share a position. Export validation reports `automaticSpawnArenaCount` for a single
+informational notice, while unresolved marker errors are grouped by template.
+
+`import_schematics` progress includes `stage`, `done`, and `total`. Counts refer to
+files processed (including failed files), not bytes or blocks. While processing a
+file, the optional `fileName` identifies it; multiple stage updates can have the
+same file count. Clients should show activity within a file separately from the
+overall file-count progress bar.
+
+The result contains `templates` for successful imports and `failures` with
+per-file error messages. An otherwise successful reply may contain zero templates,
+so clients must display failures even when there is nothing to place. Cancellation
+returns `job.cancelled` and publishes no templates from that batch. A completed
+batch with some failed files still publishes its successful templates.
+
 ## Error codes
 
 | Code | Meaning |
@@ -94,3 +114,14 @@ repeat for each column, X outer then Z inner:
 
 The three states are encoded separately on purpose: a black square alone cannot tell the
 user whether a gap will be serialized as a generated void column or left absent.
+
+`preview_tiles` also accepts `pixelsPerChunk`: 1, 4, or 16 (default). Sixteen uses
+format 1 above. Reduced previews use format 2, which adds an `int32 pixelsPerChunk`
+after `lengthChunks` and stores `pixelsPerChunk²` ARGB samples for each content column.
+Samples come from the centres of equal-sized cells in the chunk; these overviews are
+approximate, and full detail is requested when zooming in. Column states are unchanged.
+
+Clients split large views into bounded batches instead of refusing to render the whole
+view when it exceeds 4,096 columns. The native viewport sends at most one request at a
+time, coalesces navigation changes, and discards replies for an obsolete document,
+revision, height setting, or resolution. It deletes consumed and discarded tile files.

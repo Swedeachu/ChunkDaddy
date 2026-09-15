@@ -1,4 +1,4 @@
-"""Shared, fail-fast build orchestration. Invoked by setup.cmd / setup.sh."""
+"""Set up, incrementally build, test and package ChunkDaddy on Windows or Linux."""
 from __future__ import annotations
 
 import argparse
@@ -95,10 +95,43 @@ def java() -> Path:
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument('--run', action='store_true', help='Launch the app after all checks pass')
+    parser.add_argument('--build-dir', type=Path, help='Separate output directory (for example while another build is open)')
+    parser.add_argument('--prepared', action='store_true', help=argparse.SUPPRESS)
     args = parser.parse_args()
+    # A file association or ordinary terminal does not have MSVC's INCLUDE/LIB
+    # environment. All entry points must pass through the same bootstrap, including
+    # repeat development builds. The private flag breaks the bootstrap recursion.
+    if not args.prepared:
+        if WINDOWS:
+            command = ['powershell.exe', '-NoProfile', '-ExecutionPolicy', 'Bypass',
+                       '-File', ROOT / 'scripts/setup-windows.ps1']
+            if args.run:
+                command.append('-Run')
+            if args.build_dir:
+                command.extend(['-BuildDir', args.build_dir.resolve()])
+        else:
+            command = ['bash', ROOT / 'scripts/build-linux.sh']
+            if args.run:
+                command.append('--run')
+            if args.build_dir:
+                command.extend(['--build-dir', args.build_dir.resolve()])
+        run(*command)
+        return
+    preset = 'windows-release' if WINDOWS else 'linux-release'
+    build = args.build_dir.resolve() if args.build_dir else ROOT / 'build' / preset
+    app = build / f'chunkdaddy{EXE}'
+    if WINDOWS and app.exists():
+        # Windows locks running executables. Fail before expensive builds without
+        # closing the user's app or risking unsaved edits.
+        try:
+            with app.open('r+b'):
+                pass
+        except PermissionError as error:
+            raise RuntimeError(f'Close {app} before rebuilding, or use --build-dir build/windows-dev '
+                               'to keep that session open.') from error
     LOCAL.mkdir(parents=True, exist_ok=True)
     if not shutil.which('git'):
-        raise RuntimeError('Git is required. Install Git for Windows and rerun setup.cmd.')
+        raise RuntimeError('Git is required. Install Git and rerun the launcher in scripts/.')
     chunker()
     jdk = java()
     qt = LOCAL / f'Qt/{QT_VERSION}/msvc2022_64'
@@ -110,14 +143,12 @@ def main():
     gradle = [ROOT / 'worker/gradlew.bat'] if WINDOWS else ['sh', ROOT / 'worker/gradlew']
     run(*gradle, '--project-dir', ROOT / 'worker', '--project-cache-dir', LOCAL / 'gradle-project',
         'test', 'installWorker', '--console=plain', '--no-daemon', '--max-workers=4')
-    preset = 'windows-release' if WINDOWS else 'linux-release'
-    build = ROOT / 'build' / preset
-    configure = ['cmake', '--preset', preset]
+    configure = ['cmake', '--preset', preset, '-B', build]
     if WINDOWS:
         configure.append(f'-DCMAKE_PREFIX_PATH={qt}')
     run(*configure)
-    run('cmake', '--build', '--preset', preset, '--parallel', min(os.cpu_count() or 2, 8))
-    run('ctest', '--preset', preset)
+    run('cmake', '--build', build, '--parallel', min(os.cpu_count() or 2, 8))
+    run('ctest', '--test-dir', build, '--output-on-failure')
     worker = build / 'worker'
     worker.mkdir(exist_ok=True)
     shutil.copy2(ROOT / 'worker/build/dist/chunkdaddy-worker.jar', worker)
@@ -135,7 +166,6 @@ def main():
         run(qt / 'bin/windeployqt.exe', '--release', '--no-translations', build / 'chunkdaddy.exe')
     run(sys.executable, ROOT / 'scripts/smoke-worker.py', build)
     run(build / f'test_workerclient{EXE}', timeout=90)
-    app = build / f'chunkdaddy{EXE}'
     print(f'\nBuild and checks passed. Launch: {app}', flush=True)
     if args.run:
         subprocess.Popen([str(app)], cwd=build)

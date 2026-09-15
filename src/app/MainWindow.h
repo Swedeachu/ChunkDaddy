@@ -20,6 +20,8 @@ class InspectorPanel;
 class ReportPanel;
 class SpawnMarkerDialog;
 class TemplatePanel;
+class ImportProgressDialog;
+class OperationProgressDialog;
 
 /// The application window: one tab per open world, a dominant top-down viewport, and
 /// docks for templates, inspection and diagnostics.
@@ -59,7 +61,7 @@ private slots:
     void onTabChanged(int index);
     void onTabCloseRequested(int index);
     void onCursorMoved(const BlockPos& block, const QPoint& chunk, ColumnState state);
-    void onTilesNeeded(const QVector<ChunkRect>& regions);
+    void onTilesNeeded(const ChunkRect& area, int pixelsPerChunk, quint64 generation);
     void onWorkerFailed(const QString& reason);
 
 private:
@@ -72,9 +74,11 @@ private:
     void refreshActions();
     void refreshTabTitles();
     void openPathAsWorld(const QString& path);
+    void importSchematicPaths(const QStringList& paths);
     void reportError(const QString& title, const WorkerReply& reply);
     void showBusy(const QString& label, qint64 jobId);
     void hideBusy();
+    void updateBusyProgress(const WorkerProgress& progress);
 
     Workspace m_workspace;
     ChunkView* m_view = nullptr;
@@ -83,6 +87,9 @@ private:
     InspectorPanel* m_inspectorPanel = nullptr;
     ReportPanel* m_reportPanel = nullptr;
     SpawnMarkerDialog* m_spawnDialog = nullptr;
+    ImportProgressDialog* m_importProgress = nullptr;
+    OperationProgressDialog* m_operationProgress = nullptr;
+    bool m_busy = false;
 
     QLabel* m_cursorLabel = nullptr;
     QLabel* m_selectionLabel = nullptr;

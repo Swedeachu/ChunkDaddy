@@ -8,6 +8,14 @@ class TestSelection : public QObject {
     Q_OBJECT
 
 private slots:
+    void distantAndOverlappingSelections() {
+        Selection selection;
+        selection.add(ChunkRect(-1000000, -1000000, -999991, -999991));
+        selection.add(ChunkRect(1000000, 1000000, 1000009, 1000009));
+        selection.add(ChunkRect(1000005, 1000005, 1000014, 1000014));
+        selection.subtract(ChunkRect(1000000, 1000000, 1000009, 1000009));
+        QCOMPARE(selection.columnCount(), 175LL);
+    }
     void emptySelectionHasNoMembers() {
         Selection selection;
         QVERIFY(selection.isEmpty());

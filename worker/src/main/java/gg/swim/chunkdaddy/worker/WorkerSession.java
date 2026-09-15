@@ -226,7 +226,7 @@ public final class WorkerSession {
 
         WorldConverter converter = WorldImporter.newConverter();
         runningJobs.put(requestId, new AtomicReference<>(converter));
-        progress(requestId, "importing", 0, 0);
+        progress(requestId, "Reading world chunks…", 0, 0);
 
         WorldImporter.Result imported = WorldImporter.importWorld(directory, edition, profile, converter);
 
@@ -250,22 +250,37 @@ public final class WorkerSession {
         List<String> paths = Json.strings(request, "paths");
         JsonArray imported = new JsonArray();
         List<String> failures = new ArrayList<>();
+        List<ArenaTemplate> pendingTemplates = new ArrayList<>();
 
         int index = 0;
         for (String path : paths) {
             checkCancelled(requestId);
-            progress(requestId, "decoding", index, paths.size());
-            index++;
+            final int completed = index;
             File file = new File(path);
             try {
-                ArenaTemplate template = templateImporter.importFile(file);
-                templates.add(template);
+                ArenaTemplate template = templateImporter.importFile(file, stage -> {
+                    checkCancelled(requestId);
+                    JsonObject payload = new JsonObject();
+                    payload.addProperty("stage", stage);
+                    payload.addProperty("fileName", file.getName());
+                    payload.addProperty("done", completed);
+                    payload.addProperty("total", paths.size());
+                    io.writeEvent(requestId, "progress", payload);
+                });
+                pendingTemplates.add(template);
                 imported.add(describeTemplate(template));
+            } catch (WorkerException e) {
+                if ("job.cancelled".equals(e.code())) throw e;
+                failures.add(file.getName() + ": " + describe(e));
             } catch (Exception e) {
                 failures.add(file.getName() + ": " + describe(e));
             }
+            index++;
+            progress(requestId, "Files processed", index, paths.size());
         }
 
+        checkCancelled(requestId);
+        for (ArenaTemplate template : pendingTemplates) templates.add(template);
         JsonObject result = new JsonObject();
         result.add("templates", imported);
         result.add("failures", Json.ofStrings(failures));
@@ -285,7 +300,13 @@ public final class WorkerSession {
             throw new WorkerException("spawns.invalid", String.join("; ", problems));
         }
 
-        template.setSpawns(one, two, confirmed);
+        // Checking unchanged automatic positions must not turn them into an
+        // unconfirmed manual draft just because Validate was clicked.
+        if (!template.spawnsAutomatic() || confirmed
+                || !java.util.Arrays.equals(one, template.spawnPoint1())
+                || !java.util.Arrays.equals(two, template.spawnPoint2())) {
+            template.setSpawns(one, two, confirmed);
+        }
         JsonObject result = describeTemplate(template);
         result.add("warnings", Json.ofStrings(problems));
         return result;
@@ -461,16 +482,17 @@ public final class WorkerSession {
                             + "the tiles it can actually show.");
         }
         int sliceY = Json.integer(request, "sliceY", 320);
+        int pixelsPerChunk = Json.integer(request, "pixelsPerChunk", 16);
         PreviewRenderer.HeightMode mode = PreviewRenderer.HeightMode.valueOf(
                 Json.string(request, "heightMode", PreviewRenderer.HeightMode.HIGHEST_SURFACE.name()));
 
         Path output = workspace.resolve("tiles").resolve(UUID.randomUUID() + ".cdat");
         new PreviewRenderer(templates).render(
-                document.snapshot(), area, sliceY, mode, document.exportRectangle(), output);
+                document.snapshot(), area, sliceY, mode, document.exportRectangle(), output, pixelsPerChunk);
 
         JsonObject result = new JsonObject();
         result.addProperty("path", output.toString());
-        result.addProperty("formatVersion", PreviewRenderer.FORMAT_VERSION);
+        result.addProperty("formatVersion", pixelsPerChunk == 16 ? PreviewRenderer.FORMAT_VERSION : 2);
         result.add("area", Json.of(area));
         result.addProperty("revision", document.revision());
         return result;
@@ -495,6 +517,10 @@ public final class WorkerSession {
         }
         result.addProperty("arenaCount", document.snapshot().instances().size());
         result.addProperty("spawnPointCount", document.snapshot().instances().size() * 2);
+        long automaticArenas = document.snapshot().instances().stream()
+                .filter(instance -> templates.get(instance.templateId()) != null
+                        && templates.get(instance.templateId()).spawnsAutomatic()).count();
+        result.addProperty("automaticSpawnArenaCount", automaticArenas);
         result.add("problems", Json.ofStrings(problems));
         result.addProperty("profileFullyVerified", profile.fullyVerified());
         result.addProperty("profileVerificationSummary", profile.verificationSummary());
@@ -527,7 +553,15 @@ public final class WorkerSession {
 
         BedrockExporter exporter = new BedrockExporter(templates, resolverFactory);
         ExportResult exported = exporter.export(document, exportRequest,
-                done -> progress(requestId, "writingColumns", done, total), handle);
+                done -> {
+                    if (done == total) {
+                        // Enumeration finishes before database flush, compaction and
+                        // packaging. Keep the UI active until the final reply arrives.
+                        progress(requestId, "Finishing world database and packaging export…", 0, 0);
+                    } else {
+                        progress(requestId, "Preparing world columns", done, total);
+                    }
+                }, handle);
 
         JsonObject result = new JsonObject();
         result.addProperty("path", exported.worldPath());
@@ -685,6 +719,7 @@ public final class WorkerSession {
         entry.addProperty("paletteSize", template.schematic().palette().size());
         entry.addProperty("aggregateCandidate", template.aggregateCandidate());
         entry.addProperty("spawnsConfirmed", template.spawnsConfirmed());
+        entry.addProperty("spawnsAutomatic", template.spawnsAutomatic());
         entry.addProperty("hasWorldEditOrigin", template.schematic().worldEditOrigin() != null);
 
         if (template.spawnPoint1() != null) entry.add("spawnPoint1", triple(template.spawnPoint1()));

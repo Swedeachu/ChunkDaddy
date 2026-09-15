@@ -117,7 +117,7 @@ void Workspace::closeDocument(Document* document) {
     document->deleteLater();
 }
 
-void Workspace::importSchematics(const QStringList& paths, Callback done,
+qint64 Workspace::importSchematics(const QStringList& paths, Callback done,
                                  WorkerClient::ProgressHandler progress) {
     QJsonObject request = Protocol::request(QStringLiteral("import_schematics"));
     QJsonArray array;
@@ -125,7 +125,7 @@ void Workspace::importSchematics(const QStringList& paths, Callback done,
         array.append(path);
     }
     request.insert(QStringLiteral("paths"), array);
-    m_worker->send(request, std::move(done), std::move(progress));
+    return m_worker->send(request, std::move(done), std::move(progress));
 }
 
 void Workspace::setTemplateSpawns(const QString& templateId, const QVector<double>& spawn1,
@@ -376,13 +376,14 @@ void Workspace::exportWorld(Document* document, const QString& destination, cons
 }
 
 void Workspace::requestPreviewTiles(Document* document, const ChunkRect& area, int sliceY,
-                                    const QString& heightMode, Callback done) {
+                                    const QString& heightMode, Callback done, int pixelsPerChunk) {
     QJsonObject request = Protocol::request(QStringLiteral("preview_tiles"));
     request.insert(QStringLiteral("documentId"), document->documentId());
     request.insert(QStringLiteral("area"),
                    Protocol::rect(area.minX(), area.minZ(), area.maxX(), area.maxZ()));
     request.insert(QStringLiteral("sliceY"), sliceY);
     request.insert(QStringLiteral("heightMode"), heightMode);
+    request.insert(QStringLiteral("pixelsPerChunk"), pixelsPerChunk);
     m_worker->send(request, std::move(done));
 }
 

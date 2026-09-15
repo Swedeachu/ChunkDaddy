@@ -58,7 +58,7 @@ public:
     void closeDocument(Document* document);
 
     // --- editing ---
-    void importSchematics(const QStringList& paths, Callback done,
+    qint64 importSchematics(const QStringList& paths, Callback done,
                           WorkerClient::ProgressHandler progress = nullptr);
     void setTemplateSpawns(const QString& templateId, const QVector<double>& spawn1,
                            const QVector<double>& spawn2, bool confirmed, Callback done);
@@ -85,7 +85,7 @@ public:
                      Callback done, WorkerClient::ProgressHandler progress = nullptr);
 
     void requestPreviewTiles(Document* document, const ChunkRect& area, int sliceY,
-                             const QString& heightMode, Callback done);
+                             const QString& heightMode, Callback done, int pixelsPerChunk = 16);
 
 signals:
     void documentAdded(Document* document);

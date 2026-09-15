@@ -34,13 +34,14 @@ private slots:
 
     void eventsAreDistinguishedFromReplies() {
         const QByteArray event =
-            R"({"id":4,"event":"progress","payload":{"stage":"writingColumns","done":50,"total":200}})";
+            R"({"id":4,"event":"progress","payload":{"stage":"writingColumns","fileName":"arena.schem","done":50,"total":200}})";
         const QJsonObject object = QJsonDocument::fromJson(event).object();
         QVERIFY(Protocol::isEvent(object));
 
         const WorkerProgress progress =
             Protocol::parseProgress(object.value(QStringLiteral("payload")).toObject());
         QCOMPARE(progress.stage, QStringLiteral("writingColumns"));
+        QCOMPARE(progress.fileName, QStringLiteral("arena.schem"));
         QCOMPARE(progress.done, 50LL);
         QCOMPARE(progress.total, 200LL);
         QCOMPARE(progress.fraction(), 0.25);

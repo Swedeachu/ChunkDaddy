@@ -98,9 +98,9 @@ SpawnMarkerDialog::SpawnMarkerDialog(const QVector<TemplateInfo>& templates, QWi
 
     auto* layout = new QVBoxLayout(this);
     layout->addWidget(new QLabel(
-        tr("These schematics carry no spawn metadata. WorldEdit's origin and the schematic offset "
-           "describe where the copy came from, not where a player should stand, so the two duel "
-           "positions are authored here once per template and saved against the file's hash."),
+        tr("Missing markers default to the centre and one block above the highest surface there. "
+           "Both spawn entries share that fallback, which allows export. Edit and confirm them "
+           "here for separate duel positions. Markers are tied to the template's source file hash."),
         this));
     static_cast<QLabel*>(layout->itemAt(0)->widget())->setWordWrap(true);
     layout->addLayout(columns, 1);
@@ -118,9 +118,10 @@ void SpawnMarkerDialog::setTemplates(const QVector<TemplateInfo>& templates) {
     m_list->clear();
     for (const TemplateInfo& info : m_templates) {
         auto* item = new QListWidgetItem(
-            info.spawnsConfirmed ? tr("%1  ✓").arg(info.slug) : info.slug, m_list);
+            info.spawnsAutomatic ? tr("%1  (automatic)").arg(info.slug)
+                : info.spawnsConfirmed ? tr("%1  ✓").arg(info.slug) : info.slug, m_list);
         item->setData(Qt::UserRole, info.templateId);
-        if (!info.spawnsConfirmed) {
+        if (!info.spawnsReady()) {
             item->setForeground(QColor(200, 140, 40));
         }
     }
@@ -177,6 +178,10 @@ void SpawnMarkerDialog::onTemplateChanged() {
     }
     m_confirm->setChecked(info->spawnsConfirmed);
     m_warnings->clear();
+    if (info->spawnsAutomatic) {
+        m_warnings->setPlainText(tr("Automatic centre/surface fallback: both entries share this position. "
+                                   "It is ready for export. Edit and confirm to replace it with your own markers."));
+    }
 }
 
 void SpawnMarkerDialog::applyTemplateRanges(const TemplateInfo& info) {

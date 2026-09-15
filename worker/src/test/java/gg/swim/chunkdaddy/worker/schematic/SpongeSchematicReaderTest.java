@@ -9,6 +9,10 @@ import com.hivemc.chunker.nbt.tags.primitive.StringTag;
 import org.junit.jupiter.api.Test;
 
 import java.io.ByteArrayOutputStream;
+import java.io.DataOutputStream;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import org.junit.jupiter.api.io.TempDir;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -24,6 +28,43 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
  * asymmetric, so a transposed axis cannot pass by accident.
  */
 class SpongeSchematicReaderTest {
+    @TempDir Path temporary;
+
+    @Test
+    void importsLargeBlockArraysFromRealFiles() throws Exception {
+        for (int version : new int[]{2, 3}) {
+            CompoundTag root = version == 2 ? v2Root() : v3Root(false);
+            CompoundTag schematic = version == 2 ? root : root.getCompound("Schematic");
+            schematic.put("Width", (short) 200);
+            schematic.put("Height", (short) 40);
+            schematic.put("Length", (short) 20);
+            byte[] blocks = new byte[160000];
+            blocks[blocks.length - 1] = 1;
+            if (version == 2) schematic.put("BlockData", blocks);
+            else schematic.getCompound("Blocks").put("Data", blocks);
+            Path compressed = temporary.resolve("large-v" + version + ".schem");
+            Files.write(compressed, Tag.writeGZipJavaNBT(root));
+            SpongeSchematic result = SpongeSchematicReader.read(compressed.toFile());
+            assertEquals(160000, result.paletteIndices().length);
+            assertEquals(1, result.paletteIndices()[159999]);
+            Path raw = temporary.resolve("raw-v" + version + ".schem");
+            Files.write(raw, Tag.writeUncompressedJavaNBT(root));
+            assertEquals(160000, SpongeSchematicReader.read(raw.toFile()).paletteIndices().length);
+        }
+    }
+
+    @Test
+    void rejectsOversizedNbtArrayBeforeAllocating() throws Exception {
+        Path file = temporary.resolve("oversized.schem");
+        try (var out = new DataOutputStream(Files.newOutputStream(file))) {
+            out.writeByte(10); out.writeUTF("");
+            out.writeByte(7); out.writeUTF("BlockData");
+            out.writeInt(SchematicNbtReader.MAX_BYTE_ARRAY + 1);
+        }
+        SchematicFormatException error = assertThrows(SchematicFormatException.class,
+                () -> SpongeSchematicReader.read(file.toFile()));
+        assertTrue(error.getMessage().contains("256 MiB"));
+    }
 
     /** Unsigned LEB128, matching the Sponge specification's block array encoding. */
     private static byte[] varints(int... values) {

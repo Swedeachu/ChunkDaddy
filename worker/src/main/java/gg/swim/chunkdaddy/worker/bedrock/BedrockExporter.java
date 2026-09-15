@@ -2,7 +2,7 @@ package gg.swim.chunkdaddy.worker.bedrock;
 
 import com.google.gson.JsonObject;
 import com.hivemc.chunker.conversion.WorldConverter;
-import com.hivemc.chunker.conversion.encoding.base.writer.LevelWriter;
+import com.hivemc.chunker.conversion.encoding.bedrock.base.writer.BedrockLevelWriter;
 import com.hivemc.chunker.conversion.encoding.bedrock.BedrockEncoders;
 import com.hivemc.chunker.conversion.intermediate.level.ChunkerGeneratorType;
 import com.hivemc.chunker.conversion.intermediate.level.ChunkerLevelSettings;
@@ -84,7 +84,7 @@ public final class BedrockExporter {
             converterHandle.set(converter);
             configure(converter);
 
-            Optional<? extends LevelWriter> writer = BedrockEncoders.createWriter(
+            Optional<BedrockLevelWriter> writer = BedrockEncoders.createWriter(
                     worldDirectory.toFile(), request.profile().version(), converter);
             if (writer.isEmpty()) {
                 throw new IllegalStateException(
@@ -99,7 +99,7 @@ public final class BedrockExporter {
                     request.profile().minChunkY(),
                     request.profile().maxChunkY(),
                     Dimension.OVERWORLD.getFallbackBiome(),
-                    null);
+                    writer.get().buildResolvers(converter).build().blockEntityResolver());
 
             ComposedLevelReader reader = new ComposedLevelReader(
                     snapshot, composer, rectangle, request.profile(), settings, Dimension.OVERWORLD, columnProgress);

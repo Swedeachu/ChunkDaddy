@@ -36,6 +36,13 @@ ChunkView::ChunkView(QWidget* parent) : QWidget(parent) {
     setMinimumSize(320, 240);
 
     connect(&m_tiles, &TileCache::tilesChanged, this, [this](const ChunkRect&) { update(); });
+    m_previewTimer.setSingleShot(true);
+    m_previewTimer.setInterval(50);
+    connect(&m_previewTimer, &QTimer::timeout, this, &ChunkView::rebuildPreviewQueue);
+    m_retryButton = new QPushButton(tr("Retry preview"), this);
+    m_retryButton->move(16, 50);
+    m_retryButton->hide();
+    connect(m_retryButton, &QPushButton::clicked, this, &ChunkView::retryPreview);
 }
 
 void ChunkView::setDocument(Document* document) {
@@ -46,19 +53,25 @@ void ChunkView::setDocument(Document* document) {
         disconnect(m_document, nullptr, this, nullptr);
     }
     m_document = document;
-    m_tiles.clear();
+    m_previewRevision = document ? document->revision() : -1;
+    m_previewExportRectangle = document ? document->exportRectangle() : std::nullopt;
+    invalidatePreview();
     cancelPastePreview();
     if (m_document) {
         connect(m_document, &Document::stateChanged, this, [this] {
-            // A new revision invalidates everything the preview showed.
-            m_tiles.clear();
-            requestMissingTiles();
+            if (m_previewRevision != m_document->revision()
+                || m_previewExportRectangle != m_document->exportRectangle()) {
+                m_previewRevision = m_document->revision();
+                m_previewExportRectangle = m_document->exportRectangle();
+                invalidatePreview();
+            }
             update();
         });
         if (const auto bounds = m_document->contentBounds()) {
             zoomToFit(*bounds);
         }
     }
+    requestMissingTiles();
     update();
 }
 
@@ -102,8 +115,7 @@ void ChunkView::setHeightSlice(int sliceY) {
     }
     m_sliceY = sliceY;
     // The slice changes what every column samples, so cached tiles are stale.
-    m_tiles.clear();
-    requestMissingTiles();
+    invalidatePreview();
     update();
 }
 
@@ -168,19 +180,105 @@ ChunkRect ChunkView::visibleChunks() const {
     return ChunkRect(minChunkX, minChunkZ, maxChunkX, maxChunkZ);
 }
 
+void ChunkView::setHeightMode(const QString& mode) {
+    if (mode == m_heightMode) return;
+    m_heightMode = mode;
+    invalidatePreview();
+}
+
+void ChunkView::invalidatePreview() {
+    ++m_previewGeneration;
+    m_tiles.clear();
+    m_previewQueue.clear();
+    m_previewError.clear();
+    m_retryButton->hide();
+    requestMissingTiles();
+    update();
+}
+
+void ChunkView::retryPreview() { invalidatePreview(); }
+
+void ChunkView::setPreviewPaused(bool paused) {
+    m_previewPaused = paused;
+    if (!paused) requestMissingTiles();
+}
+
 void ChunkView::requestMissingTiles() {
-    if (!m_document) {
+    // Coalesce wheel, resize and state changes before planning the next batch.
+    m_previewTimer.start();
+}
+
+void ChunkView::rebuildPreviewQueue() {
+    m_previewQueue.clear();
+    m_previewTotal = m_previewCompleted = 0;
+    if (!m_document || m_previewPaused || !m_previewError.isEmpty()) return;
+    auto bounds = m_document->contentBounds();
+    if (auto exported = m_document->exportRectangle())
+        bounds = bounds ? bounds->united(*exported) : exported;
+    const auto visible = visibleChunks();
+    if (!bounds || !bounds->intersects(visible)) { update(); return; }
+    const ChunkRect area(std::max(bounds->minX(), visible.minX()), std::max(bounds->minZ(), visible.minZ()),
+                         std::min(bounds->maxX(), visible.maxX()), std::min(bounds->maxZ(), visible.maxZ()));
+    // Keep each detail level until twice as far out as before.
+    const int pixels = m_zoom * 16 <= 2 ? 1 : (m_zoom * 16 <= 8 ? 4 : 16);
+    if (pixels != m_pixelsPerChunk) {
+        m_pixelsPerChunk = pixels;
+        ++m_previewGeneration;
+        m_tiles.setPixelsPerChunk(pixels);
+    }
+    m_tiles.retain(area.expanded(32));
+    // Each request is bounded regardless of the zoom level. Only one is in flight,
+    // so navigation and edits never queue behind hundreds of obsolete renders.
+    for (int x = area.minX(); x <= area.maxX(); x += 32) {
+        for (int z = area.minZ(); z <= area.maxZ(); z += 32) {
+            ChunkRect batch(x, z, std::min(x + 31, area.maxX()), std::min(z + 31, area.maxZ()));
+            if (!m_tiles.hasRegion(batch)) m_previewQueue.append(batch);
+        }
+    }
+    const double centreX = (area.minX() + double(area.maxX())) / 2;
+    const double centreZ = (area.minZ() + double(area.maxZ())) / 2;
+    auto distance = [=](const ChunkRect& r) {
+        return std::abs((r.minX() + double(r.maxX())) / 2 - centreX)
+             + std::abs((r.minZ() + double(r.maxZ())) / 2 - centreZ);
+    };
+    std::sort(m_previewQueue.begin(), m_previewQueue.end(), [&](const ChunkRect& a, const ChunkRect& b) {
+        return distance(a) > distance(b);
+    });
+    m_previewTotal = m_previewQueue.size();
+    fetchNextPreview();
+    update();
+}
+
+void ChunkView::fetchNextPreview() {
+    if (m_previewInFlight || m_previewPaused || m_previewTimer.isActive() || !m_previewError.isEmpty()) return;
+    while (!m_previewQueue.isEmpty()) {
+        const auto area = m_previewQueue.takeLast();
+        if (m_tiles.hasRegion(area)) { ++m_previewCompleted; continue; }
+        m_previewInFlight = true;
+        emit tilesNeeded(area, m_pixelsPerChunk, m_previewGeneration);
+        break;
+    }
+    update();
+}
+
+void ChunkView::completePreview(quint64 generation, const QString& path, qint64 revision, const QString& error) {
+    m_previewInFlight = false;
+    if (generation == m_previewGeneration && m_document && revision != m_document->revision()) {
+        invalidatePreview();
         return;
     }
-    const ChunkRect visible = visibleChunks();
-    // Never ask for more than the worker will render in one call.
-    if (visible.columnCount() > 4096) {
-        return;
+    if (generation == m_previewGeneration && m_document && revision == m_document->revision()) {
+        m_previewError = error;
+        if (m_previewError.isEmpty()) m_tiles.loadTileFile(path, &m_previewError);
+        ++m_previewCompleted;
+        if (!m_previewError.isEmpty()) {
+            m_previewQueue.clear();
+            m_retryButton->show();
+            emit previewFailed(m_previewError);
+        }
     }
-    const QVector<ChunkRect> missing = m_tiles.missingRegions(visible);
-    if (!missing.isEmpty()) {
-        emit tilesNeeded(missing);
-    }
+    fetchNextPreview();
+    update();
 }
 
 void ChunkView::setZoom(double zoom, const QPointF& anchorWidgetPos) {
@@ -212,9 +310,16 @@ void ChunkView::paintEvent(QPaintEvent*) {
     }
 
     const ChunkRect visible = visibleChunks();
-    painter.setRenderHint(QPainter::SmoothPixmapTransform, m_zoom < 1.0);
+    // Preserve crisp pixels until the sampled image is reduced by more than 2x.
+    painter.setRenderHint(QPainter::SmoothPixmapTransform, m_zoom * 16 < m_pixelsPerChunk / 2.0);
 
-    drawTiles(painter, visible);
+    auto bounds = m_document->contentBounds();
+    if (auto exported = m_document->exportRectangle())
+        bounds = bounds ? bounds->united(*exported) : exported;
+    if (bounds && bounds->intersects(visible)) {
+        drawTiles(painter, ChunkRect(std::max(bounds->minX(), visible.minX()), std::max(bounds->minZ(), visible.minZ()),
+                                     std::min(bounds->maxX(), visible.maxX()), std::min(bounds->maxZ(), visible.maxZ())));
+    }
     drawExportRectangle(painter);
     if (m_showChunkGrid) {
         drawChunkGrid(painter, visible);
@@ -224,12 +329,22 @@ void ChunkView::paintEvent(QPaintEvent*) {
     drawPastePreview(painter);
     drawWorldSpawn(painter);
     drawLegend(painter);
+    if (!m_previewError.isEmpty() || m_previewInFlight || !m_previewQueue.isEmpty() || m_previewTimer.isActive()) {
+        const QRect banner(12, 12, std::min(width() - 24, 530), 32);
+        painter.fillRect(banner, QColor(20, 24, 32, 235));
+        painter.setPen(Qt::white);
+        const QString text = !m_previewError.isEmpty() ? tr("Preview failed. See Reports for details, or retry.")
+            : tr("Loading %1preview… %2 / %3 regions")
+                .arg(m_pixelsPerChunk == 1 ? tr("overview ") : QString())
+                .arg(std::min(m_previewCompleted, m_previewTotal)).arg(m_previewTotal);
+        painter.drawText(banner.adjusted(8, 0, -8, 0), Qt::AlignVCenter, text);
+    }
 }
 
 void ChunkView::drawTiles(QPainter& painter, const ChunkRect& visible) {
     const double chunkPixels = 16.0 * m_zoom;
 
-    if (chunkPixels < 3.0) {
+    if (chunkPixels < 16.0) {
         // Too small for per-chunk work: paint whole pages scaled down.
         const int minPageX = static_cast<int>(std::floor(visible.minX() / double(TileCache::kPageChunks)));
         const int maxPageX = static_cast<int>(std::floor(visible.maxX() / double(TileCache::kPageChunks)));
@@ -354,19 +469,17 @@ void ChunkView::drawArenas(QPainter& painter, const ChunkRect& visible) {
 void ChunkView::drawSelection(QPainter& painter) {
     const Selection& selection = m_document->selection();
 
+    // Boolean rectangles avoid building a path with hundreds of thousands of
+    // individual chunk cells every time the cursor moves over a large selection.
+    auto rectanglePath = [this](const ChunkRect& r) {
+        QPainterPath shape;
+        shape.addRect(QRectF(worldToWidget(chunkToBlock(r.minX()), chunkToBlock(r.minZ())),
+                             worldToWidget(chunkToBlock(r.maxX()) + 16, chunkToBlock(r.maxZ()) + 16)));
+        return shape;
+    };
     QPainterPath path;
-    if (!selection.isEmpty()) {
-        const ChunkRect box = selection.bounds();
-        for (int cx = box.minX(); cx <= box.maxX(); ++cx) {
-            for (int cz = box.minZ(); cz <= box.maxZ(); ++cz) {
-                if (!selection.contains(cx, cz)) {
-                    continue;
-                }
-                const QPointF topLeft = worldToWidget(chunkToBlock(cx), chunkToBlock(cz));
-                path.addRect(QRectF(topLeft, QSizeF(16.0 * m_zoom, 16.0 * m_zoom)));
-            }
-        }
-    }
+    for (const auto& r : selection.addedRects()) path = path.united(rectanglePath(r));
+    for (const auto& r : selection.subtractedRects()) path = path.subtracted(rectanglePath(r));
 
     // The rectangle currently being dragged out, before it is committed.
     if (m_drag == DragMode::SelectRect || m_drag == DragMode::SubtractRect) {

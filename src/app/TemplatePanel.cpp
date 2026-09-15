@@ -73,7 +73,7 @@ void TemplatePanel::rebuild() {
         root->setText(0, info.slug);
         root->setText(1, info.statusText());
         root->setData(0, Qt::UserRole, info.templateId);
-        if (!info.spawnsConfirmed || info.blockingIssueCount > 0) {
+        if (!info.spawnsReady() || info.blockingIssueCount > 0) {
             root->setForeground(1, QColor(200, 140, 40));
         }
         if (!info.issueLines.isEmpty()) {

@@ -19,6 +19,7 @@ struct WorkerReply {
 /// Progress event emitted while a job runs.
 struct WorkerProgress {
     QString stage;
+    QString fileName;
     qint64 done = 0;
     qint64 total = 0;
 

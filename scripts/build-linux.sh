@@ -1,15 +1,18 @@
 #!/usr/bin/env bash
 set -euo pipefail
-root="$(cd -- "$(dirname -- "${BASH_SOURCE[0]}")" && pwd)"
+root="$(cd -- "$(dirname -- "${BASH_SOURCE[0]}")/.." && pwd)"
 cd "$root"
 if [[ "$(uname -s)" != Linux ]]; then
-    echo 'This entry point supports Linux. Use setup.cmd on Windows.' >&2
+    echo 'This entry point supports Linux. Use scripts/build-windows.bat on Windows.' >&2
     exit 1
 fi
 if [[ "${CHUNKDADDY_SKIP_SYSTEM_DEPS:-0}" != 1 ]]; then
     elevate=()
     if (( EUID != 0 )); then elevate=(sudo); fi
-    if command -v apt-get >/dev/null; then
+    if command -v g++ >/dev/null && command -v git >/dev/null && command -v curl >/dev/null \
+        && command -v python3 >/dev/null && pkg-config --atleast-version=6.4 Qt6Widgets Qt6Test 2>/dev/null; then
+        echo 'System build dependencies are already installed.'
+    elif command -v apt-get >/dev/null; then
         "${elevate[@]}" apt-get update
         "${elevate[@]}" apt-get install -y build-essential git curl ca-certificates python3 python3-venv \
             qt6-base-dev qt6-base-dev-tools libgl1-mesa-dev libxkbcommon-dev
@@ -18,7 +21,7 @@ if [[ "${CHUNKDADDY_SKIP_SYSTEM_DEPS:-0}" != 1 ]]; then
             qt6-qtbase-devel mesa-libGL-devel libxkbcommon-devel
     else
         echo 'Install C++20 compiler, Git, curl, Python 3.10+, and Qt 6.4+ development packages.' >&2
-        echo 'Then rerun with CHUNKDADDY_SKIP_SYSTEM_DEPS=1 bash setup.sh.' >&2
+        echo 'Then rerun with CHUNKDADDY_SKIP_SYSTEM_DEPS=1 bash scripts/build-linux.sh.' >&2
         exit 1
     fi
 fi
@@ -39,4 +42,4 @@ if [[ ! -x "$root/local/linux/tools/bin/python" ]]; then
 fi
 "$root/local/linux/uv/uv" pip install --python "$root/local/linux/tools/bin/python" -r "$root/scripts/build-requirements.txt"
 export PATH="$root/local/linux/tools/bin:$PATH"
-exec "$root/local/linux/tools/bin/python" "$root/scripts/build.py" "$@"
+exec "$root/local/linux/tools/bin/python" "$root/scripts/build.py" --prepared "$@"

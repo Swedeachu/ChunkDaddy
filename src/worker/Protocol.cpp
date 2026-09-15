@@ -77,6 +77,7 @@ WorkerReply Protocol::parseReply(const QJsonObject& frame) {
 WorkerProgress Protocol::parseProgress(const QJsonObject& payload) {
     WorkerProgress progress;
     progress.stage = payload.value(QStringLiteral("stage")).toString();
+    progress.fileName = payload.value(QStringLiteral("fileName")).toString();
     progress.done = static_cast<qint64>(payload.value(QStringLiteral("done")).toDouble());
     progress.total = static_cast<qint64>(payload.value(QStringLiteral("total")).toDouble());
     return progress;

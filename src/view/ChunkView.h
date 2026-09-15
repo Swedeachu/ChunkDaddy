@@ -6,6 +6,8 @@
 
 #include <QPointF>
 #include <QWidget>
+#include <QTimer>
+#include <QPushButton>
 #include <optional>
 
 namespace chunkdaddy {
@@ -48,6 +50,11 @@ public:
 
     void setHeightSlice(int sliceY);
     int heightSlice() const noexcept { return m_sliceY; }
+    void setHeightMode(const QString& mode);
+    QString heightMode() const { return m_heightMode; }
+    void setPreviewPaused(bool paused);
+    void completePreview(quint64 generation, const QString& path, qint64 revision, const QString& error);
+    void retryPreview();
 
     void setShowChunkGrid(bool show);
     void setShowArenaLabels(bool show);
@@ -71,7 +78,8 @@ signals:
     void pasteCommitted(int chunkX, int chunkZ);
     void worldSpawnPicked(const BlockPos& block);
     /// Tiles for these regions are not cached and should be fetched.
-    void tilesNeeded(const QVector<ChunkRect>& regions);
+    void tilesNeeded(const ChunkRect& area, int pixelsPerChunk, quint64 generation);
+    void previewFailed(const QString& error);
     void arenaActivated(const QString& arenaId);
 
 protected:
@@ -103,6 +111,9 @@ private:
     void drawLegend(QPainter& painter);
 
     void requestMissingTiles();
+    void rebuildPreviewQueue();
+    void fetchNextPreview();
+    void invalidatePreview();
     void setZoom(double zoom, const QPointF& anchorWidgetPos);
 
     Document* m_document = nullptr;
@@ -128,6 +139,19 @@ private:
     QPoint m_pasteOrigin;
     QPoint m_hoverChunk;
     bool m_hasHover = false;
+    QTimer m_previewTimer;
+    QVector<ChunkRect> m_previewQueue;
+    quint64 m_previewGeneration = 0;
+    qint64 m_previewRevision = -1;
+    std::optional<ChunkRect> m_previewExportRectangle;
+    int m_pixelsPerChunk = 16;
+    int m_previewTotal = 0;
+    int m_previewCompleted = 0;
+    bool m_previewInFlight = false;
+    bool m_previewPaused = false;
+    QString m_previewError;
+    QString m_heightMode = QStringLiteral("HIGHEST_SURFACE");
+    QPushButton* m_retryButton = nullptr;
 };
 
 } // namespace chunkdaddy

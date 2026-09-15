@@ -24,6 +24,7 @@ import java.util.ArrayList;
 import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Set;
+import java.util.concurrent.atomic.AtomicLong;
 import java.util.function.LongConsumer;
 
 /**
@@ -46,8 +47,9 @@ public final class ComposedLevelReader implements LevelReader {
     private final Dimension dimension;
     private final LongConsumer progress;
 
-    private long emittedContentColumns;
-    private long emittedVoidColumns;
+    private final AtomicLong emittedContentColumns = new AtomicLong();
+    private final AtomicLong emittedVoidColumns = new AtomicLong();
+    private long lastReportedColumns;
 
     public ComposedLevelReader(WorldSnapshot snapshot,
                                ColumnComposer composer,
@@ -83,15 +85,15 @@ public final class ComposedLevelReader implements LevelReader {
     }
 
     public long emittedContentColumns() {
-        return emittedContentColumns;
+        return emittedContentColumns.get();
     }
 
     public long emittedVoidColumns() {
-        return emittedVoidColumns;
+        return emittedVoidColumns.get();
     }
 
     public long emittedColumns() {
-        return emittedContentColumns + emittedVoidColumns;
+        return emittedContentColumns.get() + emittedVoidColumns.get();
     }
 
     @Override
@@ -164,14 +166,25 @@ public final class ComposedLevelReader implements LevelReader {
                 ChunkerColumn column;
                 if (composer.hasContent(snapshot, chunkX, chunkZ)) {
                     column = composer.compose(snapshot, chunkX, chunkZ);
-                    emittedContentColumns++;
+                    emittedContentColumns.incrementAndGet();
                 } else {
                     column = composer.composeVoid(chunkX, chunkZ);
-                    emittedVoidColumns++;
+                    emittedVoidColumns.incrementAndGet();
                 }
                 handler.convertColumn(column);
-                progress.accept(emittedColumns());
+                reportProgress();
             }
+        }
+    }
+
+    // Region tasks run concurrently. Keep progress ordered and avoid flooding the UI
+    // with hundreds of thousands of messages for a large grid.
+    private synchronized void reportProgress() {
+        long done = emittedColumns();
+        if (done - lastReportedColumns >= 128 || done == exportRectangle.columnCount()) {
+            if (done <= lastReportedColumns) return;
+            lastReportedColumns = done;
+            progress.accept(done);
         }
     }
 }

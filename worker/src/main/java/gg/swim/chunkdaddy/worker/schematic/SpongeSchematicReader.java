@@ -41,7 +41,7 @@ public final class SpongeSchematicReader {
     public static SpongeSchematic read(File file) {
         CompoundTag root;
         try {
-            root = Tag.readPossibleGZipJavaNBT(file);
+            root = SchematicNbtReader.read(file);
         } catch (Exception e) {
             throw new SchematicFormatException("Not readable as NBT: " + file.getName() + " (" + e.getMessage() + ")", e);
         }

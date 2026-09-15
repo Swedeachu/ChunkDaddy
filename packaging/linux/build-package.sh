@@ -3,7 +3,7 @@
 set -euo pipefail
 root="$(cd -- "$(dirname -- "${BASH_SOURCE[0]}")/../.." && pwd)"
 out="${1:-$root/build/package/linux/ChunkDaddy}"
-bash "$root/setup.sh"
+bash "$root/scripts/build-linux.sh"
 if [[ -e "$out" ]]; then
     echo "Output already exists: $out. Choose a new directory." >&2
     exit 1

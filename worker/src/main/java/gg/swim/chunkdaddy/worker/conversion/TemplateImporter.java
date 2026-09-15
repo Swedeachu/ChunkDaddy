@@ -17,6 +17,7 @@ import java.util.ArrayList;
 import java.util.HexFormat;
 import java.util.List;
 import java.util.Set;
+import java.util.function.Consumer;
 
 /** Turns a {@code .schem} file into an audited {@link ArenaTemplate}. */
 public final class TemplateImporter {
@@ -41,10 +42,17 @@ public final class TemplateImporter {
     }
 
     public ArenaTemplate importFile(File file) throws IOException {
+        return importFile(file, stage -> {});
+    }
+
+    public ArenaTemplate importFile(File file, Consumer<String> progress) throws IOException {
+        progress.accept("Reading schematic blocks");
         SpongeSchematic schematic = SpongeSchematicReader.read(file);
+        progress.accept("Checking file identity");
         String sha256 = sha256(file);
         String slug = Slug.suggestFromFileName(file.getName());
 
+        progress.accept("Preparing block mappings");
         JavaResolvers resolvers = resolverFactory.forDataVersion(schematic.javaDataVersion());
 
         List<CompoundTag> palette = schematic.palette();
@@ -52,6 +60,7 @@ public final class TemplateImporter {
         List<MappingIssue> issues = new ArrayList<>();
 
         for (int i = 0; i < palette.size(); i++) {
+            if (i % 128 == 0) progress.accept("Mapping blocks (" + i + "/" + palette.size() + ")");
             CompoundTag state = palette.get(i);
             String name = state.getString("Name", "?");
             ChunkerBlockIdentifier identifier;
@@ -75,7 +84,10 @@ public final class TemplateImporter {
 
         // Audit block entity types too: an unmapped block entity keeps its block but loses
         // its payload, which for signs and containers is a content change, not a detail.
+        int blockEntityIndex = 0;
         for (SpongeSchematic.BlockEntityRecord record : schematic.blockEntities()) {
+            if (blockEntityIndex++ % 128 == 0) progress.accept("Checking block entities ("
+                    + (blockEntityIndex - 1) + "/" + schematic.blockEntities().size() + ")");
             if (resolvers.blockEntityResolver().to(record.javaNbt()).isEmpty()) {
                 issues.add(new MappingIssue(MappingIssue.Severity.BLOCKING, MappingIssue.Kind.BLOCK_ENTITY,
                         record.id(), "No block entity mapping for the selected profile."));
@@ -85,7 +97,10 @@ public final class TemplateImporter {
         boolean aggregate = schematic.footprintChunksX() >= AGGREGATE_CHUNK_FOOTPRINT
                 || schematic.footprintChunksZ() >= AGGREGATE_CHUNK_FOOTPRINT;
 
-        return new ArenaTemplate(slug, file.getName(), sha256, schematic, resolved, dedupe(issues), aggregate);
+        ArenaTemplate template = new ArenaTemplate(slug, file.getName(), sha256, schematic, resolved, dedupe(issues), aggregate);
+        progress.accept("Finding centre surface for fallback spawns");
+        template.generateFallbackSpawns();
+        return template;
     }
 
     /** Collapse repeats so a palette of 400 unknown states does not produce 400 lines. */

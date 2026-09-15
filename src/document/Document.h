@@ -28,6 +28,8 @@ struct TemplateInfo {
     int paletteSize = 0;
     bool aggregateCandidate = false;
     bool spawnsConfirmed = false;
+    bool spawnsAutomatic = false;
+    bool spawnsReady() const { return spawnsConfirmed || spawnsAutomatic; }
     bool hasWorldEditOrigin = false;
     int blockingIssueCount = 0;
     std::optional<BlockPos> schematicOffset;

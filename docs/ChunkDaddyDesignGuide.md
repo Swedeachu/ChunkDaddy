@@ -24,7 +24,7 @@ Ship one desktop application with its runtime included. Users should not install
 
 ### Essential corrections to the original premise
 
-1. **WorldEdit origin and schematic offset are placement metadata, not two duel spawns.** The supplied files need a template-level spawn-authoring step unless explicit markers are added.
+1. **WorldEdit origin and schematic offset are placement metadata, not two duel spawns.** Missing markers use the automatic centre/surface fallback described in the spawn workflow below; distinct duel positions can be authored per template.
 2. **The supplied schematics mix Sponge v2 and v3.** Supporting only one format cannot import all fifteen maps.
 3. **A missing chunk is not a generated void chunk.** Export must enumerate the entire selected rectangle and serialize valid empty columns.
 4. **World archives are `.mcworld`, not `.mcpack`.** Offer `.mcworld`, `.zip`, and a world directory. Resource/behavior packs are a separate asset category.
@@ -94,7 +94,7 @@ Default the import selection to the fifteen individual files when this known col
 - Copy, cut, paste, move, undo, and redo, including between tabs.
 - Application-owned chunk clipboard, independent of the OS clipboard.
 - Multi-file `.schem` import, Sponge v2/v3, per-template counts, configurable chunk gaps, and grid preview.
-- Two authored or explicitly imported spawn markers per duel template.
+- Two authored, explicitly imported, or automatic centre/surface spawn markers per duel template.
 - Stable arena instance names, transformed spawn coordinates, and export of the requested JSON shape.
 - Explicit void generation across the rectangular output area.
 - Export selected tab to `.mcworld`, `.zip`, or a world directory, defaulting to Downloads.
@@ -379,9 +379,20 @@ No explicit `spawnPoint1`/`spawnPoint2` metadata was found in the individual sch
 
 This does not exclude an intentional visual marker made of ordinary blocks. It means the application cannot reliably infer two gameplay positions from the metadata provided.
 
-### Required authoring workflow
+### Automatic defaults and optional authoring workflow
 
-For each of the fifteen templates, author **two local player-feet positions once**:
+When a template has no markers, find its geometric centre X/Z and scan that column down
+from the top for the highest non-air block. Set player-feet Y to that block's Y + 1.
+If the centre column is empty, search outward for a nearby occupied column and use its
+block-centred X/Z. Both required spawn entries initially share this location. An entirely
+empty schematic has no fallback and still needs explicit markers.
+
+These automatic defaults permit export without manual confirmation. Label them as
+automatic in the UI and manifest, bind them to the current source hash, and preserve
+existing authored markers. Automatic defaults identify a surface, not two distinct duel
+positions or a verified playable floor.
+
+To replace the defaults, author **two local player-feet positions once per template**:
 
 1. Open the template preview.
 2. Set the intended gameplay height slice, so roofs do not capture the clicks.
@@ -397,7 +408,8 @@ Supported marker sources, in precedence order:
 1. Explicit user-authored markers saved in the project/template sidecar.
 2. A documented custom schematic metadata namespace recognized by ChunkDaddy.
 3. Explicitly configured sign/structure-marker conventions.
-4. Heuristic suggestions, labeled unconfirmed and never silently exported as valid spawns.
+4. Automatic centre/surface defaults, labeled automatic and accepted for export.
+5. Other heuristic suggestions, labeled unconfirmed until the user confirms them.
 
 A convenience “opposite ends” suggestion may find candidates on the playable floor. It is only a suggestion: geometric extremes can be walls, scenery, roofs, or void. If authoring markers in-game is easier, allow entering two measured coordinates with a clearly selected coordinate frame.
 

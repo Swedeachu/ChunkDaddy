@@ -92,6 +92,7 @@ public final class ManifestWriter {
             size.addProperty("z", template.sizeZ());
             entry.add("size", size);
             entry.addProperty("spawnsConfirmed", template.spawnsConfirmed());
+            entry.addProperty("spawnsAutomatic", template.spawnsAutomatic());
             if (template.spawnPoint1() != null) entry.add("localSpawnPoint1", triple(template.spawnPoint1()));
             if (template.spawnPoint2() != null) entry.add("localSpawnPoint2", triple(template.spawnPoint2()));
             if (template.schematic().worldEditOrigin() != null) {

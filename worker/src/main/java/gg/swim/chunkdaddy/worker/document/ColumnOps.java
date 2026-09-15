@@ -96,7 +96,7 @@ public final class ColumnOps {
         }
 
         for (BlockEntity blockEntity : source.getBlockEntities()) {
-            BlockEntity moved = deepCopy ? deepCopy(blockEntity, resolver) : blockEntity;
+            BlockEntity moved = deepCopy ? deepCopy(blockEntity, source, resolver) : blockEntity;
             moved.setX(moved.getX() + dx);
             moved.setY(moved.getY() + dy);
             moved.setZ(moved.getZ() + dz);
@@ -126,11 +126,22 @@ public final class ColumnOps {
      * be shared between two arenas; a shallow share would let an edit to one appear in the
      * other, and would make a later coordinate rewrite corrupt both.
      */
-    public static BlockEntity deepCopy(BlockEntity source, @Nullable BlockEntityResolver<?, CompoundTag> resolver) {
+    public static BlockEntity deepCopy(BlockEntity source, ChunkerColumn column,
+                                       @Nullable BlockEntityResolver<?, CompoundTag> resolver) {
         if (resolver == null) {
             throw new IllegalStateException("A block entity resolver is required to copy block entities");
         }
         Optional<CompoundTag> nbt = resolver.from(source);
+        if (nbt.isEmpty()) {
+            // Imported columns contain intermediate types. Bedrock encodes some of
+            // them (chests, brushable blocks, shulkers) through a format-specific
+            // wrapper which also needs the block's state. These handlers return new
+            // wrappers; do not run all write hooks on the shared source, since hooks
+            // for directly serializable types such as banners mutate their input.
+            BlockEntity writable = resolver.updateBeforeWrite(column,
+                    source.getX(), source.getY(), source.getZ(), source);
+            nbt = resolver.from(writable);
+        }
         if (nbt.isEmpty()) {
             throw new IllegalStateException(
                     "Cannot copy block entity at " + source.getX() + "," + source.getY() + "," + source.getZ()

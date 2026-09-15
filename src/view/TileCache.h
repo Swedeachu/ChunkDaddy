@@ -42,6 +42,9 @@ public:
     void clear();
     /// Forget the tiles covering a rectangle, after an edit changed it.
     void invalidate(const ChunkRect& area);
+    void setPixelsPerChunk(int pixels);
+    bool hasRegion(const ChunkRect& area) const;
+    void retain(const ChunkRect& area);
 
     bool hasChunk(int chunkX, int chunkZ) const;
     ColumnState state(int chunkX, int chunkZ) const;
@@ -67,6 +70,7 @@ private:
 
     QHash<quint64, Tile> m_tiles;
     mutable QHash<quint64, QImage> m_pages;
+    int m_pixelsPerChunk = 16;
 };
 
 } // namespace chunkdaddy

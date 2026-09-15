@@ -6,8 +6,8 @@ From a Git checkout or an extracted source folder:
 
 | Platform | Build and test | Build, test and launch |
 | --- | --- | --- |
-| Windows x64 | Double-click `setup.cmd` | `setup.cmd -Run` |
-| Linux | `bash setup.sh` | `bash setup.sh --run` |
+| Windows x64 | Double-click `scripts\build-windows.bat` | `scripts\build-windows.bat -Run` |
+| Linux | `bash scripts/build-linux.sh` | `bash scripts/build-linux.sh --run` |
 
 Run from any working directory. Paths containing spaces are supported. Windows uses
 PowerShell 5.1 (included with Windows); no developer terminal, vcpkg, Python, Qt, Java,
@@ -22,7 +22,7 @@ For another distribution, install a C++20 compiler, Git, curl, Python 3.10+, and
 Core/Gui/Widgets/Test development packages, then run:
 
 ```bash
-CHUNKDADDY_SKIP_SYSTEM_DEPS=1 bash setup.sh
+CHUNKDADDY_SKIP_SYSTEM_DEPS=1 bash scripts/build-linux.sh
 ```
 
 Set `CMAKE_PREFIX_PATH` for a custom Linux Qt installation. Linux supports x86_64 and
@@ -45,6 +45,47 @@ Every failing command stops setup with a nonzero exit code. Repeat the same comm
 retry or rebuild; downloaded dependencies and build outputs are reused. Existing Chunker
 checkouts with a different commit or local edits are preserved and reported as errors.
 There is no need to create or commit a submodule manually.
+
+## Rebuilding while developing
+
+Use the same setup command after changing the source. If Python is already available,
+you can also run `python scripts/build.py` on Windows or `python3 scripts/build.py` on
+Linux. Running `build.py` directly from the `scripts` folder works too. Every entry point
+initializes the compiler and project-local tools, installs missing dependencies, builds
+incrementally, tests, and stages the application with its worker and runtime. A Visual
+Studio developer terminal is not required; the bootstrap sets both compiler and Windows
+SDK library paths before CMake runs.
+
+Append `--run` to the Python command to launch the result. Close the app being rebuilt
+on Windows first. To keep an existing session open, build separately:
+
+```text
+python scripts/build.py --build-dir build/windows-dev --run
+```
+
+The equivalent Windows launcher option is `scripts\build-windows.bat -BuildDir build/windows-dev -Run`.
+Linux uses `bash scripts/build-linux.sh --build-dir build/linux-dev --run`. Repeated Linux setup skips
+package-manager installation when the required system tools and Qt development packages
+are already available.
+
+### Preview regression checks
+
+CTest covers fitted views larger than 4,096 chunks, automatic refresh after edits and
+height-mode changes, stale replies after switching tabs, retry after preview errors,
+and bounded request scheduling. Preview rendering uses 32×32-chunk batches, with one
+request in flight. Distant views use reduced samples; zooming in reloads more detail.
+
+An optional native integration test accepts `CHUNKDADDY_REAL_WORLD` (a local world path)
+and `CHUNKDADDY_REAL_SCHEMATICS` (a directory containing the fifteen individual maps).
+On Windows, run `test_viewpreview realWorldAndGridPreview` from the packaged build
+directory with the Qt test libraries on PATH; on Linux, use `tests/test_viewpreview
+realWorldAndGridPreview`. It checks opening the world, delete/undo/redo refresh,
+and all 450 arena previews with eight-chunk gaps. Original input files are read only.
+`CHUNKDADDY_UI_SCREENSHOTS=1` additionally saves `world-preview.png`.
+
+Local Windows verification with the supplied FFA measured 305 ms for its initial preview
+and 5,280 ms for the full 450-arena overview after world loading/placement. The largest
+preview batch took 78 ms. These are local measurements, not cross-machine guarantees.
 
 ## Launching after setup
 
@@ -91,11 +132,31 @@ setup entry points. CI results are only established when that workflow actually 
 | Windows 11 x64, MSVC 19.51, Qt 6.8.3 | Full setup/build passed; application window and bundled worker launched successfully |
 | Ubuntu 26.04 x64 under WSL, GCC 15.2, Qt 6.10.2 | Full build and headless runtime checks passed |
 
-Both passed 28 Java tests, all five CTest suites, the native worker integration test,
+Windows passed 40 Java tests; Linux passed the preceding 39-test suite. The final
+snapshot optimization passed on Windows; its repeat Linux run was stopped at the user's
+request. Both passed all seven CTest suites, the native worker integration test,
 and one-column `.mcworld` exports for all three target profiles. Windows prerequisite
 installation was exercised with Visual Studio already installed; installation of the
 compiler on a clean Windows machine remains unverified. Linux apt dependencies were
 installed in WSL; Fedora, ARM64, and the Linux graphical UI remain unverified.
+
+The export regression test writes and reopens a world twice, checks chest contents,
+sign text, suspicious sand and banners, verifies that export leaves the source objects
+unchanged, and checks generated void columns across region boundaries. Windows also
+exported the supplied `PVP_ZONE_FFA.mcworld` with 30 copies of each of the 15 individual
+schematics and at least eight chunks between grid cells: 450 arenas, 900 spawn positions,
+266,252 columns, and a 193.5 MiB archive. Its internal and companion arena JSON matched
+byte for byte. This is conversion verification; the Minecraft acceptance checks below
+are still separate.
+
+World operations use a layout-managed progress dialog with wrapped labels and elapsed
+time. Unknown totals use an activity bar; export switches back to activity during database
+flush and packaging, and closes only on the worker's final reply. Dialog layout was also
+checked at 100% and 150% Windows scaling.
+
+Large coordinate maps use hash-map snapshots that handle colliding keys efficiently. A 262,144-column
+regression guards against the former quadratic pause at the end of world import and
+when committing edits to a large rectangular world.
 
 ## Where things are written
 
@@ -114,7 +175,7 @@ Exports default to Downloads and then remember the chosen directory.
 
 - **Worker missing or Java fails to start:** rerun setup. It copies the worker and bundles
   the matching runtime. Check the Reports dock's worker log for details.
-- **Visual Studio requires reboot:** restart Windows and rerun `setup.cmd`.
+- **Visual Studio requires reboot:** restart Windows and rerun `scripts\build-windows.bat`.
 - **Download fails:** check proxy/firewall/network access, then rerun setup. Downloads use
   GitHub, PyPI, the Qt mirrors, Gradle's distribution/plugin services and Maven Central.
 - **Chunker pin mismatch or modified files:** preserve any local work, then restore the

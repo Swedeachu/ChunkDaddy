@@ -45,6 +45,7 @@ TemplateInfo TemplateInfo::fromJson(const QJsonObject& object) {
     info.paletteSize = object.value(QStringLiteral("paletteSize")).toInt();
     info.aggregateCandidate = object.value(QStringLiteral("aggregateCandidate")).toBool();
     info.spawnsConfirmed = object.value(QStringLiteral("spawnsConfirmed")).toBool();
+    info.spawnsAutomatic = object.value(QStringLiteral("spawnsAutomatic")).toBool();
     info.hasWorldEditOrigin = object.value(QStringLiteral("hasWorldEditOrigin")).toBool();
     info.blockingIssueCount = object.value(QStringLiteral("blockingIssueCount")).toInt();
     info.spawnPoint1 = readTriple(object, QStringLiteral("spawnPoint1"));
@@ -73,8 +74,8 @@ QString TemplateInfo::statusText() const {
     parts << QStringLiteral("Sponge v%1").arg(spongeVersion);
     parts << QStringLiteral("%1x%2x%3").arg(sizeX).arg(sizeY).arg(sizeZ);
     parts << QStringLiteral("%1x%2 chunks").arg(footprintChunksX).arg(footprintChunksZ);
-    parts << (spawnsConfirmed ? QStringLiteral("spawns confirmed")
-                              : QStringLiteral("spawns NOT confirmed"));
+    parts << (spawnsAutomatic ? QStringLiteral("automatic centre/surface spawns")
+              : spawnsConfirmed ? QStringLiteral("spawns confirmed") : QStringLiteral("spawns NOT confirmed"));
     if (blockingIssueCount > 0) {
         parts << QStringLiteral("%1 blocking issue(s)").arg(blockingIssueCount);
     }

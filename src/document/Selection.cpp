@@ -1,6 +1,7 @@
 #include "document/Selection.h"
 
 #include <stdexcept>
+#include <algorithm>
 
 namespace chunkdaddy {
 
@@ -78,14 +79,25 @@ std::int64_t Selection::columnCount() const {
     if (m_added.isEmpty()) {
         return 0;
     }
-    // Counting over the bounding rectangle is exact because membership is evaluated per
-    // column; the subtract rectangles make a simple area sum wrong.
-    const ChunkRect box = bounds();
+    if (m_added.size() == 1 && m_subtracted.isEmpty()) return m_added.first().columnCount();
+    // Membership changes only at rectangle edges. Count these cells instead of
+    // walking every chunk between distant selections.
+    QVector<qint64> xs, zs;
+    for (const auto& list : {m_added, m_subtracted}) {
+        for (const auto& r : list) {
+            xs << r.minX() << qint64(r.maxX()) + 1;
+            zs << r.minZ() << qint64(r.maxZ()) + 1;
+        }
+    }
+    std::sort(xs.begin(), xs.end());
+    xs.erase(std::unique(xs.begin(), xs.end()), xs.end());
+    std::sort(zs.begin(), zs.end());
+    zs.erase(std::unique(zs.begin(), zs.end()), zs.end());
     std::int64_t count = 0;
-    for (int cx = box.minX(); cx <= box.maxX(); ++cx) {
-        for (int cz = box.minZ(); cz <= box.maxZ(); ++cz) {
-            if (contains(cx, cz)) {
-                ++count;
+    for (qsizetype x = 0; x + 1 < xs.size(); ++x) {
+        for (qsizetype z = 0; z + 1 < zs.size(); ++z) {
+            if (contains(int(xs[x]), int(zs[z]))) {
+                count += (xs[x + 1] - xs[x]) * (zs[z + 1] - zs[z]);
             }
         }
     }

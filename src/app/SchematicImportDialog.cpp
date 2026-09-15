@@ -78,9 +78,11 @@ SchematicImportDialog::SchematicImportDialog(const QVector<TemplateInfo>& templa
     m_columns->setEnabled(false);
 
     m_originX = new QSpinBox(this);
+    m_originX->setObjectName("gridOriginX");
     m_originX->setRange(-1'800'000, 1'800'000);
     m_originX->setSuffix(tr(" chunk X"));
     m_originZ = new QSpinBox(this);
+    m_originZ->setObjectName("gridOriginZ");
     m_originZ->setRange(-1'800'000, 1'800'000);
     m_originZ->setSuffix(tr(" chunk Z"));
 
@@ -90,14 +92,21 @@ SchematicImportDialog::SchematicImportDialog(const QVector<TemplateInfo>& templa
 
     m_placementMode = new QComboBox(this);
     m_placementMode->addItem(tr("Minimum corner (recommended)"), QStringLiteral("min-corner"));
-    m_placementMode->addItem(tr("WorldEdit anchor"), QStringLiteral("worldedit-anchor"));
 
     m_pastePolicy = new QComboBox(this);
     m_pastePolicy->addItem(tr("Exact region replacement, including schematic air"),
                            QStringLiteral("exact"));
-    m_pastePolicy->addItem(tr("Overlay non-air blocks only"), QStringLiteral("overlay"));
 
     m_replaceExisting = new QCheckBox(tr("Replace existing content where the grid overlaps"), this);
+    connect(m_replaceExisting, &QCheckBox::toggled, this, &SchematicImportDialog::recomputePlan);
+
+    // Start beside the loaded world with the requested gap, so the first preview is safe.
+    if (m_document) {
+        if (const auto bounds = m_document->contentBounds()) {
+            m_originX->setValue(bounds->maxX() + m_gapX->value() + 1);
+            m_originZ->setValue(bounds->minZ());
+        }
+    }
 
     m_summary = new QTextBrowser(this);
     m_summary->setMinimumHeight(170);
@@ -137,7 +146,7 @@ SchematicImportDialog::SchematicImportDialog(const QVector<TemplateInfo>& templa
     connect(previewButton, &QPushButton::clicked, this, &SchematicImportDialog::recomputePlan);
     connect(buttons, &QDialogButtonBox::accepted, this, [this] {
         recomputePlan();
-        if (m_plan.valid) {
+        if (m_plan.valid && m_placeButton->isEnabled()) {
             Settings::setDefaultGapChunks(m_gapX->value());
             accept();
         }
@@ -152,11 +161,13 @@ SchematicImportDialog::SchematicImportDialog(const QVector<TemplateInfo>& templa
     }
 
     auto* layout = new QVBoxLayout(this);
-    layout->addWidget(new QLabel(
+    auto* explanation = new QLabel(
         tr("Each selected schematic is placed the requested number of times into a uniform grid. "
            "The gap is the number of completely empty chunk columns between neighbouring arena "
            "footprints, not a distance between centres."),
-        this));
+        this);
+    explanation->setWordWrap(true);
+    layout->addWidget(explanation);
     layout->addWidget(m_table, 1);
     layout->addWidget(options);
     layout->addWidget(m_summary);
@@ -176,7 +187,11 @@ void SchematicImportDialog::populateTable() {
         include->setFlags(Qt::ItemIsUserCheckable | Qt::ItemIsEnabled);
         // A file that looks like a collection of arenas is never enabled by default; the
         // user includes it deliberately rather than getting a sixteenth duel map.
-        include->setCheckState(info.aggregateCandidate ? Qt::Unchecked : Qt::Checked);
+        include->setCheckState(info.aggregateCandidate || info.blockingIssueCount > 0 ? Qt::Unchecked : Qt::Checked);
+        if (info.blockingIssueCount > 0) {
+            include->setFlags(Qt::NoItemFlags);
+            include->setToolTip(tr("This schematic has blocking import issues. See the Palette column."));
+        }
         if (info.aggregateCandidate) {
             include->setToolTip(tr("This file's footprint is much larger than a single arena. "
                                    "It looks like an aggregate of several maps; include it only "
@@ -214,10 +229,13 @@ void SchematicImportDialog::populateTable() {
         }
         m_table->setItem(row, ColumnPalette, palette);
 
-        auto* markers = new QTableWidgetItem(info.spawnsConfirmed ? tr("confirmed")
-                                                                  : tr("not confirmed"));
+        auto* markers = new QTableWidgetItem(info.spawnsAutomatic ? tr("automatic centre/surface")
+                                            : info.spawnsConfirmed ? tr("confirmed") : tr("not confirmed"));
         markers->setFlags(Qt::ItemIsEnabled);
-        if (!info.spawnsConfirmed) {
+        if (info.spawnsAutomatic) {
+            markers->setToolTip(tr("Both spawn entries use the same centre/surface fallback. "
+                                   "Export is available; edit the markers for separate duel positions."));
+        } else if (!info.spawnsConfirmed) {
             markers->setForeground(QColor(200, 140, 40));
             markers->setToolTip(tr("Two spawn markers have to be authored and confirmed before "
                                    "this template's arenas can be exported. Placement can happen "
@@ -282,6 +300,16 @@ void SchematicImportDialog::recomputePlan() {
     options.originChunkZ = m_originZ->value();
     options.borderChunks = m_border->value();
 
+    for (const GridTemplate& entry : templates) {
+        if (entry.minY < m_profileMinBlockY || entry.minY + entry.sizeY - 1 > m_profileMaxBlockY) {
+            m_plan.valid = false;
+            m_plan.error = tr("%1 does not fit the world's build height. Adjust Min Y.").arg(entry.slug);
+            m_summary->setPlainText(m_plan.error);
+            m_placeButton->setEnabled(false);
+            return;
+        }
+    }
+
     m_plan = GridPlanner::plan(templates, options);
 
     QStringList report;
@@ -335,7 +363,7 @@ void SchematicImportDialog::recomputePlan() {
     QStringList unconfirmed;
     for (const GridTemplate& entry : templates) {
         for (const TemplateInfo& info : m_templates) {
-            if (info.templateId == entry.templateId && !info.spawnsConfirmed) {
+            if (info.templateId == entry.templateId && !info.spawnsReady()) {
                 unconfirmed << info.slug;
             }
         }

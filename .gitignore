@@ -17,8 +17,14 @@ __pycache__/
 
 # Local caches / staging
 /local/
+/worker/local/
 /third_party/chunker/
 *.chunkdaddy-workspace/
+
+# Generated logs, scratch files and JVM heap dumps
+*.log
+*.tmp
+*.hprof
 
 # Test worlds and large fixtures are not distributed
 tests/fixtures/worlds/

@@ -46,6 +46,7 @@ public final class ArenaJsonWriter {
     public static List<String> unresolved(WorldSnapshot snapshot, TemplateRegistry templates) {
         List<String> problems = new ArrayList<>();
         Set<String> names = new HashSet<>();
+        java.util.Map<ArenaTemplate, Integer> missingSpawns = new java.util.LinkedHashMap<>();
         for (ArenaInstance instance : sorted(snapshot)) {
             ArenaTemplate template = templates.get(instance.templateId());
             if (template == null) {
@@ -58,11 +59,13 @@ public final class ArenaJsonWriter {
             if (instance.needsRevalidation()) {
                 problems.add(instance.exportId() + ": a partial edit changed this arena; revalidate or remove it.");
             }
-            if (!template.spawnsConfirmed()) {
-                problems.add(instance.exportId() + ": template '" + template.slug()
-                        + "' has no confirmed spawn markers for its current source hash.");
+            if (!template.spawnsReady()) {
+                missingSpawns.merge(template, 1, Integer::sum);
             }
         }
+        missingSpawns.forEach((template, count) -> problems.add("Template '" + template.slug()
+                + "' (" + count + " arena(s)) has no export-ready spawn markers. "
+                + "Author and confirm markers; an entirely empty schematic has no fallback surface."));
         return problems;
     }
 

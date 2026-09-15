@@ -6,6 +6,10 @@
 #include "app/OpenWorldRootDialog.h"
 #include "app/ReportPanel.h"
 #include "app/SchematicImportDialog.h"
+#include "app/ImportProgressDialog.h"
+#include "app/OperationProgressDialog.h"
+#include <QPointer>
+#include <QSet>
 #include "app/Settings.h"
 #include "app/SpawnMarkerDialog.h"
 #include "app/TemplatePanel.h"
@@ -28,6 +32,7 @@
 #include <QMessageBox>
 #include <QMimeData>
 #include <QProgressBar>
+#include <QFile>
 #include <QPushButton>
 #include <QSpinBox>
 #include <QStatusBar>
@@ -65,13 +70,18 @@ MainWindow::MainWindow(QWidget* parent) : QMainWindow(parent) {
     connect(m_tabs, &QTabBar::tabCloseRequested, this, &MainWindow::onTabCloseRequested);
     connect(m_view, &ChunkView::cursorMoved, this, &MainWindow::onCursorMoved);
     connect(m_view, &ChunkView::tilesNeeded, this, &MainWindow::onTilesNeeded);
+    connect(m_view, &ChunkView::previewFailed, this, [this](const QString& error) {
+        m_reportPanel->appendLog(tr("Preview: %1").arg(error));
+    });
     connect(m_view, &ChunkView::selectionChanged, this, &MainWindow::refreshActions);
     connect(m_view, &ChunkView::moveRequested, this, [this](int dx, int dz) {
         Document* document = currentDocument();
         if (!document) {
             return;
         }
+        showBusy(tr("Moving selected chunks…"), -1);
         m_workspace.moveSelection(document, dx, dz, false, [this](const WorkerReply& reply) {
+            hideBusy();
             if (!reply.ok) {
                 reportError(tr("Move failed"), reply);
                 return;
@@ -94,7 +104,9 @@ MainWindow::MainWindow(QWidget* parent) : QMainWindow(parent) {
         if (!document) {
             return;
         }
+        showBusy(tr("Pasting chunks…"), -1);
         m_workspace.pasteClipboard(document, chunkX, chunkZ, false, [this](const WorkerReply& reply) {
+            hideBusy();
             m_view->cancelPastePreview();
             if (!reply.ok) {
                 reportError(tr("Paste failed"), reply);
@@ -366,10 +378,7 @@ void MainWindow::buildStatusBar() {
     m_heightMode->addItem(tr("Highest visible surface"), QStringLiteral("HIGHEST_SURFACE"));
     m_heightMode->addItem(tr("Exactly at the slice"), QStringLiteral("SLICE"));
     connect(m_heightMode, &QComboBox::currentIndexChanged, this, [this] {
-        // Changing what each column samples invalidates every cached tile.
-        m_view->tiles().clear();
-        m_view->setHeightSlice(m_sliceSpin->value());
-        m_view->update();
+        m_view->setHeightMode(m_heightMode->currentData().toString());
     });
 
     statusBar()->addWidget(m_cursorLabel, 2);
@@ -460,7 +469,7 @@ void MainWindow::refreshActions() {
     m_deleteAction->setEnabled(hasSelection);
     m_pasteAction->setEnabled(hasDocument && !m_workspace.clipboard().isEmpty());
     m_exportAction->setEnabled(hasDocument);
-    m_importAction->setEnabled(hasDocument);
+    m_importAction->setEnabled(hasDocument && !m_importProgress);
     m_spawnAction->setEnabled(hasDocument && !document->templates().isEmpty());
 
     if (hasSelection) {
@@ -572,77 +581,94 @@ void MainWindow::openPathAsWorld(const QString& path) {
                 }
             },
             [this](const WorkerProgress& progress) {
-                m_busyLabel->setText(progress.describe());
+                updateBusyProgress(progress);
             });
     });
 }
 
 void MainWindow::importSchematics() {
-    Document* document = currentDocument();
-    if (!document) {
-        return;
-    }
+    if (!currentDocument() || m_importProgress) return;
     const QStringList paths = QFileDialog::getOpenFileNames(
         this, tr("Import schematics"), Settings::lastImportDirectory(),
         tr("Sponge schematics (*.schem);;All files (*)"));
-    if (paths.isEmpty()) {
-        return;
-    }
-    Settings::setLastImportDirectory(QFileInfo(paths.first()).absolutePath());
+    importSchematicPaths(paths);
+}
 
-    // Natural ordering, saved with the plan: 1, 2, ... 15, never the directory's order.
+void MainWindow::importSchematicPaths(const QStringList& paths) {
+    QPointer<Document> document = currentDocument();
+    if (!document || paths.isEmpty() || m_importProgress) return;
+    Settings::setLastImportDirectory(QFileInfo(paths.first()).absolutePath());
     const QStringList ordered = InstanceNaming::sortNaturally(paths);
 
-    showBusy(tr("Decoding %1 schematic(s)…").arg(ordered.size()), -1);
-    m_workspace.importSchematics(
+    m_importProgress = new ImportProgressDialog(ordered.size(), this);
+    connect(m_importProgress, &ImportProgressDialog::cancelRequested, this, [this] {
+        if (m_activeJob >= 0) m_workspace.worker().cancel(m_activeJob);
+    });
+    m_importProgress->show();
+    refreshActions();
+    showBusy(tr("Importing %1 schematics…").arg(ordered.size()), -1);
+    m_activeJob = m_workspace.importSchematics(
         ordered,
-        [this, document](const WorkerReply& reply) {
-            hideBusy();
+        [this, document, count = ordered.size()](const WorkerReply& reply) {
             if (!reply.ok) {
-                reportError(tr("Import failed"), reply);
+                hideBusy();
+                if (reply.errorCode == QStringLiteral("job.cancelled")) {
+                    statusBar()->showMessage(tr("Schematic import cancelled. No grid was placed."), 7000);
+                } else {
+                    reportError(tr("Import failed"), reply);
+                }
                 return;
             }
+            QSet<QString> importedIds;
+            for (const QJsonValue& value : reply.result.value("templates").toArray())
+                importedIds.insert(value.toObject().value("templateId").toString());
             QStringList failures;
-            for (const QJsonValue& value : reply.result.value(QStringLiteral("failures")).toArray()) {
-                failures << value.toString();
+            for (const QJsonValue& value : reply.result.value("failures").toArray()) failures << value.toString();
+            if (!failures.isEmpty() || importedIds.isEmpty()) {
+                hideBusy();
+                const QString summary = importedIds.isEmpty()
+                    ? tr("None of the %1 selected schematics could be imported. No grid was placed.").arg(count)
+                    : tr("Imported %1 of %2 schematics. Grid options will contain only the successful imports.")
+                          .arg(importedIds.size()).arg(count);
+                m_reportPanel->appendReport(summary + "\n" + failures.join("\n"));
+                QMessageBox message(QMessageBox::Warning, tr("Schematic import results"), summary,
+                                    QMessageBox::Ok, this);
+                message.setDetailedText(failures.join("\n"));
+                message.exec();
+                if (importedIds.isEmpty()) return;
             }
-            if (!failures.isEmpty()) {
-                m_reportPanel->appendReport(
-                    tr("These files were not imported:\n  %1").arg(failures.join(QStringLiteral("\n  "))));
-                m_reportPanel->showReportTab();
-            }
-
-            // Refresh the document so it carries the newly imported templates.
+            if (!document) { hideBusy(); return; }
+            if (m_importProgress) m_importProgress->preparingGrid();
             QJsonObject request = Protocol::request(QStringLiteral("document_info"));
             request.insert(QStringLiteral("documentId"), document->documentId());
-            m_workspace.worker().send(request, [this, document](const WorkerReply& info) {
-                if (!info.ok) {
-                    reportError(tr("Could not refresh the world"), info);
-                    return;
-                }
+            m_workspace.worker().send(request, [this, document, importedIds](const WorkerReply& info) {
+                hideBusy();
+                if (!document) return;
+                if (!info.ok) { reportError(tr("Could not refresh the world"), info); return; }
                 document->applyState(info.result);
-                if (document->templates().isEmpty()) {
-                    return;
-                }
+                QVector<TemplateInfo> imported;
+                for (const TemplateInfo& entry : document->templates())
+                    if (importedIds.contains(entry.templateId)) imported.append(entry);
+                if (imported.isEmpty()) return;
                 const ProfileInfo profile = m_workspace.profile(document->profileId());
-                SchematicImportDialog dialog(document->templates(), document, profile.minBlockY,
-                                             profile.maxBlockY, this);
-                if (dialog.exec() != QDialog::Accepted) {
-                    return;
-                }
+                SchematicImportDialog dialog(imported, document, profile.minBlockY, profile.maxBlockY, this);
+                if (dialog.exec() != QDialog::Accepted || !document) return;
+                const ChunkRect gridBounds = dialog.plan().bounds;
                 showBusy(tr("Placing %1 arena(s)…").arg(dialog.plan().placements.size()), -1);
                 m_workspace.placeGrid(document, dialog.plan(), dialog.replaceExisting(),
-                                      [this](const WorkerReply& placed) {
-                                          hideBusy();
-                                          if (!placed.ok) {
-                                              reportError(tr("Could not place the grid"), placed);
-                                              return;
-                                          }
-                                          refreshActions();
-                                      });
+                    [this, document, gridBounds](const WorkerReply& placed) {
+                        hideBusy();
+                        if (!placed.ok) { reportError(tr("Could not place the grid"), placed); return; }
+                        refreshActions();
+                        if (currentDocument() == document) m_view->zoomToFit(gridBounds);
+                        statusBar()->showMessage(tr("Grid placed. Use Undo to remove this placement."), 7000);
+                    });
             });
         },
-        [this](const WorkerProgress& progress) { m_busyLabel->setText(progress.describe()); });
+        [this](const WorkerProgress& progress) {
+            updateBusyProgress(progress);
+            if (m_importProgress) m_importProgress->updateProgress(progress);
+        });
 }
 
 void MainWindow::editSpawnMarkers() {
@@ -751,7 +777,7 @@ void MainWindow::exportCurrentWorld() {
                 QMessageBox::information(this, tr("Export complete"), message);
             },
             [this](const WorkerProgress& progress) {
-                m_busyLabel->setText(progress.describe());
+                updateBusyProgress(progress);
                 m_progress->setValue(static_cast<int>(progress.fraction() * 100));
             });
     });
@@ -791,7 +817,9 @@ void MainWindow::copySelection() {
     if (!document || document->selection().isEmpty()) {
         return;
     }
+    showBusy(tr("Copying selected chunks…"), -1);
     m_workspace.copySelection(document, false, [this](const WorkerReply& reply) {
+        hideBusy();
         if (!reply.ok) {
             reportError(tr("Copy failed"), reply);
         }
@@ -803,7 +831,9 @@ void MainWindow::cutSelection() {
     if (!document || document->selection().isEmpty()) {
         return;
     }
+    showBusy(tr("Preparing selected chunks for cut…"), -1);
     m_workspace.copySelection(document, true, [this](const WorkerReply& reply) {
+        hideBusy();
         if (!reply.ok) {
             reportError(tr("Cut failed"), reply);
             return;
@@ -833,7 +863,9 @@ void MainWindow::deleteSelection() {
     if (!document || document->selection().isEmpty()) {
         return;
     }
+    showBusy(tr("Deleting selected chunks…"), -1);
     m_workspace.clearSelection(document, [this](const WorkerReply& reply) {
+        hideBusy();
         if (!reply.ok) {
             reportError(tr("Delete failed"), reply);
         }
@@ -867,7 +899,9 @@ void MainWindow::expandSelectionToArenas() {
 
 void MainWindow::undo() {
     if (Document* document = currentDocument()) {
+        showBusy(tr("Undoing the last edit…"), -1);
         m_workspace.undo(document, [this](const WorkerReply& reply) {
+            hideBusy();
             if (!reply.ok) {
                 reportError(tr("Undo failed"), reply);
             }
@@ -877,7 +911,9 @@ void MainWindow::undo() {
 
 void MainWindow::redo() {
     if (Document* document = currentDocument()) {
+        showBusy(tr("Redoing the edit…"), -1);
         m_workspace.redo(document, [this](const WorkerReply& reply) {
+            hideBusy();
             if (!reply.ok) {
                 reportError(tr("Redo failed"), reply);
             }
@@ -908,34 +944,19 @@ void MainWindow::onCursorMoved(const BlockPos& block, const QPoint& chunk, Colum
                                .arg(stateText));
 }
 
-void MainWindow::onTilesNeeded(const QVector<ChunkRect>& regions) {
-    Document* document = currentDocument();
-    if (!document || regions.isEmpty()) {
-        return;
-    }
-    // Merge the runs into one request when they are small enough for a single render.
-    ChunkRect merged = regions.first();
-    for (const ChunkRect& region : regions) {
-        merged = merged.united(region);
-    }
-    if (merged.columnCount() > 4096) {
-        return;
-    }
-    const QString heightMode = m_heightMode->currentData().toString();
-    m_workspace.requestPreviewTiles(
-        document, merged, m_sliceSpin->value(), heightMode, [this](const WorkerReply& reply) {
-            if (!reply.ok) {
-                m_reportPanel->appendLog(tr("Preview: %1").arg(reply.describeError()));
-                return;
-            }
-            QString error;
-            if (!m_view->tiles().loadTileFile(reply.result.value(QStringLiteral("path")).toString(),
-                                              &error)) {
-                m_reportPanel->appendLog(error);
-                return;
-            }
-            m_view->update();
-        });
+void MainWindow::onTilesNeeded(const ChunkRect& area, int pixelsPerChunk, quint64 generation) {
+    Document* document = m_view->document();
+    if (!document) return;
+    const qint64 revision = document->revision();
+    m_workspace.requestPreviewTiles(document, area, m_view->heightSlice(), m_view->heightMode(),
+        [this, generation, revision](const WorkerReply& reply) {
+            const QString path = reply.result.value(QStringLiteral("path")).toString();
+            m_view->completePreview(generation, path,
+                reply.ok ? qint64(reply.result.value(QStringLiteral("revision")).toDouble()) : revision,
+                reply.ok ? QString() : reply.describeError());
+            // Preview files are transient; avoid accumulating every pan/edit on disk.
+            if (!path.isEmpty()) QFile::remove(path);
+        }, pixelsPerChunk);
 }
 
 void MainWindow::onWorkerFailed(const QString& reason) {
@@ -961,16 +982,63 @@ void MainWindow::reportError(const QString& title, const WorkerReply& reply) {
 }
 
 void MainWindow::showBusy(const QString& label, qint64 jobId) {
+    m_busy = true;
     m_activeJob = jobId;
     m_busyLabel->setText(label);
+    m_progress->setRange(0, 0);
+    m_progress->show();
     m_cancelButton->setVisible(jobId >= 0);
+    m_view->setPreviewPaused(true);
+    menuBar()->setEnabled(false);
+    m_tabs->setEnabled(false);
+    m_view->setEnabled(false);
+    m_inspectorPanel->setEnabled(false);
+    m_templatePanel->setEnabled(false);
+    if (!m_importProgress) {
+        if (!m_operationProgress) {
+            m_operationProgress = new OperationProgressDialog(label, this);
+        }
+        m_operationProgress->show();
+    }
+}
+
+void MainWindow::updateBusyProgress(const WorkerProgress& progress) {
+    m_busyLabel->setText(progress.describe());
+    if (progress.total > 0) {
+        m_progress->setRange(0, 100);
+        m_progress->setValue(int(progress.fraction() * 100));
+    } else {
+        m_progress->setRange(0, 0);
+    }
+    if (m_operationProgress) {
+        m_operationProgress->updateProgress(progress);
+    }
 }
 
 void MainWindow::hideBusy() {
+    m_busy = false;
+    if (m_operationProgress) {
+        m_operationProgress->accept();
+        m_operationProgress->deleteLater();
+        m_operationProgress = nullptr;
+    }
+    menuBar()->setEnabled(true);
+    m_tabs->setEnabled(true);
+    m_view->setEnabled(true);
+    m_inspectorPanel->setEnabled(true);
+    m_templatePanel->setEnabled(true);
+    m_view->setPreviewPaused(false);
+    if (m_importProgress) {
+        m_importProgress->accept();
+        m_importProgress->deleteLater();
+        m_importProgress = nullptr;
+        refreshActions();
+    }
     m_activeJob = -1;
     m_busyLabel->clear();
     m_progress->hide();
     m_cancelButton->hide();
+    refreshActions();
 }
 
 // ---------------------------------------------------------------------------
@@ -978,6 +1046,7 @@ void MainWindow::hideBusy() {
 // ---------------------------------------------------------------------------
 
 void MainWindow::closeEvent(QCloseEvent* event) {
+    if (m_busy) { event->ignore(); return; }
     for (Document* document : m_tabOrder) {
         if (!document->isDirty()) {
             continue;
@@ -1003,6 +1072,7 @@ void MainWindow::dragEnterEvent(QDragEnterEvent* event) {
 }
 
 void MainWindow::dropEvent(QDropEvent* event) {
+    if (m_busy) { event->ignore(); return; }
     QStringList schematics;
     QStringList worlds;
     for (const QUrl& url : event->mimeData()->urls()) {
@@ -1028,7 +1098,7 @@ void MainWindow::dropEvent(QDropEvent* event) {
             return;
         }
         // Dropping schematics onto a world runs the same import dialog as the menu.
-        importSchematics();
+        importSchematicPaths(schematics);
     }
     event->acceptProposedAction();
 }

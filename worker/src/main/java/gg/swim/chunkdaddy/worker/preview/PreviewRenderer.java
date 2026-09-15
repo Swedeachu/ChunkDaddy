@@ -63,17 +63,26 @@ public final class PreviewRenderer {
                        HeightMode mode,
                        ChunkRect exportRect,
                        Path output) throws IOException {
+        render(snapshot, area, sliceY, mode, exportRect, output, 16);
+    }
+
+    /** Adaptive preview: 1 or 4 samples per chunk side at distant zoom, 16 up close. */
+    public void render(WorldSnapshot snapshot, ChunkRect area, int sliceY, HeightMode mode,
+                       ChunkRect exportRect, Path output, int pixelsPerChunk) throws IOException {
+        if (pixelsPerChunk != 1 && pixelsPerChunk != 4 && pixelsPerChunk != 16)
+            throw new IllegalArgumentException("Preview pixelsPerChunk must be 1, 4 or 16");
         Files.createDirectories(output.getParent());
         try (OutputStream raw = Files.newOutputStream(output);
              DataOutputStream out = new DataOutputStream(new BufferedOutputStream(raw, 1 << 16))) {
             out.writeInt(MAGIC);
-            out.writeInt(FORMAT_VERSION);
+            out.writeInt(pixelsPerChunk == 16 ? FORMAT_VERSION : 2);
             out.writeInt(area.minX());
             out.writeInt(area.minZ());
             out.writeInt(area.widthChunks());
             out.writeInt(area.lengthChunks());
+            if (pixelsPerChunk != 16) out.writeInt(pixelsPerChunk);
 
-            int[] pixels = new int[256];
+            int[] pixels = new int[pixelsPerChunk * pixelsPerChunk];
             for (int chunkX = area.minX(); chunkX <= area.maxX(); chunkX++) {
                 for (int chunkZ = area.minZ(); chunkZ <= area.maxZ(); chunkZ++) {
                     byte state;
@@ -88,7 +97,7 @@ public final class PreviewRenderer {
                     if (state != STATE_CONTENT) continue;
 
                     java.util.Arrays.fill(pixels, 0);
-                    renderColumn(snapshot, chunkX, chunkZ, sliceY, mode, pixels);
+                    renderColumn(snapshot, chunkX, chunkZ, sliceY, mode, pixels, pixelsPerChunk);
                     for (int pixel : pixels) {
                         out.writeInt(pixel);
                     }
@@ -98,12 +107,15 @@ public final class PreviewRenderer {
     }
 
     private void renderColumn(WorldSnapshot snapshot, int chunkX, int chunkZ,
-                              int sliceY, HeightMode mode, int[] pixels) {
+                              int sliceY, HeightMode mode, int[] pixels, int pixelsPerChunk) {
         ChunkerColumn materialized = snapshot.materializedColumn(chunkX, chunkZ);
         var instances = snapshot.instancesAt(chunkX, chunkZ);
 
-        for (int localX = 0; localX < 16; localX++) {
-            for (int localZ = 0; localZ < 16; localZ++) {
+        int stride = 16 / pixelsPerChunk;
+        for (int sampleX = 0; sampleX < pixelsPerChunk; sampleX++) {
+            for (int sampleZ = 0; sampleZ < pixelsPerChunk; sampleZ++) {
+                int localX = sampleX * stride + stride / 2;
+                int localZ = sampleZ * stride + stride / 2;
                 int worldX = (chunkX << 4) + localX;
                 int worldZ = (chunkZ << 4) + localZ;
                 int argb = 0;
@@ -123,7 +135,7 @@ public final class PreviewRenderer {
                 if (argb == 0 && materialized != null) {
                     argb = sampleColumn(materialized, localX, localZ, sliceY, mode);
                 }
-                pixels[localZ * 16 + localX] = argb;
+                pixels[sampleZ * pixelsPerChunk + sampleX] = argb;
             }
         }
     }
