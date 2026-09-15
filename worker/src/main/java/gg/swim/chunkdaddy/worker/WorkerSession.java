@@ -226,7 +226,7 @@ public final class WorkerSession {
 
         WorldConverter converter = WorldImporter.newConverter();
         runningJobs.put(requestId, new AtomicReference<>(converter));
-        progress(requestId, "Reading world chunksâ€¦", 0, 0);
+        progress(requestId, "Reading world chunks...", 0, 0);
 
         WorldImporter.Result imported = WorldImporter.importWorld(directory, edition, profile, converter);
 
@@ -568,7 +568,7 @@ public final class WorkerSession {
                     if (done == total) {
                         // Enumeration finishes before database flush, compaction and
                         // packaging. Keep the UI active until the final reply arrives.
-                        progress(requestId, "Finishing world database and packaging exportâ€¦", 0, 0);
+                        progress(requestId, "Finishing world database and packaging export...", 0, 0);
                     } else {
                         progress(requestId, "Preparing world columns", done, total);
                     }

@@ -7,6 +7,11 @@ import com.hivemc.chunker.conversion.encoding.bedrock.BedrockEncoders;
 import com.hivemc.chunker.conversion.intermediate.level.ChunkerGeneratorType;
 import com.hivemc.chunker.conversion.intermediate.level.ChunkerLevelSettings;
 import com.hivemc.chunker.conversion.intermediate.world.Dimension;
+import org.iq80.leveldb.CompressionType;
+import org.iq80.leveldb.DB;
+import org.iq80.leveldb.Options;
+import org.iq80.leveldb.impl.Iq80DBFactory;
+import org.iq80.leveldb.table.BloomFilterPolicy;
 import com.hivemc.chunker.scheduling.task.TrackedTask;
 import gg.swim.chunkdaddy.worker.conversion.ResolverFactory;
 import gg.swim.chunkdaddy.worker.document.ColumnComposer;
@@ -117,6 +122,7 @@ public final class BedrockExporter {
 
             // The database is closed by the converter's free callback before we get here;
             // packaging a database that still has an open writer would capture a torn state.
+            foldWriteAheadLogs(worldDirectory.resolve("db"), warnings);
             validateWorldDirectory(worldDirectory);
 
             Files.writeString(worldDirectory.resolve("levelname.txt"), request.worldName(), StandardCharsets.UTF_8);
@@ -230,6 +236,46 @@ public final class BedrockExporter {
             Throwable cause = e.getCause() != null ? e.getCause() : e;
             if (cause instanceof Exception exception) throw exception;
             throw new RuntimeException(cause);
+        }
+    }
+
+    /**
+     * Fold LevelDB's write-ahead logs into compressed tables.
+     *
+     * <p>Chunker opens the database with a 400 MB write buffer, so for a world of this size
+     * most of the data is still in the memtable when the database closes and stays on disk
+     * as the log LevelDB keeps for recovery. Log records are stored raw, while tables are
+     * compressed: a 450-arena export came out as 472 MB of uncompressed logs beside 138 MB
+     * of tables, and those logs compress about twenty to one.
+     *
+     * <p>Opening the database again runs LevelDB's ordinary recovery, which replays the logs
+     * into tables with the same compression as the rest of the world and then deletes them.
+     * Minecraft performs exactly this recovery the first time it loads such a world, so the
+     * work happens either way; doing it here means the archive we hand over is a third of
+     * the size and the first load is not the slow one.
+     */
+    private static void foldWriteAheadLogs(Path databaseDirectory, List<String> warnings) {
+        Options options = new Options();
+        // These must match what the world was written with, or the tables recovery produces
+        // would not match the rest of the database.
+        options.compressionType(CompressionType.ZLIB_RAW);
+        options.blockSize(160 * 1024);
+        options.filterPolicy(new BloomFilterPolicy(10));
+        // Deliberately far below the writer's buffer: recovery flushes whenever this fills,
+        // which keeps the peak memory of this step bounded however large the logs are.
+        options.writeBufferSize(32 * 1024 * 1024);
+        options.createIfMissing(false);
+
+        try (DB ignored = new Iq80DBFactory().open(databaseDirectory.toFile(), options)) {
+            // Opening and closing is the whole operation; recovery does the work.
+            assert ignored != null;
+        } catch (Throwable e) {
+            // The export already succeeded and the world is valid either way, just larger.
+            // An optimization must never be the thing that fails a finished export.
+            warnings.add("The world was written, but its write-ahead logs could not be folded "
+                    + "into compressed tables (" + e + "). The world is valid and loadable; it "
+                    + "is simply larger than it needs to be, and Minecraft will perform the same "
+                    + "recovery itself the first time it opens it.");
         }
     }
 
