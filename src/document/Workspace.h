@@ -25,6 +25,24 @@ struct ProfileInfo {
     bool fullyVerified = false;
     QString verificationSummary;
     QString notes;
+
+    /// What this profile means for whoever opens the world.
+    ///
+    /// Bedrock stamps MinimumCompatibleClientVersion into level.dat. A client or server
+    /// older than that refuses the world with "a newer version of the game saved this
+    /// world" - the world is intact, the client is simply older than the profile it was
+    /// written for. So this is the number that actually decides whether an export opens.
+    QString requirementText() const {
+        if (version.isEmpty()) {
+            return QStringLiteral("No target profile selected.");
+        }
+        return QStringLiteral(
+                   "Stamped as Bedrock %1. Minecraft %1 or newer can open worlds written with "
+                   "this profile; an older client or server refuses them with \"a newer version "
+                   "of the game saved this world\". Pick the profile that matches the oldest "
+                   "build you need to load it with.")
+            .arg(version);
+    }
 };
 
 /// Everything open in the application: documents, the chunk clipboard, and the worker.
@@ -80,9 +98,11 @@ public:
 
     // --- output ---
     void validateExport(Document* document, Callback done);
+    /// `profileId` empty keeps the document's current target profile.
     void exportWorld(Document* document, const QString& destination, const QString& mode,
                      const QString& worldName, const QString& numberMode, bool arenaPreset,
-                     Callback done, WorkerClient::ProgressHandler progress = nullptr);
+                     const QString& profileId, Callback done,
+                     WorkerClient::ProgressHandler progress = nullptr);
 
     void requestPreviewTiles(Document* document, const ChunkRect& area, int sliceY,
                              const QString& heightMode, Callback done, int pixelsPerChunk = 16);

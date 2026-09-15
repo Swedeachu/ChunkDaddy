@@ -167,7 +167,7 @@ void InspectorPanel::refresh() {
                                       .arg(m_profile.displayName, m_profile.version)
                                       .arg(m_profile.minBlockY)
                                       .arg(m_profile.maxBlockY)
-                                      .arg(m_profile.verificationSummary));
+                                      .arg(m_profile.requirementText()));
     }
 
     m_updating = false;

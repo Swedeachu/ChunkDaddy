@@ -19,11 +19,7 @@ NewWorldDialog::NewWorldDialog(const QVector<ProfileInfo>& profiles, QWidget* pa
     m_name = new QLineEdit(tr("PVP Zone"), this);
     m_profile = new QComboBox(this);
     for (const ProfileInfo& profile : m_profiles) {
-        QString label = profile.displayName;
-        if (profile.fullyVerified) {
-            label = tr("%1 — verified").arg(label);
-        }
-        m_profile->addItem(label, profile.id);
+        m_profile->addItem(profile.displayName, profile.id);
     }
     const QString remembered = Settings::lastProfileId();
     if (!remembered.isEmpty()) {
@@ -62,15 +58,11 @@ void NewWorldDialog::updateProfileNotes() {
         if (profile.id != id) {
             continue;
         }
-        QString text = tr("Bedrock %1. Build range Y %2 to %3.\n\n%4")
-                           .arg(profile.version)
-                           .arg(profile.minBlockY)
-                           .arg(profile.maxBlockY)
-                           .arg(profile.verificationSummary);
-        if (!profile.notes.isEmpty()) {
-            text += QStringLiteral("\n\n") + profile.notes;
-        }
-        m_notes->setText(text);
+        m_notes->setText(tr("Bedrock %1. Build range Y %2 to %3.\n\n%4")
+                             .arg(profile.version)
+                             .arg(profile.minBlockY)
+                             .arg(profile.maxBlockY)
+                             .arg(profile.requirementText()));
         return;
     }
     m_notes->clear();

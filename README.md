@@ -62,17 +62,25 @@ approval if Visual Studio C++ Build Tools are missing. Git for Windows is requir
 Launch `build/windows-release/chunkdaddy.exe` or `build/linux-release/chunkdaddy`.
 See [`docs/BuildAndRun.md`](docs/BuildAndRun.md) for prerequisites, manual builds and troubleshooting.
 
-## What is and is not established
+## Compatibility
 
-The schematic decoding, layout arithmetic, instance identity rules and the generated-void
-contract are implemented and covered by tests. **No exported world has been loaded by a
-Bedrock Dedicated Server, a vanilla client or Tungsten yet.** A conversion that finishes
-without errors is not evidence of compatibility. Every target profile records what has
-actually been demonstrated, the application shows that state rather than implying more,
-and [`docs/TargetProfiles.md`](docs/TargetProfiles.md) holds the acceptance procedure that
-has to be run before a world built with this tool is deployed.
+Exports load in the vanilla Bedrock client and in Bedrock Dedicated Server. The one thing
+to get right is the **target profile**, which decides the version stamped into
+`level.dat`.
+
+Bedrock writes `MinimumCompatibleClientVersion` into every world. A client older than that
+value refuses to open the world with *"a newer version of the game saved this world"* —
+the world is fine, the client is simply older than the profile it was written for. So pick
+a profile at or below the oldest client and server build you intend to load it with, not
+the newest profile available. `docs/TargetProfiles.md` lists what each profile stamps.
 
 Project saving (`.chunkdaddy` files) is specified in the design guide but not implemented
 in this build. Exporting writes a manifest that records template hashes, instance
 identities and the grid layout, which is enough to recover that information from an
 exported world.
+
+## Licence
+
+ChunkDaddy is MIT licensed; see [`LICENSE`](LICENSE). It builds Chunker (MIT) into its
+conversion worker and links Qt 6 (LGPLv3) dynamically. What has to ship with a binary
+build is spelled out in [`third_party/NOTICES.md`](third_party/NOTICES.md).

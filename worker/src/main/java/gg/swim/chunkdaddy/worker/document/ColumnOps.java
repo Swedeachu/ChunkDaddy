@@ -35,26 +35,17 @@ public final class ColumnOps {
      * <p>This is not the same thing as an absent column. The column record is always
      * emitted so the server finds a generated void rather than an ungenerated hole.
      */
-    public static ChunkerColumn voidColumn(ChunkCoordPair position, ChunkerBiome biome, int minChunkY, int maxChunkY) {
+    public static ChunkerColumn voidColumn(ChunkCoordPair position, ChunkerBiome biome) {
         ChunkerColumn column = new ChunkerColumn(position);
-        for (int chunkY = minChunkY; chunkY <= maxChunkY; chunkY++) {
-            column.getChunks().put((byte) chunkY, new ChunkerChunk((byte) chunkY));
-        }
+        // Deliberately no sub-chunks. The writer emits this column's version and Data3D
+        // records regardless, and those are what make it a generated empty column; an
+        // all-air record for every Y would decode back to exactly this, at the cost of one
+        // database entry each. On a large grid that is millions of entries.
         ChunkerBiome[] biomes = new ChunkerBiome[256];
         Arrays.fill(biomes, biome);
         column.setBiomes(new ChunkerColumnBasedBiomes(biomes));
         column.setLightPopulated(false);
         return column;
-    }
-
-    /** Ensure the column has an all-air sub-chunk for every Y in the profile's range. */
-    public static void fillMissingSections(ChunkerColumn column, int minChunkY, int maxChunkY) {
-        for (int chunkY = minChunkY; chunkY <= maxChunkY; chunkY++) {
-            byte y = (byte) chunkY;
-            if (!column.getChunks().containsKey(y)) {
-                column.getChunks().put(y, new ChunkerChunk(y));
-            }
-        }
     }
 
     /**
@@ -177,3 +168,4 @@ public final class ColumnOps {
         return writeable;
     }
 }
+

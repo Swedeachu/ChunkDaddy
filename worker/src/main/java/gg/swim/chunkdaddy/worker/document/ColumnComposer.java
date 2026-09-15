@@ -84,14 +84,16 @@ public final class ColumnComposer {
         if (column.getBiomes() == null) {
             column.setBiomes(uniformBiomes(fallbackBiome));
         }
-        ColumnOps.fillMissingSections(column, minChunkY, maxChunkY);
+        // Sub-chunks that hold nothing are left out rather than padded in: the writer
+        // would drop them again, and allocating them for every column of a large export
+        // is millions of throwaway objects.
         column.setHeightMap(null);
         return column;
     }
 
     /** A column that exists but holds nothing: explicit generated void. */
     public ChunkerColumn composeVoid(int chunkX, int chunkZ) {
-        return ColumnOps.voidColumn(new ChunkCoordPair(chunkX, chunkZ), fallbackBiome, minChunkY, maxChunkY);
+        return ColumnOps.voidColumn(new ChunkCoordPair(chunkX, chunkZ), fallbackBiome);
     }
 
     // ------------------------------------------------------------------
@@ -184,7 +186,21 @@ public final class ColumnComposer {
                                           ArenaInstance instance,
                                           ArenaTemplate template,
                                           int x0, int x1, int z0, int z1) {
-        List<SpongeSchematic.BlockEntityRecord> records = template.blockEntities();
+        if (template.blockEntities().isEmpty()) return;
+
+        // Look up only the records that land in this column. Scanning the whole template
+        // once per column is quadratic in disguise: the mine arena alone has 1,693 block
+        // entities and covers 208 columns, so thirty copies of the production set came to
+        // tens of millions of bounds checks that decided nothing.
+        final List<SpongeSchematic.BlockEntityRecord> records;
+        if ((instance.minX() & 15) == 0 && (instance.minZ() & 15) == 0) {
+            records = template.blockEntitiesInLocalChunk((x0 - instance.minX()) >> 4,
+                                                        (z0 - instance.minZ()) >> 4);
+        } else {
+            // An off-grid paste does not line up with the template's local chunk grid, so
+            // fall back to the full scan rather than index into the wrong bucket.
+            records = template.blockEntities();
+        }
         if (records.isEmpty()) return;
 
         JavaResolvers resolvers = template.resolvers(resolverFactory);
@@ -230,3 +246,4 @@ public final class ColumnComposer {
         return maxChunkY;
     }
 }
+

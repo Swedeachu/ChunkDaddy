@@ -363,9 +363,13 @@ void Workspace::validateExport(Document* document, Callback done) {
 
 void Workspace::exportWorld(Document* document, const QString& destination, const QString& mode,
                             const QString& worldName, const QString& numberMode, bool arenaPreset,
-                            Callback done, WorkerClient::ProgressHandler progress) {
+                            const QString& profileId, Callback done,
+                            WorkerClient::ProgressHandler progress) {
     QJsonObject request = Protocol::request(QStringLiteral("export_world"));
     request.insert(QStringLiteral("documentId"), document->documentId());
+    if (!profileId.isEmpty()) {
+        request.insert(QStringLiteral("profileId"), profileId);
+    }
     request.insert(QStringLiteral("destination"), destination);
     request.insert(QStringLiteral("mode"), mode);
     request.insert(QStringLiteral("worldName"), worldName);

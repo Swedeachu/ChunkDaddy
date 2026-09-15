@@ -226,7 +226,7 @@ public final class WorkerSession {
 
         WorldConverter converter = WorldImporter.newConverter();
         runningJobs.put(requestId, new AtomicReference<>(converter));
-        progress(requestId, "Reading world chunks…", 0, 0);
+        progress(requestId, "Reading world chunksâ€¦", 0, 0);
 
         WorldImporter.Result imported = WorldImporter.importWorld(directory, edition, profile, converter);
 
@@ -500,7 +500,8 @@ public final class WorkerSession {
 
     private JsonObject validateExport(JsonObject request) {
         WorldDocument document = document(request);
-        TargetProfile profile = TargetProfile.byId(document.targetProfileId());
+        TargetProfile profile = TargetProfile.byId(
+                Json.string(request, "profileId", document.targetProfileId()));
         ChunkRect rectangle = document.exportRectangle();
 
         JsonObject result = new JsonObject();
@@ -522,6 +523,8 @@ public final class WorkerSession {
                         && templates.get(instance.templateId()).spawnsAutomatic()).count();
         result.addProperty("automaticSpawnArenaCount", automaticArenas);
         result.add("problems", Json.ofStrings(problems));
+        result.addProperty("profileId", profile.id());
+        result.addProperty("profileMinimumClientVersion", profile.minimumClientVersion());
         result.addProperty("profileFullyVerified", profile.fullyVerified());
         result.addProperty("profileVerificationSummary", profile.verificationSummary());
         return result;
@@ -529,7 +532,15 @@ public final class WorkerSession {
 
     private JsonObject exportWorld(long requestId, JsonObject request) throws Exception {
         WorldDocument document = document(request);
-        TargetProfile profile = TargetProfile.byId(document.targetProfileId());
+        // The profile can be changed at export time. A composition is expensive to rebuild
+        // and the right profile is often only discovered when a client refuses the world,
+        // so switching it re-runs the writer over the same committed revision instead of
+        // making the user start again. The document keeps the choice.
+        TargetProfile profile = TargetProfile.byId(
+                Json.string(request, "profileId", document.targetProfileId()));
+        if (!profile.id().equals(document.targetProfileId())) {
+            document.setTargetProfileId(profile.id());
+        }
         ChunkRect rectangle = Json.optionalChunkRect(request, "rectangle");
         if (rectangle == null) rectangle = document.exportRectangle();
         if (rectangle == null) {
@@ -557,7 +568,7 @@ public final class WorkerSession {
                     if (done == total) {
                         // Enumeration finishes before database flush, compaction and
                         // packaging. Keep the UI active until the final reply arrives.
-                        progress(requestId, "Finishing world database and packaging export…", 0, 0);
+                        progress(requestId, "Finishing world database and packaging exportâ€¦", 0, 0);
                     } else {
                         progress(requestId, "Preparing world columns", done, total);
                     }
@@ -758,3 +769,4 @@ public final class WorkerSession {
         return new LinkedHashMap<>(documents);
     }
 }
+

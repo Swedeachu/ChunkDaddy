@@ -1,5 +1,6 @@
 package gg.swim.chunkdaddy.worker.bedrock;
 
+import java.io.BufferedOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.nio.file.FileVisitResult;
@@ -11,6 +12,7 @@ import java.nio.file.attribute.BasicFileAttributes;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
+import java.util.zip.Deflater;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipOutputStream;
 
@@ -92,8 +94,12 @@ public final class WorldPackager {
         }
         files.sort(Comparator.comparing(path -> directory.relativize(path).toString()));
 
-        try (OutputStream out = Files.newOutputStream(archive);
+        try (OutputStream out = new BufferedOutputStream(Files.newOutputStream(archive), 1 << 20);
              ZipOutputStream zip = new ZipOutputStream(out)) {
+            // LevelDB table files are already zlib-compressed internally, so squeezing them
+            // again costs a great deal of CPU for a percent or two. On a 200MB-plus arena
+            // world that is the difference between seconds and minutes of packaging.
+            zip.setLevel(Deflater.BEST_SPEED);
             for (Path file : files) {
                 String name = directory.relativize(file).toString().replace('\\', '/');
                 ZipEntry entry = new ZipEntry(name);

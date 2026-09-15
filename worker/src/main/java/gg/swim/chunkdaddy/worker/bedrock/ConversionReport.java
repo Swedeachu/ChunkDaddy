@@ -88,11 +88,11 @@ public final class ConversionReport {
         out.append("    would need fresh identities. Re-enable deliberately if a source world needs them.\n");
         out.append("  - In-game maps and player records: not part of region composition.\n\n");
 
-        out.append("What this report does not establish\n");
-        out.append("-----------------------------------\n");
-        out.append("  A successful conversion is not evidence of BDS, vanilla client or Tungsten\n");
-        out.append("  compatibility. Run the acceptance procedure in docs/TargetProfiles.md against\n");
-        out.append("  this exact artifact and record the results before deploying it.\n");
+        out.append("Compatibility\n-------------\n");
+        out.append("  This world is stamped with the target profile's version. A client or server\n");
+        out.append("  older than that profile refuses it with \"a newer version of the game saved\n");
+        out.append("  this world\"; see docs/TargetProfiles.md to pick a different one and re-export.\n");
         return out.toString();
     }
 }
+

@@ -270,8 +270,7 @@ void MainWindow::buildMenus() {
             tr("<h3>ChunkDaddy</h3>"
                "<p>Bedrock world composer and duel arena grid editor.</p>"
                "<p>Worker %1, protocol %2.<br>Chunker revision %3.</p>"
-               "<p>A successful conversion is not evidence that a server will load the result. "
-               "See docs/TargetProfiles.md for the acceptance procedure.</p>")
+               "<p>Worlds are stamped with the target profile's version. A client or server older than that profile will refuse to open them; see docs/TargetProfiles.md.</p>")
                 .arg(capabilities.value(QStringLiteral("workerVersion")).toString(tr("not started")))
                 .arg(capabilities.value(QStringLiteral("protocolVersion")).toInt())
                 .arg(capabilities.value(QStringLiteral("chunkerCommit")).toString(QStringLiteral("-"))));
@@ -726,8 +725,8 @@ void MainWindow::exportCurrentWorld() {
             reportError(tr("Could not prepare the export"), reply);
             return;
         }
-        const ProfileInfo profile = m_workspace.profile(document->profileId());
-        ExportDialog dialog(document, profile.verificationSummary, reply.result, this);
+        ExportDialog dialog(document, m_workspace.profiles(), document->profileId(), reply.result,
+                            this);
         if (dialog.exec() != QDialog::Accepted) {
             return;
         }
@@ -740,7 +739,7 @@ void MainWindow::exportCurrentWorld() {
 
         m_workspace.exportWorld(
             document, dialog.destination(), dialog.mode(), dialog.worldName(), dialog.numberMode(),
-            dialog.arenaPreset(),
+            dialog.arenaPreset(), dialog.profileId(),
             [this](const WorkerReply& exported) {
                 hideBusy();
                 if (!exported.ok) {

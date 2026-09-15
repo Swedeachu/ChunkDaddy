@@ -36,9 +36,10 @@ QString sanitizeFileName(const QString& name) {
 
 } // namespace
 
-ExportDialog::ExportDialog(const Document* document, const QString& profileSummary,
-                           const QJsonObject& validation, QWidget* parent)
-    : QDialog(parent), m_document(document), m_profileSummary(profileSummary), m_validation(validation) {
+ExportDialog::ExportDialog(const Document* document, const QVector<ProfileInfo>& profiles,
+                           const QString& currentProfileId, const QJsonObject& validation,
+                           QWidget* parent)
+    : QDialog(parent), m_document(document), m_profiles(profiles), m_validation(validation) {
     setWindowTitle(tr("Export world"));
     setModal(true);
 
@@ -56,6 +57,19 @@ ExportDialog::ExportDialog(const Document* document, const QString& profileSumma
     m_numberMode = new QComboBox(this);
     m_numberMode->addItem(tr("Exact (keeps half-block offsets)"), QStringLiteral("EXACT"));
     m_numberMode->addItem(tr("Whole numbers only"), QStringLiteral("INTEGER"));
+
+    // The target profile is changeable here, not only when the world was created. It
+    // decides the version stamped into the world, which is what a client checks before it
+    // will open one, and that is usually discovered at export time rather than earlier.
+    m_profile = new QComboBox(this);
+    for (const ProfileInfo& profile : m_profiles) {
+        m_profile->addItem(profile.displayName, profile.id);
+    }
+    const int currentIndex = m_profile->findData(currentProfileId);
+    if (currentIndex >= 0) {
+        m_profile->setCurrentIndex(currentIndex);
+    }
+    connect(m_profile, &QComboBox::currentIndexChanged, this, &ExportDialog::updateSummary);
 
     m_arenaPreset = new QCheckBox(tr("Apply the arena world preset"), this);
     m_arenaPreset->setChecked(true);
@@ -85,6 +99,7 @@ ExportDialog::ExportDialog(const Document* document, const QString& profileSumma
     destinationRow->addWidget(browseButton);
     form->addRow(tr("Save to"), destinationRow);
     form->addRow(QString(), m_useSystemDownloads);
+    form->addRow(tr("Target profile"), m_profile);
     form->addRow(tr("Spawn coordinates"), m_numberMode);
     form->addRow(QString(), m_arenaPreset);
 
@@ -212,7 +227,12 @@ void ExportDialog::updateSummary() {
                  .arg(name);
 
     lines << QString();
-    lines << tr("Target profile: %1").arg(m_profileSummary.toHtmlEscaped());
+    lines << tr("Compatibility: %1").arg(currentProfile().requirementText().toHtmlEscaped());
+    if (!m_document->profileId().isEmpty() && profileId() != m_document->profileId()) {
+        lines << tr("<b>This re-writes the world for a different target profile.</b> The blocks, "
+                    "the arena JSON and the manifest are unchanged; only the version stamp and "
+                    "the chunk encoding differ.");
+    }
 
     m_summary->setHtml(lines.join(QStringLiteral("<br>")));
     m_exportButton->setEnabled(problems.isEmpty() && !m_destination->text().trimmed().isEmpty());
@@ -237,6 +257,20 @@ QString ExportDialog::numberMode() const {
 
 bool ExportDialog::arenaPreset() const {
     return m_arenaPreset->isChecked();
+}
+
+QString ExportDialog::profileId() const {
+    return m_profile->currentData().toString();
+}
+
+ProfileInfo ExportDialog::currentProfile() const {
+    const QString id = profileId();
+    for (const ProfileInfo& profile : m_profiles) {
+        if (profile.id == id) {
+            return profile;
+        }
+    }
+    return {};
 }
 
 } // namespace chunkdaddy

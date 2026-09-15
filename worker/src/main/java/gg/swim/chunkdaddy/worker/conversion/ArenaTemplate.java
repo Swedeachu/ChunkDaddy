@@ -7,8 +7,10 @@ import gg.swim.chunkdaddy.worker.schematic.SpongeSchematic;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.LinkedHashSet;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 import java.util.UUID;
 
@@ -32,6 +34,8 @@ public final class ArenaTemplate {
     private final ChunkerBlockIdentifier[] resolvedPalette;
     private final List<MappingIssue> issues;
     private final boolean aggregateCandidate;
+    /** Built on first use; see {@link #blockEntitiesInLocalChunk}. */
+    private volatile @Nullable Map<Long, List<SpongeSchematic.BlockEntityRecord>> blockEntitiesByChunk;
 
     /** Local player-feet positions, authored or generated from the centre surface. */
     private @Nullable double[] spawnPoint1;
@@ -123,6 +127,31 @@ public final class ArenaTemplate {
 
     public List<SpongeSchematic.BlockEntityRecord> blockEntities() {
         return schematic.blockEntities();
+    }
+
+    /**
+     * The template's block entities grouped by the local chunk column they sit in.
+     *
+     * <p>Composition asks for one column at a time, and a template's records are shared by
+     * every instance of it, so the grouping is built once on first use and reused for all
+     * of them. Two threads racing to build it produce equal maps, which is why no lock is
+     * taken here.
+     */
+    public List<SpongeSchematic.BlockEntityRecord> blockEntitiesInLocalChunk(int localChunkX, int localChunkZ) {
+        Map<Long, List<SpongeSchematic.BlockEntityRecord>> index = blockEntitiesByChunk;
+        if (index == null) {
+            index = new HashMap<>();
+            for (SpongeSchematic.BlockEntityRecord record : blockEntities()) {
+                index.computeIfAbsent(localChunkKey(record.localX() >> 4, record.localZ() >> 4),
+                        key -> new ArrayList<>()).add(record);
+            }
+            blockEntitiesByChunk = index;
+        }
+        return index.getOrDefault(localChunkKey(localChunkX, localChunkZ), List.of());
+    }
+
+    private static long localChunkKey(int localChunkX, int localChunkZ) {
+        return ((long) localChunkX << 32) | (localChunkZ & 0xFFFFFFFFL);
     }
 
     /** Java resolvers appropriate for this template's declared DataVersion. */
@@ -227,3 +256,4 @@ public final class ArenaTemplate {
         return blocking;
     }
 }
+
