@@ -77,8 +77,52 @@ void ChunkView::setDocument(Document* document) {
 
 void ChunkView::setTool(Tool tool) {
     m_tool = tool;
-    setCursor(tool == Tool::Move ? Qt::SizeAllCursor
-                                 : (tool == Tool::PlaceWorldSpawn ? Qt::CrossCursor : Qt::ArrowCursor));
+    refreshCursor();
+    update();
+}
+
+void ChunkView::refreshCursor() {
+    if (m_drag == DragMode::Pan) {
+        setCursor(Qt::ClosedHandCursor);
+        return;
+    }
+    if (m_spaceHeld) {
+        setCursor(Qt::OpenHandCursor);
+        return;
+    }
+    if (m_tool == Tool::PlaceWorldSpawn) {
+        setCursor(Qt::CrossCursor);
+        return;
+    }
+    // In the select tool, hovering inside the selection is the affordance for dragging it:
+    // the cursor has to say so before the user commits to a drag, or the only way to find
+    // out is to accidentally move a world.
+    setCursor(m_tool == Tool::Move || cursorOverSelection() ? Qt::SizeAllCursor : Qt::ArrowCursor);
+}
+
+bool ChunkView::cursorOverSelection() const {
+    return m_document && m_hasHover && !m_document->selection().isEmpty()
+           && m_document->selection().contains(m_hoverChunk.x(), m_hoverChunk.y());
+}
+
+void ChunkView::clearSelection() {
+    if (!m_document || m_document->selection().isEmpty()) {
+        return;
+    }
+    m_document->selection().clear();
+    m_document->notifySelectionChanged();
+    emit selectionChanged();
+    refreshCursor();
+    update();
+}
+
+void ChunkView::translateSelection(int deltaChunkX, int deltaChunkZ) {
+    if (!m_document || (deltaChunkX == 0 && deltaChunkZ == 0)) {
+        return;
+    }
+    m_document->selection().translate(deltaChunkX, deltaChunkZ);
+    m_document->notifySelectionChanged();
+    emit selectionChanged();
     update();
 }
 
@@ -219,14 +263,16 @@ void ChunkView::rebuildPreviewQueue() {
     if (!bounds || !bounds->intersects(visible)) { update(); return; }
     const ChunkRect area(std::max(bounds->minX(), visible.minX()), std::max(bounds->minZ(), visible.minZ()),
                          std::min(bounds->maxX(), visible.maxX()), std::min(bounds->maxZ(), visible.maxZ()));
-    // Keep each detail level until twice as far out as before.
-    const int pixels = m_zoom * 16 <= 2 ? 1 : (m_zoom * 16 <= 8 ? 4 : 16);
+    // Four pixels per chunk is the floor. One pixel cannot show an arena's shape, and
+    // the bytes it saves are nothing beside asking the worker to render the same ground
+    // twice. Switching level no longer bumps the generation: tiles already decoded at
+    // another level stay valid and keep painting while the new level fills in.
+    const int pixels = m_zoom * 16 <= 4 ? 4 : 16;
     if (pixels != m_pixelsPerChunk) {
         m_pixelsPerChunk = pixels;
-        ++m_previewGeneration;
         m_tiles.setPixelsPerChunk(pixels);
     }
-    m_tiles.retain(area.expanded(32));
+    m_tiles.retain(area.expanded(64));
     // Each request is bounded regardless of the zoom level. Only one is in flight,
     // so navigation and edits never queue behind hundreds of obsolete renders.
     for (int x = area.minX(); x <= area.maxX(); x += 32) {
@@ -310,8 +356,9 @@ void ChunkView::paintEvent(QPaintEvent*) {
     }
 
     const ChunkRect visible = visibleChunks();
-    // Preserve crisp pixels until the sampled image is reduced by more than 2x.
-    painter.setRenderHint(QPainter::SmoothPixmapTransform, m_zoom * 16 < m_pixelsPerChunk / 2.0);
+    // Smooth only when shrinking. Enlarging a tile beyond its own resolution should look
+    // like what it is - a coarse tile waiting for a finer one - rather than a blur.
+    painter.setRenderHint(QPainter::SmoothPixmapTransform, m_zoom * 16 < m_pixelsPerChunk);
 
     auto bounds = m_document->contentBounds();
     if (auto exported = m_document->exportRectangle())
@@ -335,7 +382,7 @@ void ChunkView::paintEvent(QPaintEvent*) {
         painter.setPen(Qt::white);
         const QString text = !m_previewError.isEmpty() ? tr("Preview failed. See Reports for details, or retry.")
             : tr("Loading %1preview… %2 / %3 regions")
-                .arg(m_pixelsPerChunk == 1 ? tr("overview ") : QString())
+                .arg(m_pixelsPerChunk < 16 ? tr("overview ") : QString())
                 .arg(std::min(m_previewCompleted, m_previewTotal)).arg(m_previewTotal);
         painter.drawText(banner.adjusted(8, 0, -8, 0), Qt::AlignVCenter, text);
     }
@@ -345,18 +392,27 @@ void ChunkView::drawTiles(QPainter& painter, const ChunkRect& visible) {
     const double chunkPixels = 16.0 * m_zoom;
 
     if (chunkPixels < 16.0) {
-        // Too small for per-chunk work: paint whole pages scaled down.
+        // Too small for per-chunk work: paint whole pages scaled down. Every populated
+        // level is drawn, coarsest first, so a page the active level has not fetched yet
+        // still shows whatever detail the cache already holds, and a page held at a finer
+        // level than the view is fetching keeps that detail instead of being replaced by
+        // a blurrier one. This is what makes a zoom-out instant rather than a blank wait.
+        const QVector<int> levels = m_tiles.populatedLevels();
         const int minPageX = static_cast<int>(std::floor(visible.minX() / double(TileCache::kPageChunks)));
         const int maxPageX = static_cast<int>(std::floor(visible.maxX() / double(TileCache::kPageChunks)));
         const int minPageZ = static_cast<int>(std::floor(visible.minZ() / double(TileCache::kPageChunks)));
         const int maxPageZ = static_cast<int>(std::floor(visible.maxZ() / double(TileCache::kPageChunks)));
+        const double side = TileCache::kPageChunks * chunkPixels;
+        const int targetSide = std::max(1, static_cast<int>(std::ceil(side)));
         for (int pageX = minPageX; pageX <= maxPageX; ++pageX) {
             for (int pageZ = minPageZ; pageZ <= maxPageZ; ++pageZ) {
-                const QImage page = m_tiles.pageImage(pageX, pageZ);
                 const QPointF topLeft = worldToWidget(chunkToBlock(pageX * TileCache::kPageChunks),
                                                       chunkToBlock(pageZ * TileCache::kPageChunks));
-                const double side = TileCache::kPageChunks * chunkPixels;
-                painter.drawImage(QRectF(topLeft, QSizeF(side, side)), page);
+                const QRectF destination(topLeft, QSizeF(side, side));
+                for (int level : levels) {
+                    const QImage page = m_tiles.pageImage(level, pageX, pageZ, targetSide);
+                    if (!page.isNull()) painter.drawImage(destination, page);
+                }
             }
         }
         return;
@@ -366,6 +422,8 @@ void ChunkView::drawTiles(QPainter& painter, const ChunkRect& visible) {
         for (int cz = visible.minZ(); cz <= visible.maxZ(); ++cz) {
             const QPointF topLeft = worldToWidget(chunkToBlock(cx), chunkToBlock(cz));
             const QRectF cell(topLeft, QSizeF(chunkPixels, chunkPixels));
+            // The cache answers from the finest level that knows this column, so zooming
+            // in shows the coarse tile stretched until the sharp one arrives, never a gap.
             const ColumnState state = m_tiles.state(cx, cz);
 
             switch (state) {
@@ -622,6 +680,18 @@ void ChunkView::mousePressEvent(QMouseEvent* event) {
         return;
     }
 
+    // Select tool: pressing inside the selection drags it, which is how every editor that
+    // has a marquee behaves. A plain drag outside starts a new rectangle; shift adds and
+    // alt subtracts, and both keep marquee behaviour even over the selection so an
+    // existing box can still be extended or cut into.
+    if (!event->modifiers().testFlag(Qt::ShiftModifier)
+        && !event->modifiers().testFlag(Qt::AltModifier)
+        && m_document->selection().contains(chunk.x(), chunk.y())) {
+        m_drag = DragMode::MoveContent;
+        setCursor(Qt::SizeAllCursor);
+        return;
+    }
+
     if (event->modifiers().testFlag(Qt::AltModifier)) {
         m_drag = DragMode::SubtractRect;
     } else {
@@ -661,6 +731,7 @@ void ChunkView::mouseMoveEvent(QMouseEvent* event) {
         update();
         break;
     case DragMode::None:
+        refreshCursor();
         break;
     }
 
@@ -673,7 +744,6 @@ void ChunkView::mouseReleaseEvent(QMouseEvent* event) {
     }
     const DragMode finished = m_drag;
     m_drag = DragMode::None;
-    setCursor(m_tool == Tool::Move ? Qt::SizeAllCursor : Qt::ArrowCursor);
 
     switch (finished) {
     case DragMode::SelectRect: {
@@ -707,6 +777,7 @@ void ChunkView::mouseReleaseEvent(QMouseEvent* event) {
         break;
     }
     Q_UNUSED(event);
+    refreshCursor();
     update();
 }
 
@@ -746,11 +817,8 @@ void ChunkView::keyPressEvent(QKeyEvent* event) {
         if (m_pastePreview) {
             // Escape cancels the preview without changing the document.
             cancelPastePreview();
-        } else if (m_document && !m_document->selection().isEmpty()) {
-            m_document->selection().clear();
-            m_document->notifySelectionChanged();
-            emit selectionChanged();
-            update();
+        } else {
+            clearSelection();
         }
         event->accept();
         return;
@@ -761,7 +829,7 @@ void ChunkView::keyPressEvent(QKeyEvent* event) {
 void ChunkView::keyReleaseEvent(QKeyEvent* event) {
     if (event->key() == Qt::Key_Space) {
         m_spaceHeld = false;
-        setCursor(m_tool == Tool::Move ? Qt::SizeAllCursor : Qt::ArrowCursor);
+        refreshCursor();
         event->accept();
         return;
     }
@@ -775,6 +843,7 @@ void ChunkView::resizeEvent(QResizeEvent* event) {
 
 void ChunkView::leaveEvent(QEvent* event) {
     m_hasHover = false;
+    refreshCursor();
     QWidget::leaveEvent(event);
 }
 

@@ -5,6 +5,7 @@
 #include "app/WorldSettingsPanel.h"
 #include "app/NewWorldDialog.h"
 #include "app/OpenWorldRootDialog.h"
+#include "app/HistoryPanel.h"
 #include "app/ReportPanel.h"
 #include "app/SchematicImportDialog.h"
 #include "app/ImportProgressDialog.h"
@@ -64,6 +65,7 @@ MainWindow::MainWindow(QWidget* parent) : QMainWindow(parent) {
     setCentralWidget(central);
 
     buildMenus();
+    buildToolBar();
     buildDocks();
     buildStatusBar();
 
@@ -81,12 +83,16 @@ MainWindow::MainWindow(QWidget* parent) : QMainWindow(parent) {
             return;
         }
         showBusy(tr("Moving selected chunks…"), -1);
-        m_workspace.moveSelection(document, dx, dz, false, [this](const WorkerReply& reply) {
+        m_workspace.moveSelection(document, dx, dz, false, [this, dx, dz](const WorkerReply& reply) {
             hideBusy();
             if (!reply.ok) {
                 reportError(tr("Move failed"), reply);
                 return;
             }
+            // The box the user dragged is still the box they care about, so it travels
+            // with the content. Leaving it behind means the next drag moves whatever
+            // happened to be at the old coordinates.
+            m_view->translateSelection(dx, dz);
             const QJsonArray invalidated = reply.result.value(QStringLiteral("invalidatedArenas")).toArray();
             if (!invalidated.isEmpty()) {
                 QStringList names;
@@ -188,8 +194,9 @@ void MainWindow::buildMenus() {
     editMenu->addSeparator();
     editMenu->addAction(tr("Select &all content"), QKeySequence::SelectAll, this,
                         &MainWindow::selectAllContent);
-    editMenu->addAction(tr("&Expand selection to whole arenas"), this,
-                        &MainWindow::expandSelectionToArenas);
+    m_deselectAction = editMenu->addAction(tr("&Deselect"), this, &MainWindow::deselectAll);
+    m_expandAction = editMenu->addAction(tr("&Expand selection to whole arenas"), this,
+                                         &MainWindow::expandSelectionToArenas);
     editMenu->addAction(tr("Cancel pending cut"), this, [this] {
         m_workspace.clipboard().cancelPendingCut();
         statusBar()->showMessage(tr("Pending cut cancelled. The source is unchanged."), 5000);
@@ -278,6 +285,54 @@ void MainWindow::buildMenus() {
     });
 }
 
+void MainWindow::buildToolBar() {
+    // The tools used to live three levels into the World menu, which is a long way to go
+    // for something you switch between every few seconds. Everything here is a thing you
+    // reach for mid-gesture: the mode you are in, getting out of a selection, and undo.
+    m_toolBar = addToolBar(tr("Tools"));
+    m_toolBar->setObjectName(QStringLiteral("mainToolBar"));
+    m_toolBar->setToolButtonStyle(Qt::ToolButtonTextBesideIcon);
+    m_toolBar->setMovable(false);
+
+    const QStyle* style = this->style();
+    m_selectTool->setIcon(style->standardIcon(QStyle::SP_FileDialogDetailedView));
+    m_selectTool->setShortcut(QKeySequence(Qt::Key_V));
+    m_selectTool->setToolTip(tr("Select (V)\nDrag a box to select chunks. Drag inside the box to "
+                                "move it and its content. Shift adds, Alt subtracts."));
+    m_moveTool->setIcon(style->standardIcon(QStyle::SP_TitleBarNormalButton));
+    m_moveTool->setShortcut(QKeySequence(Qt::Key_M));
+    m_moveTool->setToolTip(tr("Move (M)\nAny drag moves the selection, even from outside it."));
+    m_spawnTool->setIcon(style->standardIcon(QStyle::SP_DialogYesButton));
+    m_spawnTool->setToolTip(tr("Click the map to set the world spawn."));
+    m_toolBar->addAction(m_selectTool);
+    m_toolBar->addAction(m_moveTool);
+    m_toolBar->addAction(m_spawnTool);
+    // Single letter shortcuts belong to the viewport, not the window: otherwise typing a
+    // coordinate into the inspector would switch tools instead of entering a "v".
+    for (QAction* action : {m_selectTool, m_moveTool}) {
+        action->setShortcutContext(Qt::WidgetWithChildrenShortcut);
+        m_view->addAction(action);
+    }
+
+    m_toolBar->addSeparator();
+    m_deselectAction->setIcon(style->standardIcon(QStyle::SP_DialogCancelButton));
+    m_deselectAction->setToolTip(tr("Deselect (Esc)\nDrops the selection. Nothing is deleted."));
+    m_toolBar->addAction(m_deselectAction);
+    m_toolBar->addAction(m_expandAction);
+
+    m_toolBar->addSeparator();
+    m_undoAction->setIcon(style->standardIcon(QStyle::SP_ArrowBack));
+    m_redoAction->setIcon(style->standardIcon(QStyle::SP_ArrowForward));
+    m_toolBar->addAction(m_undoAction);
+    m_toolBar->addAction(m_redoAction);
+
+    m_toolBar->addSeparator();
+    m_toolBar->addAction(m_copyAction);
+    m_toolBar->addAction(m_cutAction);
+    m_toolBar->addAction(m_pasteAction);
+    m_toolBar->addAction(m_deleteAction);
+}
+
 void MainWindow::buildDocks() {
     m_templatePanel = new TemplatePanel(this);
     auto* templateDock = new QDockWidget(tr("Templates and arenas"), this);
@@ -359,6 +414,17 @@ void MainWindow::buildDocks() {
         m_view->update();
     });
 
+    m_historyPanel = new HistoryPanel(this);
+    auto* historyDock = new QDockWidget(tr("History"), this);
+    historyDock->setWidget(m_historyPanel);
+    historyDock->setObjectName(QStringLiteral("historyDock"));
+    addDockWidget(Qt::RightDockWidgetArea, historyDock);
+    tabifyDockWidget(inspectorDock, historyDock);
+    inspectorDock->raise();
+    connect(m_historyPanel, &HistoryPanel::undoRequested, this, &MainWindow::undo);
+    connect(m_historyPanel, &HistoryPanel::redoRequested, this, &MainWindow::redo);
+    connect(m_historyPanel, &HistoryPanel::jumpRequested, this, &MainWindow::jumpToHistoryStep);
+
     m_reportPanel = new ReportPanel(this);
     auto* reportDock = new QDockWidget(tr("Reports"), this);
     reportDock->setWidget(m_reportPanel);
@@ -436,6 +502,7 @@ void MainWindow::onTabChanged(int index) {
     m_templatePanel->setDocument(document);
     m_inspectorPanel->setDocument(document);
     m_settingsPanel->setDocument(document);
+    m_historyPanel->setSources(&m_workspace.history(), document);
     if (document) {
         m_inspectorPanel->setProfile(m_workspace.profile(document->profileId()));
     }
@@ -482,6 +549,11 @@ void MainWindow::refreshActions() {
 
     m_undoAction->setEnabled(hasDocument && document->canUndo());
     m_redoAction->setEnabled(hasDocument && document->canRedo());
+    m_deselectAction->setEnabled(hasSelection);
+    m_expandAction->setEnabled(hasSelection);
+    if (m_historyPanel) {
+        m_historyPanel->refresh();
+    }
     m_copyAction->setEnabled(hasSelection);
     m_cutAction->setEnabled(hasSelection);
     m_deleteAction->setEnabled(hasSelection);
@@ -758,7 +830,7 @@ void MainWindow::exportCurrentWorld() {
 
         m_workspace.exportWorld(
             document, dialog.destination(), dialog.mode(), dialog.worldName(), dialog.numberMode(),
-            dialog.arenaPreset(), dialog.profileId(),
+            dialog.arenaPreset(), dialog.voidCleaner(), dialog.profileId(),
             [this](const WorkerReply& exported) {
                 hideBusy();
                 if (!exported.ok) {
@@ -772,6 +844,11 @@ void MainWindow::exportCurrentWorld() {
                 }
                 const bool companion =
                     exported.result.value(QStringLiteral("companionJsonWritten")).toBool();
+                const QString logPath =
+                    exported.result.value(QStringLiteral("logPath")).toString();
+                if (!logPath.isEmpty()) {
+                    m_reportPanel->appendReport(tr("Export log: %1").arg(logPath));
+                }
 
                 QString message =
                     tr("Wrote %1.\n\n%2 arena(s) and %3 spawn position(s).\n"
@@ -915,6 +992,53 @@ void MainWindow::expandSelectionToArenas() {
     }
 }
 
+void MainWindow::deselectAll() {
+    m_view->clearSelection();
+    refreshActions();
+}
+
+void MainWindow::jumpToHistoryStep(int appliedSteps) {
+    Document* document = currentDocument();
+    if (!document || m_busy) {
+        return;
+    }
+    const int distance = m_workspace.history().distanceTo(document->documentId(), appliedSteps);
+    if (distance == 0) {
+        return;
+    }
+    // One worker call per step, chained. The worker owns the undo stack, so walking it is
+    // the only honest way to reach an earlier state; there is no shortcut that would not
+    // be a second, disagreeing stack.
+    showBusy(distance > 0 ? tr("Stepping back %n edit(s)…", nullptr, distance)
+                          : tr("Stepping forward %n edit(s)…", nullptr, -distance),
+             -1);
+    stepHistory(std::max(0, distance), std::max(0, -distance));
+}
+
+void MainWindow::stepHistory(int remainingUndo, int remainingRedo) {
+    Document* document = currentDocument();
+    if (!document || (remainingUndo <= 0 && remainingRedo <= 0)) {
+        hideBusy();
+        refreshActions();
+        return;
+    }
+    auto onReply = [this, remainingUndo, remainingRedo](const WorkerReply& reply) {
+        if (!reply.ok) {
+            hideBusy();
+            reportError(remainingUndo > 0 ? tr("Undo failed") : tr("Redo failed"), reply);
+            refreshActions();
+            return;
+        }
+        stepHistory(std::max(0, remainingUndo - 1), remainingUndo > 0 ? remainingRedo
+                                                                      : std::max(0, remainingRedo - 1));
+    };
+    if (remainingUndo > 0) {
+        m_workspace.undo(document, onReply);
+    } else {
+        m_workspace.redo(document, onReply);
+    }
+}
+
 void MainWindow::undo() {
     if (Document* document = currentDocument()) {
         showBusy(tr("Undoing the last edit…"), -1);
@@ -996,7 +1120,11 @@ void MainWindow::onWorkerFailed(const QString& reason) {
 void MainWindow::reportError(const QString& title, const WorkerReply& reply) {
     hideBusy();
     m_reportPanel->appendReport(QStringLiteral("%1: %2").arg(title, reply.describeError()));
-    QMessageBox::warning(this, title, reply.errorMessage);
+    // Worker failures often carry a path to a log file. A plain message box renders that
+    // as unselectable text, which leaves the user retyping it; make it copyable instead.
+    QMessageBox box(QMessageBox::Warning, title, reply.errorMessage, QMessageBox::Ok, this);
+    box.setTextInteractionFlags(Qt::TextSelectableByMouse | Qt::TextSelectableByKeyboard);
+    box.exec();
 }
 
 void MainWindow::showBusy(const QString& label, qint64 jobId) {
@@ -1012,6 +1140,7 @@ void MainWindow::showBusy(const QString& label, qint64 jobId) {
     m_view->setEnabled(false);
     m_inspectorPanel->setEnabled(false);
     m_templatePanel->setEnabled(false);
+    m_historyPanel->setBusy(true);
     if (!m_importProgress) {
         if (!m_operationProgress) {
             m_operationProgress = new OperationProgressDialog(label, this);
@@ -1045,6 +1174,7 @@ void MainWindow::hideBusy() {
     m_view->setEnabled(true);
     m_inspectorPanel->setEnabled(true);
     m_templatePanel->setEnabled(true);
+    m_historyPanel->setBusy(false);
     m_view->setPreviewPaused(false);
     if (m_importProgress) {
         m_importProgress->accept();

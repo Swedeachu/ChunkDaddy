@@ -58,9 +58,80 @@ public final class BedrockExporter {
                                ExportRequest request,
                                LongConsumer columnProgress,
                                AtomicReference<WorldConverter> converterHandle) throws Exception {
+        return export(document, request, columnProgress, converterHandle, null);
+    }
+
+    /**
+     * @param logFallbackDirectory where to put the export log when the destination's own
+     *                             directory cannot take it; may be null.
+     */
+    public ExportResult export(WorldDocument document,
+                               ExportRequest request,
+                               LongConsumer columnProgress,
+                               AtomicReference<WorldConverter> converterHandle,
+                               Path logFallbackDirectory) throws Exception {
         WorldSnapshot snapshot = document.snapshot();
         ChunkRect rectangle = request.exportRectangle();
         List<String> warnings = new ArrayList<>();
+
+        try (ExportLog log = ExportLog.open(request.destination().toAbsolutePath().getParent(),
+                                            logFallbackDirectory, request.worldName())) {
+            try {
+                ExportResult result = run(document, request, columnProgress, converterHandle,
+                                          snapshot, rectangle, warnings, log);
+                log.section("Result");
+                log.line("Wrote %s", result.worldPath());
+                log.line("Content columns: %d", result.contentColumns());
+                log.line("Void columns: %d", result.voidColumns());
+                log.line("Total columns: %d", result.totalColumns());
+                log.line("Arenas: %d, spawn points: %d", result.arenaCount(), result.spawnPointCount());
+                log.line("Companion arenas.json written: %s", result.companionJsonWritten());
+                for (String warning : result.warnings()) log.line("warning  %s", warning);
+                for (String note : result.preservedNotes()) log.line("preserved  %s", note);
+                return result.withLogPath(log.path() == null ? null : log.path().toString());
+            } catch (Throwable failure) {
+                log.failure(failure);
+                throw new ExportFailure(failure, log.path());
+            }
+        }
+    }
+
+    private ExportResult run(WorldDocument document,
+                             ExportRequest request,
+                             LongConsumer columnProgress,
+                             AtomicReference<WorldConverter> converterHandle,
+                             WorldSnapshot snapshot,
+                             ChunkRect rectangle,
+                             List<String> warnings,
+                             ExportLog log) throws Exception {
+        log.section("Request");
+        log.line("Document: %s (%s), revision %d", document.name(), document.id(), document.revision());
+        log.line("Destination: %s", request.destination());
+        log.line("Output mode: %s", request.mode());
+        log.line("Target profile: %s (%s)", request.profile().id(), request.profile().version());
+        log.line("Sub-chunk Y range: %d..%d", request.profile().minChunkY(), request.profile().maxChunkY());
+        log.line("World name: %s", request.worldName());
+        log.line("Export rectangle: chunks %d,%d to %d,%d (%d x %d = %d columns)",
+                rectangle.minX(), rectangle.minZ(), rectangle.maxX(), rectangle.maxZ(),
+                rectangle.widthChunks(), rectangle.lengthChunks(), rectangle.columnCount());
+        log.line("Materialized columns in document: %d", snapshot.materializedCount());
+        log.line("Arena instances: %d", snapshot.instances().size());
+        log.line("Number mode: %s, arena preset: %s, companion json: %s",
+                request.numberMode(), request.arenaPreset(), request.writeCompanionJson());
+        log.line("Explicit void columns: %s", request.writeVoidColumns()
+                ? "yes (every empty column is written)"
+                : "NO (empty columns are left to the generator named in level.dat)");
+        log.line("Void cleaner: %s", request.voidCleaner()
+                ? "on (columns holding nothing are removed before packaging)" : "off");
+
+        // Look at the composition before the writer does. Chunker's own guards fire deep
+        // inside its pipeline and name neither the coordinate nor the arena involved.
+        CompositionAudit audit = CompositionAudit.run(snapshot, rectangle,
+                request.profile().minChunkY(), request.profile().maxChunkY());
+        audit.writeTo(log);
+        if (audit.hasFaults()) {
+            throw new IllegalStateException(audit.refusal());
+        }
 
         // Refuse before writing anything if the arena data cannot be produced. An export
         // whose world and JSON disagree is worse than no export at all.
@@ -71,6 +142,7 @@ public final class BedrockExporter {
         }
         JsonObject arenaJson = ArenaJsonWriter.build(snapshot, templates, request.numberMode());
         String arenaJsonText = ArenaJsonWriter.serialize(arenaJson);
+        log.milestone("Arena JSON built");
 
         Path staging = Files.createTempDirectory(
                 request.destination().toAbsolutePath().getParent(), ".chunkdaddy-export-");
@@ -103,15 +175,21 @@ public final class BedrockExporter {
                     writer.get().buildResolvers(converter).build().blockEntityResolver());
 
             ComposedLevelReader reader = new ComposedLevelReader(
-                    snapshot, composer, rectangle, request.profile(), settings, Dimension.OVERWORLD, columnProgress);
+                    snapshot, composer, rectangle, request.profile(), settings, Dimension.OVERWORLD,
+                    columnProgress, request.writeVoidColumns());
 
+            log.milestone("Writer created; converting");
             TrackedTask<Void> task = converter.convert(reader, writer.get());
             awaitOrThrow(task);
+            log.milestone("Columns written");
 
             contentColumns = reader.emittedContentColumns();
             voidColumns = reader.emittedVoidColumns();
 
             long expected = rectangle.columnCount();
+            // The contract is that every column in the rectangle is accounted for. When
+            // explicit void is switched off they are counted and deliberately not written,
+            // which is still accounting for them.
             long emitted = reader.emittedColumns();
             if (emitted != expected) {
                 // Every column inside the rectangle has to be emitted, including the
@@ -144,7 +222,34 @@ public final class BedrockExporter {
                     ConversionReport.render(document, templates, converter, warnings, preserved),
                     StandardCharsets.UTF_8);
 
+            if (request.voidCleaner()) {
+                // Skipping the rectangle's void saves writing it; this pass catches what
+                // that cannot see - columns the composer counted as content which contain
+                // no blocks, which is most of what an imported server world carries.
+                Path cleaned = staging.resolve(worldDirectory.getFileName() + "-cleaned");
+                VoidCleaner.Report cleanReport = VoidCleaner.clean(
+                        worldDirectory, cleaned, VoidCleaner.Settings.safe(), null);
+                log.section("Void cleaner");
+                log.line("Columns scanned: %d", cleanReport.columnsScanned());
+                log.line("Columns kept: %d", cleanReport.columnsKept());
+                log.line("Columns removed: %d", cleanReport.columnsRemoved());
+                log.line("Keys removed: %d (%d bytes of values)",
+                        cleanReport.keysRemoved(), cleanReport.valueBytesRemoved());
+                log.line("World level records preserved: %d", cleanReport.worldRecordsPreserved());
+                for (String note : cleanReport.notes()) log.line("note  %s", note);
+                if (cleanReport.columnsRemoved() > 0) {
+                    warnings.addAll(cleanReport.notes());
+                    WorldPackager.deleteRecursively(worldDirectory);
+                    Files.move(cleaned, worldDirectory);
+                } else {
+                    WorldPackager.deleteRecursively(cleaned);
+                }
+                log.milestone("Void cleaner finished");
+            }
+
+            log.milestone("Packaging as %s", request.mode());
             WorldPackager.publish(worldDirectory, request.destination(), request.mode());
+            log.milestone("Published");
         } finally {
             WorldPackager.deleteRecursively(staging);
         }
@@ -170,7 +275,24 @@ public final class BedrockExporter {
                 request.destination().toString(),
                 contentColumns, voidColumns, contentColumns + voidColumns,
                 arenas, arenas * 2, companion, warnings,
-                preserved.carried(), preserved.notes());
+                preserved.carried(), preserved.notes(), null);
+    }
+
+    /**
+     * Carries the log's location alongside a failure, so the dialog can say where to look
+     * rather than leaving the user with one sentence from inside Chunker.
+     */
+    public static final class ExportFailure extends Exception {
+        private final transient Path logPath;
+
+        ExportFailure(Throwable cause, Path logPath) {
+            super(cause.getMessage(), cause);
+            this.logPath = logPath;
+        }
+
+        public Path logPath() {
+            return logPath;
+        }
     }
 
     // ------------------------------------------------------------------

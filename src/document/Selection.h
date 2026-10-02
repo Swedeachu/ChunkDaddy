@@ -18,6 +18,8 @@ public:
     void subtract(const ChunkRect& rect);
     /// Replace the whole selection with one rectangle.
     void set(const ChunkRect& rect);
+    /// Shift every rectangle by whole chunks, so a selection follows content that moved.
+    void translate(int deltaChunkX, int deltaChunkZ);
 
     bool isEmpty() const noexcept { return m_added.isEmpty(); }
     bool contains(int chunkX, int chunkZ) const;

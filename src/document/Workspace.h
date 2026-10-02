@@ -117,7 +117,7 @@ public:
     /// `profileId` empty keeps the document's current target profile.
     void exportWorld(Document* document, const QString& destination, const QString& mode,
                      const QString& worldName, const QString& numberMode, bool arenaPreset,
-                     const QString& profileId, Callback done,
+                     bool voidCleaner, const QString& profileId, Callback done,
                      WorkerClient::ProgressHandler progress = nullptr);
 
     void requestPreviewTiles(Document* document, const ChunkRect& area, int sliceY,

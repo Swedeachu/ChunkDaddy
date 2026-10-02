@@ -61,6 +61,7 @@ if (CHUNKDADDY_BUILD_GUI)
         src/app/SpawnMarkerDialog.cpp
         src/app/ExportDialog.cpp
         src/app/ReportPanel.cpp
+        src/app/HistoryPanel.cpp
         src/app/InspectorPanel.cpp
         src/app/WorldSettingsPanel.cpp
         src/app/TemplatePanel.cpp

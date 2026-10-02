@@ -39,6 +39,17 @@ public:
     void setTool(Tool tool);
     Tool tool() const noexcept { return m_tool; }
 
+    /// Drop the selection without touching any blocks. The Edit menu's "delete" clears
+    /// chunks; this only stops them being selected, which is what a user reaching for a
+    /// button called Deselect means.
+    void clearSelection();
+    /// Shift the selection by whole chunks, so it follows content that has been moved.
+    void translateSelection(int deltaChunkX, int deltaChunkZ);
+
+    /// True when the cursor is over a selected chunk, so a drag here would move content
+    /// rather than start a new rectangle.
+    bool cursorOverSelection() const;
+
     /// Show a paste preview that follows the cursor until it is committed or cancelled.
     void beginPastePreview(const ChunkRect& relativeBounds);
     void cancelPastePreview();
@@ -115,6 +126,7 @@ private:
     void fetchNextPreview();
     void invalidatePreview();
     void setZoom(double zoom, const QPointF& anchorWidgetPos);
+    void refreshCursor();
 
     Document* m_document = nullptr;
     TileCache m_tiles;

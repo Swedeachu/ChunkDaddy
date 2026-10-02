@@ -13,9 +13,11 @@ class QProgressBar;
 class QPushButton;
 class QSpinBox;
 class QTabBar;
+class QToolBar;
 
 namespace chunkdaddy {
 
+class HistoryPanel;
 class InspectorPanel;
 class ReportPanel;
 class SpawnMarkerDialog;
@@ -56,6 +58,8 @@ private slots:
     void deleteSelection();
     void selectAllContent();
     void expandSelectionToArenas();
+    /// Drop the selection without touching any blocks.
+    void deselectAll();
     void undo();
     void redo();
 
@@ -67,8 +71,14 @@ private slots:
 
 private:
     void buildMenus();
+    void buildToolBar();
     void buildDocks();
     void buildStatusBar();
+
+    /// Walk the current document to the state with `appliedSteps` history steps applied,
+    /// by issuing exactly the undo or redo calls that reach it.
+    void jumpToHistoryStep(int appliedSteps);
+    void stepHistory(int remainingUndo, int remainingRedo);
 
     Document* currentDocument() const;
     void addDocumentTab(Document* document);
@@ -88,6 +98,8 @@ private:
     InspectorPanel* m_inspectorPanel = nullptr;
     WorldSettingsPanel* m_settingsPanel = nullptr;
     ReportPanel* m_reportPanel = nullptr;
+    HistoryPanel* m_historyPanel = nullptr;
+    QToolBar* m_toolBar = nullptr;
     SpawnMarkerDialog* m_spawnDialog = nullptr;
     ImportProgressDialog* m_importProgress = nullptr;
     OperationProgressDialog* m_operationProgress = nullptr;
@@ -108,6 +120,8 @@ private:
     QAction* m_cutAction = nullptr;
     QAction* m_pasteAction = nullptr;
     QAction* m_deleteAction = nullptr;
+    QAction* m_deselectAction = nullptr;
+    QAction* m_expandAction = nullptr;
     QAction* m_exportAction = nullptr;
     QAction* m_importAction = nullptr;
     QAction* m_spawnAction = nullptr;

@@ -1,6 +1,7 @@
 package gg.swim.chunkdaddy.worker.document;
 
 import com.hivemc.chunker.conversion.intermediate.column.ChunkerColumn;
+import com.hivemc.chunker.conversion.intermediate.column.chunk.ChunkCoordPair;
 import gg.swim.chunkdaddy.worker.util.Checked;
 import gg.swim.chunkdaddy.worker.util.ChunkRect;
 import org.jetbrains.annotations.Nullable;
@@ -130,6 +131,18 @@ public final class WorldSnapshot {
         }
 
         public Builder putColumn(int chunkX, int chunkZ, ChunkerColumn column) {
+            // A column knows its own coordinate, and the export writer trusts that over
+            // the key it was filed under. If the two ever disagree the world is written
+            // with columns at the wrong place, or two columns claim one position and the
+            // export dies deep inside Chunker with nothing naming the offender. Refuse the
+            // write here instead, where the caller that got it wrong is on the stack.
+            ChunkCoordPair position = column.getPosition();
+            if (position.chunkX() != chunkX || position.chunkZ() != chunkZ) {
+                throw new IllegalStateException(
+                        "Column filed at chunk " + chunkX + "," + chunkZ + " carries position "
+                                + position.chunkX() + "," + position.chunkZ()
+                                + ". A relocation lost track of its destination.");
+            }
             columns.put(Checked.chunkKey(chunkX, chunkZ), column);
             return this;
         }

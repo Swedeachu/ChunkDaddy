@@ -8,6 +8,7 @@ import com.hivemc.chunker.conversion.handlers.LevelConversionHandler;
 import com.hivemc.chunker.conversion.handlers.WorldConversionHandler;
 import com.hivemc.chunker.conversion.intermediate.column.ChunkerColumn;
 import com.hivemc.chunker.conversion.intermediate.column.biome.ChunkerBiome;
+import com.hivemc.chunker.conversion.intermediate.column.chunk.ChunkCoordPair;
 import com.hivemc.chunker.conversion.intermediate.column.chunk.RegionCoordPair;
 import com.hivemc.chunker.conversion.intermediate.level.ChunkerLevel;
 import com.hivemc.chunker.conversion.intermediate.level.ChunkerLevelSettings;
@@ -46,6 +47,7 @@ public final class ComposedLevelReader implements LevelReader {
     private final ChunkerLevelSettings settings;
     private final Dimension dimension;
     private final LongConsumer progress;
+    private final boolean writeVoidColumns;
 
     private final AtomicLong emittedContentColumns = new AtomicLong();
     private final AtomicLong emittedVoidColumns = new AtomicLong();
@@ -58,6 +60,18 @@ public final class ComposedLevelReader implements LevelReader {
                                ChunkerLevelSettings settings,
                                Dimension dimension,
                                LongConsumer progress) {
+        this(snapshot, composer, exportRectangle, profile, settings, dimension, progress, true);
+    }
+
+    public ComposedLevelReader(WorldSnapshot snapshot,
+                               ColumnComposer composer,
+                               ChunkRect exportRectangle,
+                               TargetProfile profile,
+                               ChunkerLevelSettings settings,
+                               Dimension dimension,
+                               LongConsumer progress,
+                               boolean writeVoidColumns) {
+        this.writeVoidColumns = writeVoidColumns;
         this.snapshot = snapshot;
         this.composer = composer;
         this.exportRectangle = exportRectangle;
@@ -168,8 +182,28 @@ public final class ComposedLevelReader implements LevelReader {
                     column = composer.compose(snapshot, chunkX, chunkZ);
                     emittedContentColumns.incrementAndGet();
                 } else {
-                    column = composer.composeVoid(chunkX, chunkZ);
                     emittedVoidColumns.incrementAndGet();
+                    if (!writeVoidColumns) {
+                        // Counted but not written. The column is left for the generator the
+                        // level.dat names; whether that is equivalent is the caller's call,
+                        // not this loop's.
+                        reportProgress();
+                        continue;
+                    }
+                    column = composer.composeVoid(chunkX, chunkZ);
+                }
+                // The rectangle is walked once per position, so this loop cannot emit a
+                // duplicate by itself. What it can do is emit a column that carries a
+                // different coordinate than the one it was asked for, and two of those
+                // collide downstream. Chunker's own guard then throws "Duplicate chunk
+                // processed, unable to solve", which names neither coordinate and points
+                // at its own internals. Catch it here, where both numbers are in hand.
+                ChunkCoordPair position = column.getPosition();
+                if (position.chunkX() != chunkX || position.chunkZ() != chunkZ) {
+                    throw new IllegalStateException(
+                            "Composed column for chunk " + chunkX + "," + chunkZ + " carries position "
+                                    + position.chunkX() + "," + position.chunkZ()
+                                    + ". Exporting it would place it on top of another column.");
                 }
                 handler.convertColumn(column);
                 reportProgress();

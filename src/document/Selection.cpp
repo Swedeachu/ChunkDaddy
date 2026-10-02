@@ -23,6 +23,14 @@ void Selection::set(const ChunkRect& rect) {
     m_added.append(rect);
 }
 
+void Selection::translate(int deltaChunkX, int deltaChunkZ) {
+    if (deltaChunkX == 0 && deltaChunkZ == 0) {
+        return;
+    }
+    for (ChunkRect& rect : m_added) rect = rect.translated(deltaChunkX, deltaChunkZ);
+    for (ChunkRect& rect : m_subtracted) rect = rect.translated(deltaChunkX, deltaChunkZ);
+}
+
 bool Selection::contains(int chunkX, int chunkZ) const {
     bool inside = false;
     for (const ChunkRect& rect : m_added) {

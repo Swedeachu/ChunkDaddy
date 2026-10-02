@@ -191,9 +191,10 @@ private slots:
         QVERIFY(requests > edited);
     }
 
-    void detailDropsOnlyAfterZoomingTwiceAsFarOut() {
+    void detailNeverDropsBelowFourPixelsPerChunk() {
+        // One pixel per chunk cannot show an arena's shape, so the ladder stops at four.
         const int sizes[] = {50, 100, 300};
-        const int expected[] = {16, 4, 1};
+        const int expected[] = {16, 16, 4};
         for (int i = 0; i < 3; ++i) {
             Document document;
             document.applyState(state("detail", 1, ChunkRect(0, 0, sizes[i] - 1, sizes[i] - 1)));
@@ -256,6 +257,64 @@ private slots:
         view.setPreviewPaused(false);
         QTRY_COMPARE(requests.count(), 2);
         QVERIFY(requests.last()[2].toULongLong() != oldGeneration);
+    }
+
+    void zoomingOutKeepsFinerTilesInsteadOfRefetchingThem() {
+        // The complaint this answers: zooming blanked the view because changing detail
+        // level threw the cache away. A chunk held at sixteen pixels must satisfy a four
+        // pixel request, so a zoom-out paints immediately and paints the sharper data.
+        QTemporaryDir temp;
+        const ChunkRect bounds(0, 0, 15, 15);
+        TileCache cache;
+        QString error;
+        QVERIFY2(cache.loadTileFile(tileFile(temp.filePath("fine"), bounds, 16), &error),
+                 qPrintable(error));
+        QVERIFY(cache.hasRegion(bounds));
+
+        cache.setPixelsPerChunk(4);
+        QVERIFY(cache.hasRegion(bounds));
+        QVERIFY(cache.missingRegions(bounds).isEmpty());
+        QCOMPARE(cache.cachedChunkCount(16), 256);
+        QCOMPARE(cache.chunkImage(0, 0).width(), 16);
+        QVERIFY(!cache.pageImage(16, 0, 0).isNull());
+        QVERIFY(cache.pageImage(4, 0, 0).isNull());
+        QCOMPARE(cache.populatedLevels(), QVector<int>{16});
+
+        // Zooming back in must not have cost a round trip either.
+        cache.setPixelsPerChunk(16);
+        QVERIFY(cache.hasRegion(bounds));
+
+        // A coarse level arriving later coexists with the fine one rather than replacing it.
+        QVERIFY2(cache.loadTileFile(tileFile(temp.filePath("coarse"), bounds, 4), &error),
+                 qPrintable(error));
+        QCOMPARE(cache.cachedChunkCount(4), 256);
+        QCOMPARE(cache.cachedChunkCount(16), 256);
+        QCOMPARE(cache.chunkImage(0, 0).width(), 16);
+
+        // A distant page is reduced once, properly, rather than left to the painter.
+        const QImage reduced = cache.pageImage(16, 0, 0, 20);
+        QCOMPARE(reduced.width(), 32);
+
+        // An edit still clears every level for the area it touched.
+        cache.invalidate(ChunkRect(0, 0, 0, 0));
+        QVERIFY(!cache.hasChunk(0, 0));
+        QVERIFY(cache.hasChunk(1, 0));
+    }
+
+    void cacheStaysInsideItsByteBudget() {
+        QTemporaryDir temp;
+        TileCache cache;
+        cache.setBudgetBytes(16LL * 1024 * 1024);
+        QString error;
+        for (int page = 0; page < 24; ++page) {
+            const ChunkRect area = ChunkRect::ofSize(page * 16, 0, 16, 16);
+            QVERIFY2(cache.loadTileFile(tileFile(temp.filePath(QString::number(page)), area, 16), &error),
+                     qPrintable(error));
+            cache.retain(area);
+        }
+        QVERIFY(cache.bytesUsed() <= 16LL * 1024 * 1024);
+        // The area most recently looked at is the one that survived.
+        QVERIFY(cache.hasChunk(23 * 16, 0));
     }
 
     void truncatedTileFileDoesNotPartiallyChangeCache() {

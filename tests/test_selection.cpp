@@ -8,6 +8,20 @@ class TestSelection : public QObject {
     Q_OBJECT
 
 private slots:
+    void translateMovesEveryRectangleTogether() {
+        // The box follows the content it moved, so the next drag acts on the same chunks.
+        Selection selection;
+        selection.add(ChunkRect(0, 0, 3, 3));
+        selection.subtract(ChunkRect(1, 1, 2, 2));
+        const std::int64_t before = selection.columnCount();
+        selection.translate(-5, 7);
+        QCOMPARE(selection.columnCount(), before);
+        QVERIFY(!selection.contains(0, 0));
+        QVERIFY(selection.contains(-5, 7));
+        QVERIFY(!selection.contains(-4, 8));
+        QCOMPARE(selection.bounds(), ChunkRect(-5, 7, -2, 10));
+    }
+
     void distantAndOverlappingSelections() {
         Selection selection;
         selection.add(ChunkRect(-1000000, -1000000, -999991, -999991));

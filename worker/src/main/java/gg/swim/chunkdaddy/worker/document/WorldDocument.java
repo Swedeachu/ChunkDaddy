@@ -491,7 +491,15 @@ public final class WorldDocument {
         for (Map.Entry<Long, ChunkerColumn> entry : clipboard.columns().entrySet()) {
             int rx = Checked.chunkKeyX(entry.getKey());
             int rz = Checked.chunkKeyZ(entry.getKey());
-            ChunkerColumn placed = ColumnOps.relocate(entry.getValue(), destChunkX + rx, destChunkZ + rz, 0, true, null);
+            // The clipboard holds columns already relocated to relative coordinates by
+            // capture, so a column at relative (rx, rz) carries position (rx, rz). The
+            // translation to apply is therefore the destination corner alone. Adding the
+            // relative offset as well double counted it: the column landed under key
+            // (destX + rx) while carrying position (destX + 2rx), and since the export
+            // writer takes a column's coordinate from the column rather than from the key,
+            // two columns could claim the same position and Chunker refused the whole
+            // export with "Duplicate chunk processed, unable to solve."
+            ChunkerColumn placed = ColumnOps.relocate(entry.getValue(), destChunkX, destChunkZ, 0, true, null);
             builder.putColumn(destChunkX + rx, destChunkZ + rz, placed);
         }
 

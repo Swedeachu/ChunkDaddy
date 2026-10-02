@@ -21,8 +21,15 @@ public record ExportResult(String worldPath,
                            /** level.dat tag names carried across from the source world. */
                            List<String> preservedTags,
                            /** Readable notes about the carried tags that matter most. */
-                           List<String> preservedNotes) {
+                           List<String> preservedNotes,
+                           /** Where the export log was written, or null when none could be. */
+                           String logPath) {
     public long expectedColumns() {
         return contentColumns + voidColumns;
+    }
+
+    public ExportResult withLogPath(String path) {
+        return new ExportResult(worldPath, contentColumns, voidColumns, totalColumns, arenaCount,
+                spawnPointCount, companionJsonWritten, warnings, preservedTags, preservedNotes, path);
     }
 }

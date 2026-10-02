@@ -109,6 +109,7 @@ void Workspace::closeDocument(Document* document) {
     request.insert(QStringLiteral("documentId"), document->documentId());
     m_worker->send(request, nullptr);
 
+    m_history.forget(document->documentId());
     m_documents.removeAll(document);
     emit documentRemoved(document);
     emit documentsChanged();
@@ -283,7 +284,7 @@ void Workspace::undo(Document* document, Callback done) {
     m_worker->send(request, [this, document, done](const WorkerReply& reply) {
         if (reply.ok) {
             document->applyState(reply.result);
-            m_history.recordUndo(document->revision());
+            m_history.recordUndo(document->documentId(), document->revision());
         }
         if (done) {
             done(reply);
@@ -297,7 +298,7 @@ void Workspace::redo(Document* document, Callback done) {
     m_worker->send(request, [this, document, done](const WorkerReply& reply) {
         if (reply.ok) {
             document->applyState(reply.result);
-            m_history.recordRedo(document->revision());
+            m_history.recordRedo(document->documentId(), document->revision());
         }
         if (done) {
             done(reply);
@@ -426,7 +427,7 @@ void Workspace::validateExport(Document* document, Callback done) {
 
 void Workspace::exportWorld(Document* document, const QString& destination, const QString& mode,
                             const QString& worldName, const QString& numberMode, bool arenaPreset,
-                            const QString& profileId, Callback done,
+                            bool voidCleaner, const QString& profileId, Callback done,
                             WorkerClient::ProgressHandler progress) {
     QJsonObject request = Protocol::request(QStringLiteral("export_world"));
     request.insert(QStringLiteral("documentId"), document->documentId());
@@ -438,6 +439,7 @@ void Workspace::exportWorld(Document* document, const QString& destination, cons
     request.insert(QStringLiteral("worldName"), worldName);
     request.insert(QStringLiteral("numberMode"), numberMode);
     request.insert(QStringLiteral("arenaPreset"), arenaPreset);
+    request.insert(QStringLiteral("voidCleaner"), voidCleaner);
     request.insert(QStringLiteral("writeCompanionJson"), true);
     m_worker->send(request, std::move(done), std::move(progress));
 }
@@ -460,7 +462,7 @@ void Workspace::applyAndRecord(Document* document, const WorkerReply& reply,
         return;
     }
     document->applyState(reply.result);
-    m_history.recordCommit(description, document->revision());
+    m_history.recordCommit(document->documentId(), description, document->revision());
 }
 
 } // namespace chunkdaddy

@@ -10,6 +10,7 @@ import gg.swim.chunkdaddy.worker.bedrock.ExportRequest;
 import gg.swim.chunkdaddy.worker.bedrock.ExportResult;
 import gg.swim.chunkdaddy.worker.bedrock.LevelDataPreserver;
 import gg.swim.chunkdaddy.worker.bedrock.TargetProfile;
+import gg.swim.chunkdaddy.worker.bedrock.VoidCleaner;
 import gg.swim.chunkdaddy.worker.bedrock.WorldPackager;
 import gg.swim.chunkdaddy.worker.conversion.ArenaTemplate;
 import gg.swim.chunkdaddy.worker.conversion.MappingIssue;
@@ -103,6 +104,7 @@ public final class WorkerSession {
                 case "preview_tiles" -> previewTiles(request);
                 case "validate_export" -> validateExport(request);
                 case "export_world" -> exportWorld(id, request);
+                case "clean_void" -> cleanVoid(id, request);
                 case "cancel" -> cancel(request);
                 case "shutdown" -> new JsonObject();
                 default -> throw new WorkerException("protocol.unknown", "Unknown request type '" + type + "'");
@@ -639,14 +641,21 @@ public final class WorkerSession {
                 document.worldSpawn(),
                 ArenaJsonWriter.NumberMode.valueOf(Json.string(request, "numberMode", "EXACT")),
                 Json.bool(request, "arenaPreset", true),
-                Json.bool(request, "writeCompanionJson", true));
+                Json.bool(request, "writeCompanionJson", true),
+                // Default keeps the original generated-void contract. Switching it off is
+                // only sound when the written level.dat already generates void.
+                Json.bool(request, "writeVoidColumns", !Json.bool(request, "voidCleaner", true)),
+                Json.bool(request, "voidCleaner", true));
 
         AtomicReference<WorldConverter> handle = new AtomicReference<>();
         runningJobs.put(requestId, handle);
         long total = rectangle.columnCount();
 
         BedrockExporter exporter = new BedrockExporter(templates, resolverFactory);
-        ExportResult exported = exporter.export(document, exportRequest,
+        Path logFallback = workspace.resolve("logs");
+        ExportResult exported;
+        try {
+            exported = exporter.export(document, exportRequest,
                 done -> {
                     if (done == total) {
                         // Enumeration finishes before database flush, compaction and
@@ -655,7 +664,16 @@ public final class WorkerSession {
                     } else {
                         progress(requestId, "Preparing world columns", done, total);
                     }
-                }, handle);
+                }, handle, logFallback);
+        } catch (BedrockExporter.ExportFailure failure) {
+            // The useful detail is in the log, and the dialog only has room for a sentence.
+            // Point at the file rather than truncating a stack trace into the message.
+            Throwable cause = failure.getCause() == null ? failure : failure.getCause();
+            String where = failure.logPath() == null
+                    ? "No export log could be written."
+                    : "Full details: " + failure.logPath();
+            throw new WorkerException("export.failed", describe(cause) + "\n\n" + where, cause);
+        }
 
         JsonObject result = new JsonObject();
         result.addProperty("path", exported.worldPath());
@@ -668,7 +686,71 @@ public final class WorkerSession {
         result.add("warnings", Json.ofStrings(exported.warnings()));
         result.add("preservedTags", Json.ofStrings(exported.preservedTags()));
         result.add("preservedNotes", Json.ofStrings(exported.preservedNotes()));
+        if (exported.logPath() != null) {
+            result.addProperty("logPath", exported.logPath());
+        }
         result.addProperty("revision", document.revision());
+        return result;
+    }
+
+    /**
+     * Run the void cleaner over a world on disk, without opening it as a document.
+     *
+     * <p>Deliberately separate from the document model: this is a database operation on a
+     * finished world, and routing it through import and re-export would drop every record
+     * that is not a chunk.
+     */
+    private JsonObject cleanVoid(long requestId, JsonObject request) throws Exception {
+        Path source = Path.of(Json.string(request, "path"));
+        if (!Files.exists(source)) {
+            throw new WorkerException("source.missing", "No such file or folder: " + source);
+        }
+        boolean dryRun = Json.bool(request, "dryRun", false);
+        boolean airSubChunks = Json.bool(request, "airSubChunks", false);
+
+        Path scratch = workspace.resolve("void-clean").resolve(UUID.randomUUID().toString());
+        Files.createDirectories(scratch);
+        Path world = source;
+        if (Files.isRegularFile(source) && SourceInspector.isArchive(source)) {
+            Path extracted = scratch.resolve("source");
+            SourceInspector.extract(source, extracted);
+            List<SourceInspector.WorldRoot> roots = SourceInspector.findWorldRoots(extracted, 6);
+            if (roots.isEmpty()) {
+                throw new WorkerException("source.empty", "No Bedrock world found inside " + source);
+            }
+            world = roots.get(0).directory();
+        }
+
+        String destinationPath = Json.string(request, "destination", "");
+        Path destination = destinationPath.isEmpty()
+                ? scratch.resolve("cleaned.mcworld") : Path.of(destinationPath);
+        WorldPackager.OutputMode mode =
+                WorldPackager.OutputMode.valueOf(Json.string(request, "mode", "MCWORLD"));
+        Path staged = mode == WorldPackager.OutputMode.DIRECTORY ? destination : scratch.resolve("staged");
+
+        VoidCleaner.Report report = VoidCleaner.clean(world, staged,
+                new VoidCleaner.Settings(airSubChunks, dryRun),
+                keys -> progress(requestId, "Scanning world database", keys, 0));
+        if (!dryRun && mode != WorldPackager.OutputMode.DIRECTORY) {
+            WorldPackager.publish(staged, destination, mode);
+        }
+
+        JsonObject result = new JsonObject();
+        if (!dryRun) result.addProperty("path", destination.toString());
+        result.addProperty("dryRun", dryRun);
+        result.addProperty("keysScanned", report.keysScanned());
+        result.addProperty("columnsScanned", report.columnsScanned());
+        result.addProperty("columnsKept", report.columnsKept());
+        result.addProperty("columnsRemoved", report.columnsRemoved());
+        result.addProperty("keysRemoved", report.keysRemoved());
+        result.addProperty("valueBytesRemoved", report.valueBytesRemoved());
+        result.addProperty("airOnlyColumnsRemoved", report.airOnlyColumnsRemoved());
+        result.addProperty("worldRecordsPreserved", report.worldRecordsPreserved());
+        result.addProperty("summary", report.summary());
+        JsonObject byTag = new JsonObject();
+        report.removedByTag().forEach(byTag::addProperty);
+        result.add("removedByRecordType", byTag);
+        result.add("notes", Json.ofStrings(report.notes()));
         return result;
     }
 

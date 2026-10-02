@@ -35,6 +35,7 @@ public:
     /// EXACT or INTEGER.
     QString numberMode() const;
     bool arenaPreset() const;
+    bool voidCleaner() const;
     /// The target profile to write with; may differ from the document's current one.
     QString profileId() const;
 
@@ -56,6 +57,7 @@ private:
     QComboBox* m_numberMode = nullptr;
     QComboBox* m_profile = nullptr;
     QCheckBox* m_arenaPreset = nullptr;
+    QCheckBox* m_voidCleaner = nullptr;
     QCheckBox* m_useSystemDownloads = nullptr;
     QTextBrowser* m_summary = nullptr;
     QPushButton* m_exportButton = nullptr;
