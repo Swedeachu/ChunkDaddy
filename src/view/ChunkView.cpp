@@ -65,9 +65,10 @@ void ChunkView::setDocument(Document* document) {
                 m_previewExportRectangle = m_document->exportRectangle();
                 invalidatePreview();
             }
+            if (m_document->isLoading()) requestMissingTiles();
             update();
         });
-        if (const auto bounds = m_document->contentBounds()) {
+        if (const auto bounds = m_document->initialViewBounds() ? m_document->initialViewBounds() : m_document->contentBounds()) {
             zoomToFit(*bounds);
         }
     }
@@ -260,6 +261,9 @@ void ChunkView::rebuildPreviewQueue() {
     if (auto exported = m_document->exportRectangle())
         bounds = bounds ? bounds->united(*exported) : exported;
     const auto visible = visibleChunks();
+    // Before indexing finishes, space outside the spawn preview is unknown.
+    // Ask for it so panning shows loading placeholders, not apparent void.
+    if (m_document->isLoading()) bounds = visible;
     if (!bounds || !bounds->intersects(visible)) { update(); return; }
     const ChunkRect area(std::max(bounds->minX(), visible.minX()), std::max(bounds->minZ(), visible.minZ()),
                          std::min(bounds->maxX(), visible.maxX()), std::min(bounds->maxZ(), visible.maxZ()));
@@ -376,11 +380,16 @@ void ChunkView::paintEvent(QPaintEvent*) {
     drawPastePreview(painter);
     drawWorldSpawn(painter);
     drawLegend(painter);
-    if (!m_previewError.isEmpty() || m_previewInFlight || !m_previewQueue.isEmpty() || m_previewTimer.isActive()) {
+    if (!m_previewError.isEmpty() || m_document->isLoading() || !m_document->loadError().isEmpty()
+        || m_previewInFlight || !m_previewQueue.isEmpty() || m_previewTimer.isActive()) {
         const QRect banner(12, 12, std::min(width() - 24, 530), 32);
         painter.fillRect(banner, QColor(20, 24, 32, 235));
         painter.setPen(Qt::white);
-        const QString text = !m_previewError.isEmpty() ? tr("Preview failed. See Reports for details, or retry.")
+        const QString text = !m_document->loadError().isEmpty() ? tr("World loading failed: %1").arg(m_document->loadError())
+            : !m_previewError.isEmpty() ? tr("Preview failed. See Reports for details, or retry.")
+            : m_document->isLoading() ? (m_document->totalColumns() > 0
+                ? tr("Loading world nearby… %1 / %2 chunks ready").arg(m_document->loadedColumns()).arg(m_document->totalColumns())
+                : tr("Loading world nearby… %1 chunks ready").arg(m_document->loadedColumns()))
             : tr("Loading %1preview… %2 / %3 regions")
                 .arg(m_pixelsPerChunk < 16 ? tr("overview ") : QString())
                 .arg(std::min(m_previewCompleted, m_previewTotal)).arg(m_previewTotal);
@@ -442,6 +451,9 @@ void ChunkView::drawTiles(QPainter& painter, const ChunkRect& visible) {
                 break;
             case ColumnState::Absent:
                 painter.fillRect(cell, kAbsent);
+                break;
+            case ColumnState::Loading:
+                painter.fillRect(cell, QBrush(QColor(76, 87, 108), Qt::Dense4Pattern));
                 break;
             }
         }

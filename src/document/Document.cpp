@@ -114,6 +114,11 @@ void Document::applyState(const QJsonObject& state) {
     m_canUndo = state.value(QStringLiteral("canUndo")).toBool(false);
     m_canRedo = state.value(QStringLiteral("canRedo")).toBool(false);
     m_materializedColumns = state.value(QStringLiteral("materializedColumns")).toInt();
+    m_loading = state.value(QStringLiteral("loading")).toBool(false);
+    m_loadedColumns = state.value(QStringLiteral("loadedColumns")).toInt(m_materializedColumns);
+    m_totalColumns = state.value(QStringLiteral("totalColumns")).toInt(m_materializedColumns);
+    m_loadError = state.value(QStringLiteral("loadError")).toString();
+    m_initialViewBounds = readRect(state, QStringLiteral("initialViewBounds"));
     m_hasExplicitExportRectangle =
         state.value(QStringLiteral("hasExplicitExportRectangle")).toBool(false);
     m_exportBorderChunks = state.value(QStringLiteral("exportBorderChunks")).toInt();

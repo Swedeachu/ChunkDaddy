@@ -46,6 +46,23 @@ public final class WorldImporter {
                                      SourceInspector.Edition edition,
                                      TargetProfile profile,
                                      WorldConverter converter) throws Exception {
+        return importWorld(worldDirectory, edition, profile, converter, null);
+    }
+
+    /** Reports captured columns while the conversion runs, without traversing its task tree. */
+    public static Result importWorld(Path worldDirectory,
+                                     SourceInspector.Edition edition,
+                                     TargetProfile profile,
+                                     WorldConverter converter,
+                                     @Nullable java.util.function.IntConsumer onProgress) throws Exception {
+        return importWorld(worldDirectory, edition, profile, converter, onProgress,
+                new CaptureLevelWriter(profile.version(), Dimension.OVERWORLD));
+    }
+
+    public static Result importWorld(Path worldDirectory, SourceInspector.Edition edition,
+                                     TargetProfile profile, WorldConverter converter,
+                                     @Nullable java.util.function.IntConsumer onProgress,
+                                     CaptureLevelWriter writer) throws Exception {
         Optional<? extends LevelReader> reader = switch (edition) {
             case BEDROCK -> BedrockEncoders.createReader(worldDirectory.toFile(), converter);
             case JAVA -> JavaEncoders.createReader(worldDirectory.toFile(), converter);
@@ -56,8 +73,6 @@ public final class WorldImporter {
                             + "Its version may be outside the range the pinned Chunker revision supports.");
         }
 
-        CaptureLevelWriter writer = new CaptureLevelWriter(profile.version(), Dimension.OVERWORLD);
-
         // Entities and maps are deliberately excluded from region composition; see the
         // conversion report. Block entities are essential and stay on.
         converter.setProcessEntities(false);
@@ -67,7 +82,15 @@ public final class WorldImporter {
         converter.setDiscardEmptyChunks(false);
 
         TrackedTask<Void> task = converter.convert(reader.get(), writer);
-        task.future().join();
+        var completion = task.future();
+        if (onProgress != null) {
+            while (!completion.isDone()) {
+                try { completion.get(1, java.util.concurrent.TimeUnit.SECONDS); }
+                catch (java.util.concurrent.TimeoutException ignored) { /* report activity below */ }
+                onProgress.accept(writer.columns().size());
+            }
+        }
+        completion.join();
 
         List<String> notices = new java.util.ArrayList<>();
         if (!writer.otherDimensionsSeen().isEmpty()) {

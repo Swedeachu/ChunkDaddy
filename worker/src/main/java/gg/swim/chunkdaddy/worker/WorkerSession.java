@@ -25,6 +25,7 @@ import gg.swim.chunkdaddy.worker.document.SourceInspector;
 import gg.swim.chunkdaddy.worker.document.TemplateRegistry;
 import gg.swim.chunkdaddy.worker.document.WorldDocument;
 import gg.swim.chunkdaddy.worker.document.WorldImporter;
+import gg.swim.chunkdaddy.worker.document.ProgressiveWorldImport;
 import gg.swim.chunkdaddy.worker.preview.PreviewRenderer;
 import gg.swim.chunkdaddy.worker.protocol.Json;
 import gg.swim.chunkdaddy.worker.protocol.ProtocolIO;
@@ -56,6 +57,7 @@ public final class WorkerSession {
     private final Path workspace;
     private final TemplateRegistry templates = new TemplateRegistry();
     private final Map<UUID, WorldDocument> documents = new ConcurrentHashMap<>();
+    private final Map<UUID, ProgressiveWorldImport> loadingWorlds = new ConcurrentHashMap<>();
     private final Map<UUID, ClipboardContent> clipboard = new ConcurrentHashMap<>();
     private final Map<Long, AtomicReference<WorldConverter>> runningJobs = new ConcurrentHashMap<>();
     private final Map<Long, AtomicBoolean> cancelled = new ConcurrentHashMap<>();
@@ -78,6 +80,19 @@ public final class WorkerSession {
         long id = request.has("id") ? request.get("id").getAsLong() : -1;
         String type = Json.string(request, "type", "");
         try {
+            // Preview and inspection remain available; commands that can consume or
+            // change world data wait for the full import to publish atomically.
+            if (request.has("documentId") && !List.of("preview_tiles", "document_info", "get_level_settings", "close_document").contains(type)) {
+                var loading = loadingWorlds.get(Json.uuid(request, "documentId"));
+                if (loading != null) {
+                    cancelled.computeIfAbsent(id, key -> new AtomicBoolean());
+                    loading.awaitComplete(() -> {
+                        checkCancelled(id);
+                        progress(id, "Finishing world loading before this operation...", loading.loadedColumns(), loading.totalColumns());
+                    });
+                    checkCancelled(id);
+                }
+            }
             JsonObject result = switch (type) {
                 case "capabilities" -> capabilities();
                 case "inspect_source" -> inspectSource(request);
@@ -85,6 +100,12 @@ public final class WorkerSession {
                 case "close_document" -> closeDocument(request);
                 case "document_info" -> documentInfo(request);
                 case "open_world" -> openWorld(id, request);
+                case "compose_regions" -> composeRegions(id, request);
+                case "surface_raster" -> surfaceRaster(request);
+                case "verify_regions" -> verifyRegions(request);
+                case "realign_block_entities" -> realignBlockEntities(request);
+                case "inspect_bedrock_records" -> inspectBedrockRecords(request);
+                case "merge_bedrock_chunks" -> mergeBedrockChunks(request);
                 case "import_schematics" -> importSchematics(id, request);
                 case "set_template_spawns" -> setTemplateSpawns(request);
                 case "place_grid" -> placeGrid(request);
@@ -106,10 +127,17 @@ public final class WorkerSession {
                 case "export_world" -> exportWorld(id, request);
                 case "clean_void" -> cleanVoid(id, request);
                 case "cancel" -> cancel(request);
-                case "shutdown" -> new JsonObject();
+                case "shutdown" -> {
+                    for (var loading : loadingWorlds.values()) if (loading.loading()) loading.close();
+                    yield new JsonObject();
+                }
                 default -> throw new WorkerException("protocol.unknown", "Unknown request type '" + type + "'");
             };
             io.writeResult(id, result);
+            if ("open_world".equals(type) && result.has("documentId")) {
+                var loading = loadingWorlds.get(UUID.fromString(result.get("documentId").getAsString()));
+                if (loading != null) loading.enableNotifications();
+            }
         } catch (WorkerException e) {
             io.writeError(id, e.code(), e.getMessage());
         } catch (Throwable e) {
@@ -149,6 +177,7 @@ public final class WorkerSession {
         schemas.add("sponge-v2");
         schemas.add("sponge-v3");
         result.add("schematicSchemas", schemas);
+        result.add("regionFeatures", Json.ofStrings(List.of("compose_regions", "relative-json", "shared-palettes", "surface_raster", "verify_regions", "realign_block_entities", "inspect_bedrock_records", "merge_bedrock_chunks")));
 
         JsonArray profiles = new JsonArray();
         for (TargetProfile profile : TargetProfile.all()) {
@@ -167,6 +196,61 @@ public final class WorkerSession {
             profiles.add(entry);
         }
         result.add("targetProfiles", profiles);
+        return result;
+    }
+
+    private JsonObject realignBlockEntities(JsonObject request) throws Exception {
+        Path source = Path.of(Json.string(request, "path"));
+        if (!Files.isRegularFile(source) || !SourceInspector.isArchive(source))
+            throw new IllegalArgumentException("Realignment requires an archive; its working extraction is disposable");
+        JsonArray roots = Json.array(inspectSource(request), "worlds");
+        if (roots.size() != 1) throw new IllegalArgumentException("Expected one world");
+        Path directory = Path.of(Json.string(roots.get(0).getAsJsonObject(), "directory"));
+        var ids = new java.util.HashSet<String>();
+        for (var id : Json.array(request, "blockEntityIds")) ids.add(id.getAsString());
+        long repaired = gg.swim.chunkdaddy.worker.bedrock.BlockEntityRealigner.realign(directory, ids);
+        JsonObject manifest = com.google.gson.JsonParser.parseString(Files.readString(directory.resolve("regions.json"))).getAsJsonObject();
+        JsonObject result = gg.swim.chunkdaddy.worker.bedrock.RegionVerifier.verify(directory, manifest);
+        Path destination = Path.of(Json.string(request, "destination"));
+        WorldPackager.publish(directory, destination, WorldPackager.OutputMode.ZIP);
+        result.addProperty("realignedBlockEntities", repaired);
+        result.addProperty("path", destination.toString());
+        result.addProperty("verifiedDirectory", directory.toString());
+        return result;
+    }
+
+    private JsonObject verifyRegions(JsonObject request) throws Exception {
+        JsonArray roots = Json.array(inspectSource(request), "worlds");
+        if (roots.size() != 1) throw new IllegalArgumentException("Expected one world");
+        Path directory = Path.of(Json.string(roots.get(0).getAsJsonObject(), "directory"));
+        JsonObject manifest = com.google.gson.JsonParser.parseString(Files.readString(directory.resolve("regions.json"))).getAsJsonObject();
+        return gg.swim.chunkdaddy.worker.bedrock.RegionVerifier.verify(directory, manifest);
+    }
+
+    private Path singleBedrockRoot(String path) throws Exception {
+        JsonObject request = new JsonObject();
+        request.addProperty("path", path);
+        JsonArray roots = Json.array(inspectSource(request), "worlds");
+        if (roots.size() != 1 || !Json.string(roots.get(0).getAsJsonObject(), "edition").equals("BEDROCK"))
+            throw new IllegalArgumentException("Expected one Bedrock world: " + path);
+        return Path.of(Json.string(roots.get(0).getAsJsonObject(), "directory"));
+    }
+
+    private JsonObject inspectBedrockRecords(JsonObject request) throws Exception {
+        return gg.swim.chunkdaddy.worker.bedrock.BedrockChunkMerger.inspect(singleBedrockRoot(Json.string(request, "path")));
+    }
+
+    private JsonObject mergeBedrockChunks(JsonObject request) throws Exception {
+        Path base = singleBedrockRoot(Json.string(request, "basePath"));
+        Path overlay = singleBedrockRoot(Json.string(request, "overlayPath"));
+        ChunkRect footprint = Json.optionalChunkRect(request, "rectangle");
+        if (footprint == null) throw new IllegalArgumentException("Placement rectangle is required");
+        Path staged = workspace.resolve("merges").resolve(UUID.randomUUID().toString());
+        JsonObject result = gg.swim.chunkdaddy.worker.bedrock.BedrockChunkMerger.merge(base, overlay, staged, footprint);
+        Path destination = Path.of(Json.string(request, "destination"));
+        WorldPackager.publish(staged, destination, WorldPackager.OutputMode.valueOf(Json.string(request, "mode", "ZIP")));
+        result.addProperty("path", destination.toString());
+        result.addProperty("verifiedDirectory", staged.toString());
         return result;
     }
 
@@ -215,6 +299,8 @@ public final class WorkerSession {
 
     private JsonObject closeDocument(JsonObject request) {
         UUID id = Json.uuid(request, "documentId");
+        var loading = loadingWorlds.remove(id);
+        if (loading != null && loading.loading()) loading.close();
         documents.remove(id);
         // A clipboard entry captured from this document stays valid: closing the source tab
         // must not invalidate a copy the user already made.
@@ -232,11 +318,40 @@ public final class WorkerSession {
                 Json.string(request, "profileId", TargetProfile.defaultProfile().id()));
         String name = Json.string(request, "name", directory.getFileName().toString());
 
+        if (edition == SourceInspector.Edition.BEDROCK && Json.bool(request, "progressive", false)) {
+            WorldDocument document = new WorldDocument(name, profile.id(), templates);
+            var loading = new ProgressiveWorldImport(directory, edition, profile, document,
+                    job -> io.writeEvent(-1, "document_state", describeDocument(document)));
+            runningJobs.put(requestId, new AtomicReference<>(loading.converter()));
+            try {
+                checkCancelled(requestId);
+                loading.awaitInitialView();
+                checkCancelled(requestId);
+            } catch (Exception error) {
+                loading.close();
+                checkCancelled(requestId);
+                throw error;
+            }
+            synchronized (document) {
+                if (loading.loading()) document.adoptSourceLevel(loading.writer().capturedSettings(),
+                        loading.writer().capturedLevelData(), true);
+                documents.put(document.id(), document);
+                loadingWorlds.put(document.id(), loading);
+            }
+            JsonObject result = describeDocument(document);
+            result.addProperty("importedColumns", loading.totalColumns());
+            result.add("notices", Json.ofStrings(List.of("Nearby chunks are ready. The rest of the world continues loading; edits and exports wait for completion.",
+                    "Ordinary entities were not imported.")));
+            result.add("otherDimensions", Json.ofStrings(List.copyOf(loading.writer().otherDimensionsSeen())));
+            return result;
+        }
+
         WorldConverter converter = WorldImporter.newConverter();
         runningJobs.put(requestId, new AtomicReference<>(converter));
         progress(requestId, "Reading world chunks...", 0, 0);
 
-        WorldImporter.Result imported = WorldImporter.importWorld(directory, edition, profile, converter);
+        WorldImporter.Result imported = WorldImporter.importWorld(directory, edition, profile, converter,
+                count -> progress(requestId, "Reading world chunks... " + count + " columns ready", count, 0));
 
         WorldDocument document = new WorldDocument(name, profile.id(), templates);
         documents.put(document.id(), document);
@@ -385,7 +500,7 @@ public final class WorkerSession {
         WorldDocument document = document(request);
         ChunkSelection selection = selection(request);
         boolean cut = Json.bool(request, "cut", false);
-        ClipboardContent content = document.capture(selection, cut, null);
+        ClipboardContent content = document.capture(selection, cut, blockEntityResolver(document));
         clipboard.put(content.id(), content);
 
         JsonObject result = new JsonObject();
@@ -412,7 +527,7 @@ public final class WorkerSession {
         int destChunkZ = Json.integer(request, "destChunkZ");
         boolean replace = Json.bool(request, "replaceExisting", false);
 
-        EditResult edit = document.paste(content, destChunkX, destChunkZ, replace);
+        EditResult edit = document.paste(content, destChunkX, destChunkZ, replace, blockEntityResolver(document));
 
         JsonObject result = describeEdit(document, edit);
         if (content.pendingCut()) {
@@ -445,7 +560,7 @@ public final class WorkerSession {
                 Json.integer(request, "deltaChunkX"),
                 Json.integer(request, "deltaChunkZ"),
                 Json.bool(request, "replaceExisting", false),
-                null);
+                blockEntityResolver(document));
         return describeEdit(document, edit);
     }
 
@@ -453,6 +568,80 @@ public final class WorkerSession {
         WorldDocument document = document(request);
         EditResult edit = document.clearSelection(selection(request));
         return describeEdit(document, edit);
+    }
+
+    private com.hivemc.chunker.conversion.encoding.base.resolver.blockentity.BlockEntityResolver<?, com.hivemc.chunker.nbt.tags.collection.CompoundTag>
+    blockEntityResolver(WorldDocument document) {
+        TargetProfile profile = TargetProfile.byId(document.targetProfileId());
+        var writer = com.hivemc.chunker.conversion.encoding.bedrock.BedrockEncoders.createWriter(
+                workspace.resolve("copy-resolvers").toFile(), profile.version(), sessionConverter).orElseThrow();
+        return writer.buildResolvers(sessionConverter).build().blockEntityResolver();
+    }
+
+    /** A whole composition is one transaction; failed imports leave no partial document. */
+    private JsonObject composeRegions(long requestId, JsonObject request) throws Exception {
+        String name = Json.string(request, "name", "Composed Regions");
+        TargetProfile profile = TargetProfile.byId(Json.string(request, "profileId", TargetProfile.defaultProfile().id()));
+        WorldDocument destination = new WorldDocument(name, profile.id(), templates);
+        // All template biome lists below use the modern negative-Y frame.
+        destination.levelSettings().CavesAndCliffs = true;
+        var resolver = blockEntityResolver(destination);
+        var composer = new gg.swim.chunkdaddy.worker.document.RegionComposer();
+        JsonArray sources = Json.array(request, "sources");
+        int index = 0;
+        for (JsonElement element : sources) {
+            JsonObject source = element.getAsJsonObject();
+            String templateName = Json.string(source, "name");
+            progress(requestId, "Importing region " + templateName, index++, sources.size());
+            checkCancelled(requestId);
+            JsonObject inspect = new JsonObject();
+            inspect.addProperty("path", Json.string(source, "path"));
+            JsonArray roots = Json.array(inspectSource(inspect), "worlds");
+            if (roots.size() != 1) throw new IllegalArgumentException("Source must contain exactly one world: " + templateName);
+            JsonObject root = roots.get(0).getAsJsonObject();
+            WorldConverter converter = WorldImporter.newConverter();
+            runningJobs.put(requestId, new AtomicReference<>(converter));
+            WorldImporter.Result imported = WorldImporter.importWorld(Path.of(Json.string(root, "directory")),
+                    SourceInspector.Edition.valueOf(Json.string(root, "edition")), profile, converter);
+            if (imported.sourceSettings() != null && !imported.sourceSettings().CavesAndCliffs) {
+                for (var column : imported.columns().values()) {
+                    if (column.getBiomes() == null) continue;
+                    var palettes = new java.util.ArrayList<>(column.getBiomes().asPalette());
+                    if (palettes.isEmpty()) continue;
+                    var bottom = palettes.getFirst();
+                    for (int i = 0; i < 4; i++) palettes.add(0, bottom);
+                    column.setBiomes(new com.hivemc.chunker.conversion.intermediate.column.biome.layout.ChunkerPaletteBasedBiomes(palettes));
+                }
+            }
+            WorldDocument temporary = new WorldDocument(templateName, profile.id(), templates);
+            temporary.importColumns(imported.columns());
+            ChunkRect bounds = Json.optionalChunkRect(source, "rectangle");
+            if (bounds == null) bounds = temporary.snapshot().contentChunkBounds();
+            if (bounds == null) throw new IllegalArgumentException("Empty source " + templateName);
+            JsonObject metadata = Json.object(source, "metadata");
+            composer.add(templateName, temporary.snapshot(), bounds, metadata,
+                    Json.array(source, "coordinatePaths"), Json.array(source, "placements"), resolver);
+            if (source.has("raster")) {
+                JsonObject raster = source.getAsJsonObject("raster");
+                gg.swim.chunkdaddy.worker.preview.SurfaceRaster.write(temporary.snapshot(), raster);
+            }
+        }
+        destination.commitSnapshot(composer.snapshot());
+        JsonObject manifest = composer.manifest(name);
+        if (request.has("layout")) manifest.add("layout", request.get("layout").deepCopy());
+        destination.setRegionManifest(manifest);
+        documents.put(destination.id(), destination);
+        Path manifestPath = workspace.resolve("regions-" + destination.id() + ".json");
+        Files.writeString(manifestPath, new com.google.gson.GsonBuilder().setPrettyPrinting().create().toJson(manifest));
+        JsonObject result = describeDocument(destination);
+        result.addProperty("regionManifestPath", manifestPath.toString());
+        result.addProperty("regionCount", manifest.getAsJsonArray("instances").size());
+        result.addProperty("regionTemplateCount", manifest.getAsJsonObject("templates").size());
+        return result;
+    }
+
+    private JsonObject surfaceRaster(JsonObject request) throws Exception {
+        return gg.swim.chunkdaddy.worker.preview.SurfaceRaster.write(document(request).snapshot(), request);
     }
 
     private JsonObject undo(JsonObject request) {
@@ -572,14 +761,27 @@ public final class WorkerSession {
                 Json.string(request, "heightMode", PreviewRenderer.HeightMode.HIGHEST_SURFACE.name()));
 
         Path output = workspace.resolve("tiles").resolve(UUID.randomUUID() + ".cdat");
-        new PreviewRenderer(templates).render(
-                document.snapshot(), area, sliceY, mode, document.exportRectangle(), output, pixelsPerChunk);
+        long renderRevision;
+        var loading = loadingWorlds.get(document.id());
+        if (loading != null && loading.loading()) {
+            synchronized (document) { renderRevision = document.revision(); }
+            loading.focus(area.minX() + area.widthChunks() / 2, area.minZ() + area.lengthChunks() / 2);
+            new PreviewRenderer(templates).render(loading.preview(), area, sliceY, mode,
+                    loading.bounds(), output, pixelsPerChunk, loading::pending);
+        } else {
+            if (loading != null && loading.failure() != null) throw new WorkerException("world.loadFailed", describe(loading.failure()));
+            synchronized (document) {
+                renderRevision = document.revision();
+                new PreviewRenderer(templates).render(document.snapshot(), area, sliceY, mode,
+                        document.exportRectangle(), output, pixelsPerChunk);
+            }
+        }
 
         JsonObject result = new JsonObject();
         result.addProperty("path", output.toString());
         result.addProperty("formatVersion", pixelsPerChunk == 16 ? PreviewRenderer.FORMAT_VERSION : 2);
         result.add("area", Json.of(area));
-        result.addProperty("revision", document.revision());
+        result.addProperty("revision", renderRevision);
         return result;
     }
 
@@ -750,12 +952,16 @@ public final class WorkerSession {
         JsonObject byTag = new JsonObject();
         report.removedByTag().forEach(byTag::addProperty);
         result.add("removedByRecordType", byTag);
+        JsonObject keptBytes = new JsonObject();
+        report.valueBytesKeptByTag().forEach(keptBytes::addProperty);
+        result.add("valueBytesKeptByRecordType", keptBytes);
         result.add("notes", Json.ofStrings(report.notes()));
         return result;
     }
 
     private JsonObject cancel(JsonObject request) {
         long jobId = request.get("jobId").getAsLong();
+        boolean waiting = cancelled.containsKey(jobId);
         cancelled.computeIfAbsent(jobId, key -> new AtomicBoolean()).set(true);
         AtomicReference<WorldConverter> handle = runningJobs.get(jobId);
         JsonObject result = new JsonObject();
@@ -763,7 +969,7 @@ public final class WorkerSession {
             handle.get().cancel(null);
             result.addProperty("state", "cancelling");
         } else {
-            result.addProperty("state", "notRunning");
+            result.addProperty("state", waiting ? "cancelling" : "notRunning");
         }
         return result;
     }
@@ -831,6 +1037,7 @@ public final class WorkerSession {
     }
 
     private JsonObject describeDocument(WorldDocument document) {
+        synchronized (document) {
         JsonObject result = new JsonObject();
         result.addProperty("documentId", document.id().toString());
         result.addProperty("name", document.name());
@@ -884,7 +1091,25 @@ public final class WorkerSession {
             templateArray.add(describeTemplate(template));
         }
         result.add("templates", templateArray);
+        var loading = loadingWorlds.get(document.id());
+        if (loading != null) {
+            result.addProperty("loading", loading.loading());
+            result.addProperty("loadedColumns", loading.loadedColumns());
+            result.addProperty("totalColumns", loading.totalColumns());
+            if (loading.initialView() != null) result.add("initialViewBounds", Json.of(loading.initialView()));
+            if (loading.loading()) {
+                result.addProperty("materializedColumns", loading.loadedColumns());
+                if (loading.bounds() != null) {
+                    result.add("contentBounds", Json.of(loading.bounds()));
+                    result.add("exportRectangle", Json.of(loading.bounds()));
+                }
+                result.addProperty("canUndo", false);
+                result.addProperty("canRedo", false);
+            }
+            if (loading.failure() != null) result.addProperty("loadError", describe(loading.failure()));
+        }
         return result;
+        }
     }
 
     private JsonObject describeTemplate(ArenaTemplate template) {
@@ -943,4 +1168,3 @@ public final class WorkerSession {
         return new LinkedHashMap<>(documents);
     }
 }
-

@@ -158,6 +158,23 @@ Large coordinate maps use hash-map snapshots that handle colliding keys efficien
 regression guards against the former quadratic pause at the end of world import and
 when committing edits to a large rectangular world.
 
+Bedrock worlds open progressively: an independent, read-only spawn preview loads
+alongside the source index scan, then the viewer starts near the source spawn (or the
+nearest stored chunk) and background decoding continues outward. Panning prioritizes
+the requested area. Hatched chunks are still loading, not empty space. Editing,
+copying and exporting wait for the complete world, and a failed import cannot export
+a partial world. Java sources retain their complete-import path.
+
+On the local Windows SG_EVENTS benchmark (124,983 columns), the native viewer
+showed terrain 1.06 seconds after opening started, with ZIP extraction measured
+separately at 1.31 seconds. Full conversion continued in the background for about
+51 seconds. Terrain, biomes, block entities and the full overview were identical
+to the previous complete import.
+
+To measure archive extraction, first view, background completion and overview
+rendering independently, run `scripts/benchmark_world_open.py WORLD --java JAVA21
+--progressive --overview`. Reports and worker logs go in `local/benchmarks/` by default.
+
 ## Where things are written
 
 | Content | Location |

@@ -6,6 +6,13 @@ namespace chunkdaddy {
 
 Workspace::Workspace(QObject* parent) : QObject(parent), m_clipboard(this), m_history(this) {
     m_worker = new WorkerClient(this);
+    connect(m_worker, &WorkerClient::documentState, this, [this](const QJsonObject& state) {
+        if (Document* document = documentById(state.value(QStringLiteral("documentId")).toString())) {
+            // A final import event can race an edit/undo reply. Once the document is
+            // ready, later background events must not overwrite its committed state.
+            if (document->isLoading()) document->applyState(state);
+        }
+    });
 }
 
 bool Workspace::startWorker(QString* error) {
@@ -80,6 +87,7 @@ void Workspace::openWorldRoot(const QString& directory, const QString& edition, 
                               const QString& profileId, Callback done,
                               WorkerClient::ProgressHandler progress) {
     QJsonObject request = Protocol::request(QStringLiteral("open_world"));
+    request.insert(QStringLiteral("progressive"), true);
     request.insert(QStringLiteral("directory"), directory);
     request.insert(QStringLiteral("edition"), edition);
     request.insert(QStringLiteral("name"), name);

@@ -262,6 +262,8 @@ class VoidCleanerTest {
         assertEquals(wet.columnsRemoved(), dry.columnsRemoved());
         assertEquals(wet.keysRemoved(), dry.keysRemoved());
         assertEquals(wet.valueBytesRemoved(), dry.valueBytesRemoved());
+        assertEquals(wet.valueBytesKeptByTag(), dry.valueBytesKeptByTag());
+        assertTrue(wet.valueBytesKeptByTag().get("SubChunk") > 0);
     }
 
     @Test

@@ -96,7 +96,7 @@ Finish with `{"type": "shutdown"}` and close stdin.
 
 ---
 
-## 3. The driver: `tools/chunkdaddy_cli.py`
+## 3. The driver: `scripts/chunkdaddy_cli.py`
 
 Raw framing is fine for one call and tedious for a job. The driver adds request ids, reply
 correlation, progress reporting, timing and — the useful part — binding one step's result
@@ -106,7 +106,7 @@ into the next step's request.
 export CHUNKDADDY_CLASSPATH=worker/build/dist/chunkdaddy-worker.jar
 export CHUNKDADDY_JAVA=java          # optional, defaults to `java`
 
-python3 tools/chunkdaddy_cli.py --workspace /tmp/ws --jvm=-Xmx6g run plan.jsonl
+python3 scripts/chunkdaddy_cli.py --workspace /tmp/ws --jvm=-Xmx6g run plan.jsonl
 ```
 
 Results go to **stdout as JSON Lines**, one per step; progress, timings and errors go to
@@ -140,15 +140,15 @@ numbers; a placeholder inside a longer string interpolates as text.
 they can be, so `minX=1120` is a number and `paths='["/a.schem"]'` is an array.
 
 ```bash
-python3 tools/chunkdaddy_cli.py call capabilities
-python3 tools/chunkdaddy_cli.py call inspect_source path=/worlds/hub.zip
+python3 scripts/chunkdaddy_cli.py call capabilities
+python3 scripts/chunkdaddy_cli.py call inspect_source path=/worlds/hub.zip
 ```
 
 **`repl`** — requests on stdin, one result per line on stdout; ids are added for you. For
 piping from another program.
 
 ```bash
-printf '%s\n' '{"type":"capabilities"}' | python3 tools/chunkdaddy_cli.py repl
+printf '%s\n' '{"type":"capabilities"}' | python3 scripts/chunkdaddy_cli.py repl
 ```
 
 ---
@@ -209,9 +209,38 @@ the whole Y extent must fit the profile's block range or the request is refused 
 A **selection** is `add[]` and optional `subtract[]`, each an array of chunk rectangles.
 Selections always cover whole vertical columns.
 
-> `copy_selection` currently passes no block-entity resolver, so copying a selection that
-> contains a chest, sign or similar fails with *"A block entity resolver is required to copy
-> block entities"*. Pure terrain copies fine. See the handoff notes.
+Copy, paste and move clone block entities through the selected Bedrock profile.
+See [Region composition](REGION-COMPOSITION.md) for bulk region copies, relative
+JSON metadata, surface rasters and database verification.
+
+`inspect_bedrock_records` takes `path` and scans raw Bedrock database records for
+column counts and `overworldBounds`, without importing the world as a document.
+
+`open_world` accepts optional `progressive: true` for Bedrock sources (used by the
+desktop application). It returns after nearby completed columns are available,
+with `loading`, `loadedColumns`, `totalColumns`, `contentBounds` and
+`initialViewBounds`. While the source index is being collected, `totalColumns` is
+zero and the bounds describe the initial spawn preview; later events provide the
+complete bounds and count. This independent preview is replaced by authoritative
+converted columns, and never enters edits or exports. Unsolicited `document_state`
+events update that state until
+completion. `preview_tiles` prioritizes its requested area and encodes source
+columns still decoding as state `3` (loading), with no pixel payload. They must
+be fetched again as loading progresses, never cached as empty. Commands consuming
+or changing document data wait for completion; import failures block export.
+Omit `progressive` for the existing fully loaded response used by automation.
+
+`merge_bedrock_chunks` takes `basePath`, `overlayPath`, `rectangle`, `destination`
+and optional `mode` (default `ZIP`). First compose/translate the incoming region
+and export it for a storage profile no newer than the base world. The merger adds
+that exported overlay's chunk records at their existing coordinates, rejecting any
+base column in the placement rectangle. Empty actor indexes are supported; nonempty
+actor references are rejected because actor ID remapping is not supported. It preserves every base key/value and base
+file, including level.dat, entities and other dimensions. It copies no overlay
+files, settings or bundled resource/behavior packs. Every base and overlay database
+record is compared with the merged result before atomic publication. The result
+includes record counts and `verifiedDirectory`. This is the path for adding a map
+without round-tripping the base world through the document importer.
 
 ### World settings
 
@@ -244,7 +273,7 @@ Selections always cover whole vertical columns.
 |---|---|---|
 | `documentId` | REQ | |
 | `destination` | REQ | output path |
-| `mode` | `MCWORLD` | `MCWORLD` (zipped) or `FOLDER` |
+| `mode` | `MCWORLD` | `MCWORLD`, `ZIP`, or `DIRECTORY` |
 | `rectangle` | document's | override the export rectangle for this run only |
 | `profileId` | document's | re-stamp for another Bedrock version without rebuilding |
 | `worldName` | document name | |
@@ -262,7 +291,7 @@ failure message ends with `Full details: <path>`.
 
 | type | fields | returns |
 |---|---|---|
-| `clean_void` | `path` REQ (world folder, `.mcworld` or `.zip`), `destination`, `mode` (`MCWORLD`/`ZIP`/`DIRECTORY`), `dryRun` (false), `airSubChunks` (false) | `path`, `columnsScanned`, `columnsKept`, `columnsRemoved`, `keysRemoved`, `valueBytesRemoved`, `worldRecordsPreserved`, `removedByRecordType{}`, `summary`, `notes[]` |
+| `clean_void` | `path` REQ (world folder, `.mcworld` or `.zip`), `destination`, `mode` (`MCWORLD`/`ZIP`/`DIRECTORY`), `dryRun` (false), `airSubChunks` (false) | `path`, `columnsScanned`, `columnsKept`, `columnsRemoved`, `keysRemoved`, `valueBytesRemoved`, `worldRecordsPreserved`, `removedByRecordType{}`, `valueBytesKeptByRecordType{}`, `summary`, `notes[]` |
 
 Operates on a finished world's database. It does **not** open the world as a document,
 because importing and re-exporting would drop every record that is not a chunk. See §7.
@@ -283,7 +312,7 @@ This is the plan used for the measurements in §6, verbatim.
 ```
 
 ```bash
-python3 tools/chunkdaddy_cli.py --workspace /tmp/ws --worker-log /tmp/worker.log \
+python3 scripts/chunkdaddy_cli.py --workspace /tmp/ws --worker-log /tmp/worker.log \
     --jvm=-Xmx6g run plan.jsonl > results.jsonl
 jq -r 'select(.ok) | "\(.type) \(.seconds)s"' results.jsonl
 ```

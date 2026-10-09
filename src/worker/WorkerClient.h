@@ -55,6 +55,7 @@ signals:
     void workerFailed(const QString& reason);
     void logLine(const QString& line);
     void capabilitiesChanged();
+    void documentState(const QJsonObject& state);
 
 private slots:
     void onReadyReadStandardOutput();

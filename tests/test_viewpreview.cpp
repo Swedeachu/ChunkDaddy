@@ -32,6 +32,112 @@ class TestViewPreview : public QObject {
         return path;
     }
 private slots:
+    void pendingTilesAreNeverCachedAsVoidOrComplete() {
+        QTemporaryDir temporary;
+        const QString pending = temporary.filePath("pending.cdat");
+        {
+            QFile file(pending);
+            QVERIFY(file.open(QIODevice::WriteOnly));
+            QDataStream out(&file);
+            out.setByteOrder(QDataStream::BigEndian);
+            out << quint32(0x43444154) << quint32(2) << qint32(0) << qint32(0)
+                << qint32(1) << qint32(1) << qint32(4) << quint8(3);
+        }
+        TileCache tiles;
+        tiles.setPixelsPerChunk(4);
+        QString error;
+        QVERIFY2(tiles.loadTileFile(pending, &error), qPrintable(error));
+        QCOMPARE(tiles.state(0, 0), ColumnState::Loading);
+        QVERIFY(!tiles.hasRegion(ChunkRect(0, 0, 0, 0)));
+        QVERIFY2(tiles.loadTileFile(tileFile(temporary.filePath("ready.cdat"), ChunkRect(0, 0, 0, 0), 4), &error), qPrintable(error));
+        QCOMPARE(tiles.state(0, 0), ColumnState::Content);
+        QVERIFY(tiles.hasRegion(ChunkRect(0, 0, 0, 0)));
+    }
+
+    void progressiveWorldFirstViewAndEditWaitForCompletion() {
+        const QString source = qEnvironmentVariable("CHUNKDADDY_PROGRESSIVE_WORLD");
+        if (source.isEmpty()) QSKIP("Set CHUNKDADDY_PROGRESSIVE_WORLD for progressive world integration.");
+        Workspace workspace;
+        QString error;
+        QVERIFY2(workspace.startWorker(&error), qPrintable(error));
+        WorkerReply reply;
+        bool done = false;
+        auto received = [&](const WorkerReply& value) { reply = value; done = true; };
+        workspace.inspectSource(source, received);
+        QTRY_VERIFY_WITH_TIMEOUT(done, 60000);
+        QVERIFY2(reply.ok, qPrintable(reply.describeError()));
+        auto world = reply.result["worlds"].toArray().first().toObject();
+        QElapsedTimer elapsed;
+        elapsed.start();
+        done = false;
+        workspace.openWorldRoot(world["directory"].toString(), world["edition"].toString(), "Progressive test", "bedrock-1.26.40", received);
+        QTRY_VERIFY_WITH_TIMEOUT(done, 30000);
+        QVERIFY2(reply.ok, qPrintable(reply.describeError()));
+        qInfo() << "First view open ms" << elapsed.elapsed();
+        auto* document = workspace.documents().last();
+        QVERIFY(document->materializedColumns() > 0);
+        ChunkView view;
+        view.resize(1200, 800);
+        view.show();
+        QSignalSpy failed(&view, &ChunkView::previewFailed);
+        connect(&view, &ChunkView::tilesNeeded, &view, [&](const ChunkRect& area, int pixels, quint64 generation) {
+            const auto revision = document->revision();
+            workspace.requestPreviewTiles(document, area, view.heightSlice(), view.heightMode(), [&, generation, revision](const WorkerReply& value) {
+                const auto path = value.result["path"].toString();
+                view.completePreview(generation, path, revision, value.ok ? QString() : value.describeError());
+                if (!path.isEmpty()) QFile::remove(path);
+            }, pixels);
+        });
+        view.setDocument(document);
+        QPoint content;
+        auto findContent = [&] {
+            auto area = *document->initialViewBounds();
+            for (int x = area.minX(); x <= area.maxX(); ++x) for (int z = area.minZ(); z <= area.maxZ(); ++z)
+                if (view.tiles().state(x, z) == ColumnState::Content) { content = {x, z}; return true; }
+            return false;
+        };
+        QTRY_VERIFY_WITH_TIMEOUT(findContent(), 15000);
+        qInfo() << "First visible content ms" << elapsed.elapsed() << "loading" << document->isLoading();
+        const QString screenshot = qEnvironmentVariable("CHUNKDADDY_PREVIEW_SCREENSHOT");
+        if (!screenshot.isEmpty()) QVERIFY(view.grab().save(screenshot));
+        QCOMPARE(failed.count(), 0);
+        if (document->isLoading()) {
+            // Panning beyond provisional bounds must show pending data, not void.
+            view.centreOn(120, 1000);
+            QTRY_COMPARE_WITH_TIMEOUT(view.tiles().state(120, 1000), ColumnState::Loading, 5000);
+            view.centreOn(content.x(), content.y());
+            done = false;
+            bool waiting = false;
+            QJsonObject request{{"type", "copy_selection"}, {"documentId", document->documentId()},
+                {"add", QJsonArray{Protocol::rect(content.x(), content.y(), content.x(), content.y())}},
+                {"subtract", QJsonArray{}}};
+            const auto job = workspace.worker().send(request, received, [&](const WorkerProgress&) { waiting = true; });
+            QTRY_VERIFY_WITH_TIMEOUT(waiting, 5000);
+            workspace.worker().cancel(job);
+            QTRY_VERIFY_WITH_TIMEOUT(done, 5000);
+            QVERIFY(!reply.ok);
+            QCOMPARE(reply.errorCode, QStringLiteral("job.cancelled"));
+            QVERIFY(document->isLoading());
+        }
+        document->selection().set(ChunkRect(content.x(), content.y(), content.x(), content.y()));
+        done = false;
+        workspace.copySelection(document, false, received);
+        QTRY_VERIFY_WITH_TIMEOUT(done, 180000);
+        QVERIFY2(reply.ok, qPrintable(reply.describeError()));
+        qInfo() << "Copy ready after full import ms" << elapsed.elapsed();
+        QCOMPARE(reply.result["columns"].toInt(), 1);
+        done = false;
+        workspace.refreshDocument(document, received);
+        QTRY_VERIFY_WITH_TIMEOUT(done, 10000);
+        QVERIFY2(reply.ok, qPrintable(reply.describeError()));
+        QVERIFY(!reply.result["loading"].toBool());
+        QTRY_VERIFY_WITH_TIMEOUT(!document->isLoading(), 10000);
+        QVERIFY(document->loadedColumns() == document->totalColumns());
+        QVERIFY(document->loadError().isEmpty());
+        workspace.closeDocument(document);
+        workspace.worker().stop();
+    }
+
     void realWorldAndGridPreview() {
         const QString source = qEnvironmentVariable("CHUNKDADDY_REAL_WORLD");
         if (source.isEmpty()) QSKIP("Set CHUNKDADDY_REAL_WORLD to exercise a local world through the bundled worker.");

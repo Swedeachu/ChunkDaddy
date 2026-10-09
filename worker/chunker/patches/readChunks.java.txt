@@ -1,0 +1,26 @@
+    protected void readChunks(ChunkerColumn column) {
+        List<Task<ChunkerChunk>> tasks = new ArrayList<>();
+        // All subchunks of a column are adjacent in LevelDB. One bounded seek
+        // replaces 128 point queries, most of which used to miss the database.
+        byte[] prefix = LevelDBKey.key(dimension, column.getPosition(), LevelDBChunkType.SUB_CHUNK_PREFIX);
+        try (org.iq80.leveldb.DBIterator iterator = database.iterator()) {
+            iterator.seek(prefix);
+            while (iterator.hasNext()) {
+                var entry = iterator.next();
+                byte[] key = entry.getKey();
+                if (!LevelDBKey.startsWith(key, prefix)) break;
+                if (key.length != prefix.length + 1) continue;
+                byte y = key[key.length - 1];
+                if (y < -64 || y >= 64) continue; // Keep the pinned reader's supported range.
+                byte[] value = entry.getValue();
+                ChunkerChunk chunk = new ChunkerChunk(y);
+                tasks.add(Task.async("Creating Chunk Reader", TaskWeight.LOW, this::createChunkReader, chunk)
+                        .thenConsume("Reading Chunk", TaskWeight.HIGHER, chunkReader -> chunkReader.readChunk(value))
+                        .then(chunk));
+            }
+        }
+        Task.join(tasks).thenConsume("Adding chunks to column", TaskWeight.LOW, chunks -> {
+            for (ChunkerChunk chunk : chunks) column.getChunks().put(chunk.getY(), chunk);
+        });
+    }
+

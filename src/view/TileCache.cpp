@@ -128,7 +128,7 @@ bool TileCache::loadTileFile(const QString& path, QString* error) {
                 return false;
             }
             Tile tile;
-            if (rawState > 2) {
+            if (rawState > 3) {
                 if (error) *error = QStringLiteral("Invalid preview column state.");
                 return false;
             }
@@ -296,7 +296,8 @@ bool TileCache::hasChunk(int chunkX, int chunkZ) const {
     for (int level : kLevels) {
         if (level < m_pixelsPerChunk) continue;
         if (const Level* data = levelIfPresent(level)) {
-            if (data->tiles.contains(key)) return true;
+            const auto tile = data->tiles.constFind(key);
+            if (tile != data->tiles.constEnd() && tile->state != ColumnState::Loading) return true;
         }
     }
     return false;
@@ -307,8 +308,12 @@ ColumnState TileCache::state(int chunkX, int chunkZ) const {
     for (int i = int(std::size(kLevels)) - 1; i >= 0; --i) {
         if (const Level* data = levelIfPresent(kLevels[i])) {
             const auto it = data->tiles.constFind(key);
-            if (it != data->tiles.constEnd()) return it->state;
+            if (it != data->tiles.constEnd() && it->state != ColumnState::Loading) return it->state;
         }
+    }
+    for (int level : kLevels) {
+        if (const Level* data = levelIfPresent(level))
+            if (data->tiles.contains(key)) return ColumnState::Loading;
     }
     return ColumnState::Absent;
 }

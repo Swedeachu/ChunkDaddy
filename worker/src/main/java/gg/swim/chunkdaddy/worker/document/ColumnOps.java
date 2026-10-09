@@ -65,6 +65,18 @@ public final class ColumnOps {
                                          int dy,
                                          boolean deepCopy,
                                          @Nullable BlockEntityResolver<?, CompoundTag> resolver) {
+        return relocate(source, dChunkX, dChunkZ, dy, deepCopy, resolver, deepCopy);
+    }
+
+    /** Share read-only palettes while detaching mutable position records. Export clones palettes. */
+    public static ChunkerColumn relocateShared(ChunkerColumn source, int dx, int dz,
+                                               BlockEntityResolver<?, CompoundTag> resolver) {
+        return relocate(source, dx, dz, 0, true, resolver, false);
+    }
+
+    private static ChunkerColumn relocate(ChunkerColumn source, int dChunkX, int dChunkZ, int dy,
+                                          boolean deepCopy, @Nullable BlockEntityResolver<?, CompoundTag> resolver,
+                                          boolean copyPalettes) {
         if ((dy & 15) != 0) {
             throw new IllegalArgumentException(
                     "Vertical column moves must be a multiple of 16 blocks; " + dy + " would repartition sub-chunks.");
@@ -81,7 +93,7 @@ public final class ColumnOps {
         for (ChunkerChunk sourceChunk : source.getChunks().values()) {
             byte newY = (byte) (sourceChunk.getY() + dChunkY);
             ChunkerChunk chunk = new ChunkerChunk(newY);
-            chunk.setPalette(deepCopy ? sourceChunk.getPalette().copy() : sourceChunk.getPalette());
+            chunk.setPalette(copyPalettes ? sourceChunk.getPalette().copy() : sourceChunk.getPalette());
             // Lighting is position dependent; carrying it over would carry a stale value.
             out.getChunks().put(newY, chunk);
         }
@@ -91,20 +103,54 @@ public final class ColumnOps {
             moved.setX(moved.getX() + dx);
             moved.setY(moved.getY() + dy);
             moved.setZ(moved.getZ() + dz);
+            // Bedrock-only records such as item frames bypass normal serialization
+            // and are written from original NBT. Keep that detached payload in step.
+            if (moved.getOriginalNBT() != null) {
+                CompoundTag original = moved.getOriginalNBT().clone();
+                original.put("x", moved.getX()); original.put("y", moved.getY()); original.put("z", moved.getZ());
+                if (original.contains("pairx")) original.put("pairx", Math.addExact(original.getInt("pairx"), dx));
+                if (original.contains("pairz")) original.put("pairz", Math.addExact(original.getInt("pairz"), dz));
+                moved.setOriginalNBT(original);
+            }
+            if (moved instanceof com.hivemc.chunker.conversion.encoding.bedrock.base.resolver.blockentity.type.BedrockChestBlockEntity chest) {
+                if (chest.getPairX() != null) chest.setPairX(Math.addExact(chest.getPairX(), dx));
+                if (chest.getPairZ() != null) chest.setPairZ(Math.addExact(chest.getPairZ(), dz));
+            }
             out.getBlockEntities().add(moved);
         }
 
         for (Entity entity : source.getEntities()) {
-            // Entities are not deep copied: a copy would need fresh identities, which is
-            // a decision the caller has to make explicitly. Region composition excludes
-            // ordinary entities by default and reports them.
+            // Bedrock frames enter the intermediate model as entities even when ordinary
+            // entity import is disabled. Their hanging anchors must move independently.
+            if (entity instanceof com.hivemc.chunker.conversion.intermediate.column.entity.ItemFrameEntity frame) {
+                var payload = (com.hivemc.chunker.conversion.encoding.bedrock.base.resolver.blockentity.type.BedrockItemFrameBlockEntity)
+                        deepCopy(frame.toBedrockBlockEntity(), source, resolver);
+                var copy = frame instanceof com.hivemc.chunker.conversion.intermediate.column.entity.GlowItemFrameEntity
+                        ? new com.hivemc.chunker.conversion.intermediate.column.entity.GlowItemFrameEntity()
+                        : new com.hivemc.chunker.conversion.intermediate.column.entity.ItemFrameEntity();
+                copy.setTileX(Math.addExact(frame.getTileX(), dx));
+                copy.setTileY(Math.addExact(frame.getTileY(), dy));
+                copy.setTileZ(Math.addExact(frame.getTileZ(), dz));
+                copy.setPositionX(frame.getPositionX() + dx); copy.setPositionY(frame.getPositionY() + dy); copy.setPositionZ(frame.getPositionZ() + dz);
+                copy.setItem(payload.getItem()); copy.setItemRotation(frame.getItemRotation());
+                copy.setDirection(frame.getDirection()); copy.setMap(frame.isMap()); copy.setPhoto(frame.isPhoto());
+                out.getEntities().add(copy);
+                continue;
+            }
+            if (deepCopy) throw new IllegalStateException("Copying ordinary entity identities is unsupported: " + entity.getClass().getSimpleName());
             entity.setPositionX(entity.getPositionX() + dx);
             entity.setPositionY(entity.getPositionY() + dy);
             entity.setPositionZ(entity.getPositionZ() + dz);
             out.getEntities().add(entity);
         }
 
-        out.setBiomes(source.getBiomes());
+        // The Bedrock writer pads biome lists in place for older worlds. Detach both
+        // list and palettes for a writable copy, while read-only composition shares them.
+        if (source.getBiomes() != null && copyPalettes) {
+            var biomes = new java.util.ArrayList<Palette<ChunkerBiome>>();
+            for (var palette : source.getBiomes().asPalette()) biomes.add(palette.copy());
+            out.setBiomes(new com.hivemc.chunker.conversion.intermediate.column.biome.layout.ChunkerPaletteBasedBiomes(biomes));
+        } else out.setBiomes(source.getBiomes());
         out.setHeightMap(null);
         out.setLightPopulated(false);
         return out;
@@ -122,7 +168,15 @@ public final class ColumnOps {
         if (resolver == null) {
             throw new IllegalStateException("A block entity resolver is required to copy block entities");
         }
-        Optional<CompoundTag> nbt = resolver.from(source);
+        // Trapped chests resolve through Chest's handler, which requires its Bedrock
+        // wrapper. Prepare that new wrapper before serialization instead of invoking
+        // the handler with an intermediate subclass.
+        BlockEntity serializable = source;
+        if (source instanceof com.hivemc.chunker.conversion.intermediate.column.blockentity.container.randomizable.ChestBlockEntity
+                && !(source instanceof com.hivemc.chunker.conversion.encoding.bedrock.base.resolver.blockentity.type.BedrockChestBlockEntity)) {
+            serializable = resolver.updateBeforeWrite(column, source.getX(), source.getY(), source.getZ(), source);
+        }
+        Optional<CompoundTag> nbt = resolver.from(serializable);
         if (nbt.isEmpty()) {
             // Imported columns contain intermediate types. Bedrock encodes some of
             // them (chests, brushable blocks, shulkers) through a format-specific
@@ -168,4 +222,3 @@ public final class ColumnOps {
         return writeable;
     }
 }
-

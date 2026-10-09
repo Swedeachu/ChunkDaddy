@@ -49,6 +49,11 @@ public final class WorldSnapshot {
         return new WorldSnapshot(Map.of(), Map.of());
     }
 
+    /** Preview-only live view; callers supply a concurrent map of fully converted columns. */
+    public static WorldSnapshot loadingView(Map<Long, ChunkerColumn> readyColumns) {
+        return new WorldSnapshot(Collections.unmodifiableMap(readyColumns), Map.of());
+    }
+
     private static Map<Long, List<ArenaInstance>> buildIndex(Collection<ArenaInstance> instances) {
         if (instances.isEmpty()) return Map.of();
         Map<Long, List<ArenaInstance>> index = new HashMap<>();

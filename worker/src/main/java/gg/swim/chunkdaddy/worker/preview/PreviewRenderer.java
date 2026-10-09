@@ -35,6 +35,7 @@ public final class PreviewRenderer {
     public static final byte STATE_ABSENT = 0;
     public static final byte STATE_GENERATED_VOID = 1;
     public static final byte STATE_CONTENT = 2;
+    public static final byte STATE_LOADING = 3;
 
     /** How the visible block for a column is chosen. */
     public enum HeightMode {
@@ -69,6 +70,12 @@ public final class PreviewRenderer {
     /** Adaptive preview: 1 or 4 samples per chunk side at distant zoom, 16 up close. */
     public void render(WorldSnapshot snapshot, ChunkRect area, int sliceY, HeightMode mode,
                        ChunkRect exportRect, Path output, int pixelsPerChunk) throws IOException {
+        render(snapshot, area, sliceY, mode, exportRect, output, pixelsPerChunk, key -> false);
+    }
+
+    public void render(WorldSnapshot snapshot, ChunkRect area, int sliceY, HeightMode mode,
+                       ChunkRect exportRect, Path output, int pixelsPerChunk,
+                       java.util.function.LongPredicate pending) throws IOException {
         if (pixelsPerChunk != 1 && pixelsPerChunk != 4 && pixelsPerChunk != 16)
             throw new IllegalArgumentException("Preview pixelsPerChunk must be 1, 4 or 16");
         Files.createDirectories(output.getParent());
@@ -86,7 +93,9 @@ public final class PreviewRenderer {
             for (int chunkX = area.minX(); chunkX <= area.maxX(); chunkX++) {
                 for (int chunkZ = area.minZ(); chunkZ <= area.maxZ(); chunkZ++) {
                     byte state;
-                    if (snapshot.hasContent(chunkX, chunkZ)) {
+                    if (pending.test(gg.swim.chunkdaddy.worker.util.Checked.chunkKey(chunkX, chunkZ))) {
+                        state = STATE_LOADING;
+                    } else if (snapshot.hasContent(chunkX, chunkZ)) {
                         state = STATE_CONTENT;
                     } else if (exportRect != null && exportRect.contains(chunkX, chunkZ)) {
                         state = STATE_GENERATED_VOID;

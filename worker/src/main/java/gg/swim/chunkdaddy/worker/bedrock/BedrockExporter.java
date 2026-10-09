@@ -71,6 +71,7 @@ public final class BedrockExporter {
                                AtomicReference<WorldConverter> converterHandle,
                                Path logFallbackDirectory) throws Exception {
         WorldSnapshot snapshot = document.snapshot();
+        document.regionManifest(); // Refuse stale companion coordinates before staging any world.
         ChunkRect rectangle = request.exportRectangle();
         List<String> warnings = new ArrayList<>();
 
@@ -215,6 +216,11 @@ public final class BedrockExporter {
 
             Files.writeString(worldDirectory.resolve("levelname.txt"), request.worldName(), StandardCharsets.UTF_8);
             Files.writeString(worldDirectory.resolve(ARENA_JSON), arenaJsonText, StandardCharsets.UTF_8);
+            JsonObject regionManifest = document.regionManifest();
+            if (regionManifest != null) {
+                Files.writeString(worldDirectory.resolve("regions.json"),
+                        new com.google.gson.GsonBuilder().setPrettyPrinting().create().toJson(regionManifest), StandardCharsets.UTF_8);
+            }
             Files.writeString(worldDirectory.resolve(MANIFEST_JSON),
                     ManifestWriter.serialize(ManifestWriter.build(document, request, templates, rectangle,
                             contentColumns, voidColumns)), StandardCharsets.UTF_8);
@@ -466,4 +472,3 @@ public final class BedrockExporter {
         return dot > 0 ? fileName.substring(0, dot) : fileName;
     }
 }
-

@@ -218,6 +218,10 @@ void WorkerClient::handleFrame(const QJsonObject& frame) {
     const qint64 id = static_cast<qint64>(frame.value(QStringLiteral("id")).toDouble(-1));
 
     if (Protocol::isEvent(frame)) {
+        if (frame.value(QStringLiteral("event")).toString() == QStringLiteral("document_state")) {
+            emit documentState(frame.value(QStringLiteral("payload")).toObject());
+            return;
+        }
         auto it = m_pending.find(id);
         if (it != m_pending.end() && it->progress
             && frame.value(QStringLiteral("event")).toString() == QStringLiteral("progress")) {

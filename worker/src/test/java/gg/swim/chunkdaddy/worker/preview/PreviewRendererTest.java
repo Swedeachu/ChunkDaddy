@@ -18,6 +18,20 @@ import static org.junit.jupiter.api.Assertions.*;
 class PreviewRendererTest {
     @TempDir Path directory;
 
+    @Test void pendingSourceColumnsAreDistinctFromVoidAndAbsent() throws Exception {
+        var output = directory.resolve("loading");
+        new PreviewRenderer(new TemplateRegistry()).render(WorldSnapshot.empty(), new ChunkRect(0, 0, 2, 0),
+                320, PreviewRenderer.HeightMode.HIGHEST_SURFACE, new ChunkRect(0, 0, 1, 0), output, 4,
+                key -> key == gg.swim.chunkdaddy.worker.util.Checked.chunkKey(0, 0));
+        try (var input = new DataInputStream(Files.newInputStream(output))) {
+            input.skipNBytes(28);
+            assertEquals(PreviewRenderer.STATE_LOADING, input.readByte());
+            assertEquals(PreviewRenderer.STATE_GENERATED_VOID, input.readByte());
+            assertEquals(PreviewRenderer.STATE_ABSENT, input.readByte());
+            assertEquals(-1, input.read());
+        }
+    }
+
     @Test void overviewAndFullResolutionPreserveColumnStatesAndSurfaceSamples() throws Exception {
         var column = new ChunkerColumn(new ChunkCoordPair(0, 0));
         var palette = ColumnOps.writeableChunk(column, (byte) 0);

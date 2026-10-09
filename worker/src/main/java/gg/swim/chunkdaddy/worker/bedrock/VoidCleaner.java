@@ -98,6 +98,7 @@ public final class VoidCleaner {
                          long airOnlyColumnsRemoved,
                          long worldRecordsPreserved,
                          Map<String, Long> removedByTag,
+                         Map<String, Long> valueBytesKeptByTag,
                          List<String> notes) {
         public String summary() {
             return String.format(
@@ -114,7 +115,8 @@ public final class VoidCleaner {
     /**
      * Clean {@code sourceWorld} into {@code destinationWorld}.
      *
-     * <p>The source is opened read only and never written. The destination is built fresh,
+     * <p>The source's logical records are never changed; LevelDB may rewrite tables during
+     * ordinary maintenance when opened. The destination is built fresh,
      * so the output database is also compacted; that alone is worth a good deal on a world
      * that has been edited.
      *
@@ -185,6 +187,7 @@ public final class VoidCleaner {
         }
 
         Map<String, Long> removedByTag = new TreeMap<>();
+        Map<String, Long> valueBytesKeptByTag = new TreeMap<>();
         long keysRemoved = 0, bytesRemoved = 0, worldRecords = 0, written = 0;
 
         try (DB source = open(sourceDb, false);
@@ -215,6 +218,9 @@ public final class VoidCleaner {
                         }
                     }
                     if (!keep) continue;
+
+                    valueBytesKeptByTag.merge(parsed == null ? "WorldRecord" :
+                            parsed.actorDigest ? "digp" : tagName(parsed.tag), (long) value.length, Long::sum);
 
                     written++;
                     if (batch == null) continue;
@@ -252,7 +258,7 @@ public final class VoidCleaner {
             notes.add("Every column in this world was empty. Check that you meant to clean it.");
         }
         return new Report(keysScanned, columnsScanned, columnsKept, columnsRemoved,
-                keysRemoved, bytesRemoved, airOnlyRemoved, worldRecords, removedByTag, notes);
+                keysRemoved, bytesRemoved, airOnlyRemoved, worldRecords, removedByTag, valueBytesKeptByTag, notes);
     }
 
     // ------------------------------------------------------------------
@@ -262,6 +268,11 @@ public final class VoidCleaner {
     }
 
     private static DB open(Path directory, boolean create) throws IOException {
+        return new Iq80DBFactory().open(directory.toFile(), databaseOptions(create));
+    }
+
+    /** All maintenance readers can trigger compaction: preserve Bedrock's table layout. */
+    static Options databaseOptions(boolean create) {
         Options options = new Options();
         // Must match what Bedrock writes, or the output is not readable as a world.
         options.compressionType(CompressionType.ZLIB_RAW);
@@ -270,7 +281,7 @@ public final class VoidCleaner {
         options.writeBufferSize(64 * 1024 * 1024);
         options.createIfMissing(create);
         options.errorIfExists(false);
-        return new Iq80DBFactory().open(directory.toFile(), options);
+        return options;
     }
 
     /** level.dat, levelname.txt, world_icon.jpeg, behaviour and resource packs, and so on. */
@@ -311,7 +322,7 @@ public final class VoidCleaner {
     }
 
     /** A parsed chunk key: which dimension, which column, which record. */
-    private record ChunkKey(int dimension, long column, int tag, boolean actorDigest) {
+    record ChunkKey(int dimension, long column, int tag, boolean actorDigest) {
     }
 
     /**

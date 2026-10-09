@@ -1079,6 +1079,9 @@ void MainWindow::onCursorMoved(const BlockPos& block, const QPoint& chunk, Colum
     case ColumnState::Absent:
         stateText = tr("absent");
         break;
+    case ColumnState::Loading:
+        stateText = tr("loading source chunk");
+        break;
     }
     m_cursorLabel->setText(tr("Block %1, %2, %3   Chunk %4, %5   %6")
                                .arg(block.x).arg(block.y).arg(block.z)

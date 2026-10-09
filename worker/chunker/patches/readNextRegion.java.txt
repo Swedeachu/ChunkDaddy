@@ -1,0 +1,25 @@
+    private void readNextRegion(java.util.List<Map.Entry<RegionCoordPair, Set<ChunkCoordPair>>> remaining,
+                                ColumnConversionHandler handler,
+                                com.hivemc.chunker.conversion.ProgressiveReadPolicy policy) {
+        if (remaining.isEmpty() || policy.stopping()) return;
+        ChunkCoordPair focus = policy.focus();
+        int nearest = 0;
+        long distance = Long.MAX_VALUE;
+        for (int i = 0; i < remaining.size(); i++) {
+            RegionCoordPair position = remaining.get(i).getKey();
+            long candidate = Math.abs((long) position.regionX() - focus.regionX())
+                    + Math.abs((long) position.regionZ() - focus.regionZ());
+            if (candidate < distance) { distance = candidate; nearest = i; }
+        }
+        var region = remaining.remove(nearest);
+        if (!converter.shouldProcessRegion(dimension, region.getKey())) {
+            readNextRegion(remaining, handler, policy);
+            return;
+        }
+        // Wait for this region's decoding tasks, not for neighbours to be solved.
+        // The existing pre-transform pipeline still holds cross-region dependencies
+        // until their neighbours arrive; only complete columns reach the capture writer.
+        Task.async("Reading region", TaskWeight.NORMAL, () -> readRegion(region, handler))
+                .then("Region - Flushing", TaskWeight.MEDIUM, () -> handler.flushRegion(region.getKey()))
+                .then("Next nearby region", TaskWeight.NORMAL, () -> readNextRegion(remaining, handler, policy));
+    }

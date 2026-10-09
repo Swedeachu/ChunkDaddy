@@ -78,6 +78,11 @@ public:
     bool canUndo() const noexcept { return m_canUndo; }
     bool canRedo() const noexcept { return m_canRedo; }
     int materializedColumns() const noexcept { return m_materializedColumns; }
+    bool isLoading() const noexcept { return m_loading; }
+    int loadedColumns() const noexcept { return m_loadedColumns; }
+    int totalColumns() const noexcept { return m_totalColumns; }
+    const QString& loadError() const noexcept { return m_loadError; }
+    std::optional<ChunkRect> initialViewBounds() const noexcept { return m_initialViewBounds; }
 
     const QVector<TemplateInfo>& templates() const noexcept { return m_templates; }
     const QVector<ArenaInfo>& arenas() const noexcept { return m_arenas; }
@@ -132,6 +137,11 @@ private:
     bool m_canUndo = false;
     bool m_canRedo = false;
     int m_materializedColumns = 0;
+    bool m_loading = false;
+    int m_loadedColumns = 0;
+    int m_totalColumns = 0;
+    QString m_loadError;
+    std::optional<ChunkRect> m_initialViewBounds;
     bool m_hasExplicitExportRectangle = false;
     int m_exportBorderChunks = 0;
     BlockPos m_worldSpawn{0, 64, 0};

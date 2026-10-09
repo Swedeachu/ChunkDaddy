@@ -25,6 +25,20 @@ import java.util.UUID;
  * as the world bytes.
  */
 public final class WorldDocument {
+    private @Nullable com.google.gson.JsonObject regionManifest;
+    private long regionManifestRevision;
+
+    /** Bind metadata to a committed revision; arbitrary edits must never export stale coordinates. */
+    public void setRegionManifest(com.google.gson.JsonObject manifest) {
+        regionManifest = manifest.deepCopy();
+        regionManifestRevision = revision();
+    }
+
+    public @Nullable com.google.gson.JsonObject regionManifest() {
+        if (regionManifest != null && regionManifestRevision != revision())
+            throw new IllegalStateException("Region composition has changed. Recompose regions before exporting their metadata.");
+        return regionManifest == null ? null : regionManifest.deepCopy();
+    }
     /**
      * How many revisions of history to keep. Each revision shares column objects with its
      * neighbours, so the cost is one map of references per step, not one copy of the world.
@@ -458,6 +472,11 @@ public final class WorldDocument {
 
     /** Paste clipboard content so its minimum corner lands at the given chunk position. */
     public EditResult paste(ClipboardContent clipboard, int destChunkX, int destChunkZ, boolean replaceExisting) {
+        return paste(clipboard, destChunkX, destChunkZ, replaceExisting, null);
+    }
+
+    public EditResult paste(ClipboardContent clipboard, int destChunkX, int destChunkZ, boolean replaceExisting,
+                            @Nullable BlockEntityResolver<?, CompoundTag> resolver) {
         WorldSnapshot current = snapshot();
         ChunkRect destination = clipboard.relativeBounds().translated(destChunkX, destChunkZ);
 
@@ -499,7 +518,7 @@ public final class WorldDocument {
             // writer takes a column's coordinate from the column rather than from the key,
             // two columns could claim the same position and Chunker refused the whole
             // export with "Duplicate chunk processed, unable to solve."
-            ChunkerColumn placed = ColumnOps.relocate(entry.getValue(), destChunkX, destChunkZ, 0, true, null);
+            ChunkerColumn placed = ColumnOps.relocate(entry.getValue(), destChunkX, destChunkZ, 0, true, resolver);
             builder.putColumn(destChunkX + rx, destChunkZ + rz, placed);
         }
 
@@ -582,7 +601,7 @@ public final class WorldDocument {
             ChunkerColumn column = current.materializedColumn(cx, cz);
             if (column == null) continue;
             moved.put(Checked.chunkKey(cx + dChunkX, cz + dChunkZ),
-                    ColumnOps.relocate(column, dChunkX, dChunkZ, 0, false, resolver));
+                    ColumnOps.relocate(column, dChunkX, dChunkZ, 0, true, resolver));
         }
         // Vacate the source, then write the destination, so an overlap keeps the moved copy.
         for (Long key : sourceKeys) {

@@ -19,7 +19,9 @@ enum class ColumnState : quint8 {
     /// Inside the export rectangle with no content: an explicit empty column will be written.
     GeneratedVoid = 1,
     /// Real content.
-    Content = 2
+    Content = 2,
+    /// Present in the source but not fully decoded yet; never treated as empty.
+    Loading = 3
 };
 
 /// Holds decoded chunk tiles at several detail levels at once.

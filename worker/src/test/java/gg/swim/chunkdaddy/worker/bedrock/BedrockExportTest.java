@@ -31,6 +31,66 @@ class BedrockExportTest {
     @TempDir Path directory;
 
     @Test
+    void fiveRegionCopiesHaveIdenticalDatabaseRecordsAcrossRepeatedExports() throws Exception {
+        TargetProfile profile = TargetProfile.defaultProfile();
+        var templates = new TemplateRegistry();
+        var converter = new WorldConverter(UUID.randomUUID());
+        var factory = new ResolverFactory(converter, directory.toFile());
+        var writer = com.hivemc.chunker.conversion.encoding.bedrock.BedrockEncoders.createWriter(directory.toFile(), profile.version(), converter).orElseThrow();
+        var resolver = writer.buildResolvers(converter).build().blockEntityResolver();
+        var column = new ChunkerColumn(new ChunkCoordPair(0, 0));
+        ColumnOps.writeableChunk(column, (byte) 4).set(1, 0, 1, new ChunkerBlockIdentifier(ChunkerVanillaBlockType.CHEST));
+        var chest = new ChestBlockEntity();
+        chest.setX(1); chest.setY(64); chest.setZ(1);
+        column.getBlockEntities().add(chest);
+        var frame = new com.hivemc.chunker.conversion.encoding.bedrock.base.resolver.blockentity.type.BedrockItemFrameBlockEntity();
+        frame.setX(2); frame.setY(64); frame.setZ(1);
+        var frameNbt = new com.hivemc.chunker.nbt.tags.collection.CompoundTag();
+        frameNbt.put("id", "ItemFrame"); frameNbt.put("x", 2); frameNbt.put("y", 64); frameNbt.put("z", 1);
+        frame.setOriginalNBT(frameNbt);
+        column.getBlockEntities().add(frame);
+        ColumnOps.writeableChunk(column, (byte) 4).set(2, 0, 1, new ChunkerBlockIdentifier(ChunkerVanillaBlockType.ITEM_FRAME_BEDROCK));
+        var importedFrame = new com.hivemc.chunker.conversion.intermediate.column.entity.ItemFrameEntity();
+        importedFrame.setTileX(3); importedFrame.setTileY(64); importedFrame.setTileZ(1);
+        importedFrame.setPositionX(3); importedFrame.setPositionY(64); importedFrame.setPositionZ(1);
+        importedFrame.setDirection(com.hivemc.chunker.conversion.intermediate.column.chunk.identifier.type.block.states.vanilla.types.FacingDirection.NORTH);
+        column.getEntities().add(importedFrame);
+        var biomes = new java.util.ArrayList<com.hivemc.chunker.conversion.intermediate.column.chunk.palette.Palette<com.hivemc.chunker.conversion.intermediate.column.biome.ChunkerBiome>>();
+        biomes.add(new com.hivemc.chunker.conversion.intermediate.column.chunk.palette.SingleValuePalette<>(16,
+                com.hivemc.chunker.conversion.intermediate.column.biome.ChunkerBiome.ChunkerVanillaBiome.PLAINS));
+        column.setBiomes(new com.hivemc.chunker.conversion.intermediate.column.biome.layout.ChunkerPaletteBasedBiomes(biomes));
+        var source = new WorldDocument("source", profile.id(), templates);
+        source.importColumns(Map.of(0L, column));
+        var placements = new com.google.gson.JsonArray();
+        for (int i = 0; i < 5; ++i) {
+            var placement = new com.google.gson.JsonObject();
+            placement.addProperty("id", "map@" + i);
+            placement.addProperty("destChunkX", i * 14); placement.addProperty("destChunkZ", 0);
+            placements.add(placement);
+        }
+        var composer = new RegionComposer();
+        composer.add("map", source.snapshot(), new gg.swim.chunkdaddy.worker.util.ChunkRect(0, 0, 0, 0),
+                new com.google.gson.JsonObject(), new com.google.gson.JsonArray(), placements, resolver);
+        var destination = new WorldDocument("copies", profile.id(), templates);
+        destination.commitSnapshot(composer.snapshot());
+        var manifest = composer.manifest("copies");
+        destination.setRegionManifest(manifest);
+        var exporter = new BedrockExporter(templates, factory);
+        for (int pass = 0; pass < 2; ++pass) {
+            var output = directory.resolve("copies-" + pass);
+            exporter.export(destination, new ExportRequest(output, WorldPackager.OutputMode.DIRECTORY,
+                    destination.snapshot().contentChunkBounds(), profile, "copies", new int[]{1, 65, 1},
+                    ArenaJsonWriter.NumberMode.EXACT, true, false, false, true), count -> {}, new AtomicReference<>());
+            assertEquals(5, RegionVerifier.verify(output, manifest).get("verifiedInstances").getAsInt());
+            assertEquals(1, biomes.size(), "Biome padding must not mutate a source shared by copies");
+            assertEquals(1, chest.getX());
+            assertEquals(3, importedFrame.getTileX());
+            assertEquals(3, importedFrame.getPositionX());
+            assertTrue(Files.exists(output.resolve("regions.json")));
+        }
+    }
+
+    @Test
     void repeatedExportPreservesImportedBlockEntitiesAndWritesEveryColumn() throws Exception {
         TargetProfile profile = TargetProfile.defaultProfile();
         TemplateRegistry templates = new TemplateRegistry();

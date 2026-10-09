@@ -22,6 +22,7 @@ from __future__ import annotations
 import argparse
 import json
 import os
+import queue
 import re
 import subprocess
 import sys
@@ -56,6 +57,14 @@ class Worker:
         self._next_id = 1
         self._stderr = threading.Thread(target=self._drain_stderr, daemon=True)
         self._stderr.start()
+        self._stdout_queue = queue.Queue()
+        self._stdout = threading.Thread(target=self._drain_stdout, daemon=True)
+        self._stdout.start()
+
+    def _drain_stdout(self) -> None:
+        for line in self._process.stdout:
+            self._stdout_queue.put(line)
+        self._stdout_queue.put(None)
 
     def _drain_stderr(self) -> None:
         # The worker redirects System.out to stderr so library logging cannot corrupt the
@@ -77,7 +86,11 @@ class Worker:
         while True:
             if deadline is not None and time.monotonic() > deadline:
                 raise WorkerError("cli.timeout", f"no reply to {request.get('type')} in {timeout}s")
-            line = self._process.stdout.readline()
+            remaining = None if deadline is None else max(0, deadline - time.monotonic())
+            try:
+                line = self._stdout_queue.get(timeout=remaining)
+            except queue.Empty:
+                raise WorkerError("cli.timeout", f"no reply to {request.get('type')} in {timeout}s") from None
             if not line:
                 raise WorkerError("cli.closed", "the worker exited before replying")
             line = line.strip()
@@ -106,7 +119,11 @@ class Worker:
             self._process.stdin.close()
         except Exception:
             pass
-        self._process.wait(timeout=30)
+        try:
+            self._process.wait(timeout=30)
+        except subprocess.TimeoutExpired:
+            self._process.kill()
+            self._process.wait(timeout=10)
         if self._log:
             self._log.close()
 
