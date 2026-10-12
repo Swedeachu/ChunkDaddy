@@ -62,17 +62,17 @@ public final class WorldPackager {
             copyRecursively(stagedWorldDirectory, temporary);
             if (Files.exists(destination)) {
                 Path previous = siblingTemp(destination);
-                Files.move(destination, previous, StandardCopyOption.ATOMIC_MOVE);
+                moveWithRetry(destination, previous, StandardCopyOption.ATOMIC_MOVE);
                 deleteRecursively(previous);
             }
-            Files.move(temporary, destination, StandardCopyOption.ATOMIC_MOVE);
+            moveWithRetry(temporary, destination, StandardCopyOption.ATOMIC_MOVE);
             return;
         }
 
         Path temporary = siblingTemp(destination);
         try {
             zipDirectory(stagedWorldDirectory, temporary);
-            Files.move(temporary, destination,
+            moveWithRetry(temporary, destination,
                     StandardCopyOption.REPLACE_EXISTING, StandardCopyOption.ATOMIC_MOVE);
         } finally {
             Files.deleteIfExists(temporary);
@@ -81,6 +81,21 @@ public final class WorldPackager {
 
     private static Path siblingTemp(Path destination) {
         return destination.resolveSibling(destination.getFileName() + ".chunkdaddy-partial");
+    }
+
+    /** Windows indexers/virus scanners can briefly hold a newly written directory open. */
+    private static void moveWithRetry(Path source, Path destination, java.nio.file.CopyOption... options) throws IOException {
+        for (int attempt = 0; ; attempt++) {
+            try { Files.move(source, destination, options); return; }
+            catch (java.nio.file.AccessDeniedException denied) {
+                if (attempt >= 5 || !System.getProperty("os.name").startsWith("Windows")) throw denied;
+                try { Thread.sleep(50L << attempt); }
+                catch (InterruptedException interrupted) {
+                    Thread.currentThread().interrupt();
+                    throw new IOException("Interrupted while publishing world", interrupted);
+                }
+            }
+        }
     }
 
     /**

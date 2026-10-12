@@ -106,6 +106,8 @@ public final class WorkerSession {
                 case "realign_block_entities" -> realignBlockEntities(request);
                 case "inspect_bedrock_records" -> inspectBedrockRecords(request);
                 case "merge_bedrock_chunks" -> mergeBedrockChunks(request);
+                case "align_bedrock_region" -> alignBedrockRegion(id, request);
+                case "replace_bedrock_regions" -> replaceBedrockRegions(request);
                 case "import_schematics" -> importSchematics(id, request);
                 case "set_template_spawns" -> setTemplateSpawns(request);
                 case "place_grid" -> placeGrid(request);
@@ -177,7 +179,7 @@ public final class WorkerSession {
         schemas.add("sponge-v2");
         schemas.add("sponge-v3");
         result.add("schematicSchemas", schemas);
-        result.add("regionFeatures", Json.ofStrings(List.of("compose_regions", "relative-json", "shared-palettes", "surface_raster", "verify_regions", "realign_block_entities", "inspect_bedrock_records", "merge_bedrock_chunks")));
+        result.add("regionFeatures", Json.ofStrings(List.of("compose_regions", "relative-json", "shared-palettes", "surface_raster", "verify_regions", "realign_block_entities", "inspect_bedrock_records", "merge_bedrock_chunks", "align_bedrock_region", "replace_bedrock_regions")));
 
         JsonArray profiles = new JsonArray();
         for (TargetProfile profile : TargetProfile.all()) {
@@ -247,6 +249,49 @@ public final class WorkerSession {
         if (footprint == null) throw new IllegalArgumentException("Placement rectangle is required");
         Path staged = workspace.resolve("merges").resolve(UUID.randomUUID().toString());
         JsonObject result = gg.swim.chunkdaddy.worker.bedrock.BedrockChunkMerger.merge(base, overlay, staged, footprint);
+        Path destination = Path.of(Json.string(request, "destination"));
+        WorldPackager.publish(staged, destination, WorldPackager.OutputMode.valueOf(Json.string(request, "mode", "ZIP")));
+        result.addProperty("path", destination.toString());
+        result.addProperty("verifiedDirectory", staged.toString());
+        return result;
+    }
+
+    /** Match only the requested old footprint; unrelated grid instances never influence alignment. */
+    private JsonObject alignBedrockRegion(long requestId, JsonObject request) throws Exception {
+        Path reference = singleBedrockRoot(Json.string(request, "referencePath"));
+        Path source = singleBedrockRoot(Json.string(request, "sourcePath"));
+        ChunkRect bounds = Json.chunkRect(request, "referenceRectangle");
+        Path slice = workspace.resolve("alignment").resolve(UUID.randomUUID().toString());
+        gg.swim.chunkdaddy.worker.bedrock.BedrockRegionReplacer.slice(reference, slice, bounds);
+        TargetProfile profile = TargetProfile.byId(Json.string(request, "profileId", TargetProfile.defaultProfile().id()));
+        progress(requestId, "Reading reference footprint", 0, 3);
+        var converter = WorldImporter.newConverter();
+        runningJobs.put(requestId, new AtomicReference<>(converter));
+        var old = WorldImporter.importWorld(slice, SourceInspector.Edition.BEDROCK, profile, converter);
+        checkCancelled(requestId);
+        progress(requestId, "Reading edited terrain", 1, 3);
+        converter = WorldImporter.newConverter();
+        runningJobs.put(requestId, new AtomicReference<>(converter));
+        var edited = WorldImporter.importWorld(source, SourceInspector.Edition.BEDROCK, profile, converter);
+        checkCancelled(requestId);
+        progress(requestId, "Matching distinctive terrain and verifying full footprint", 2, 3);
+        return gg.swim.chunkdaddy.worker.document.RegionAlignment.align(
+                gg.swim.chunkdaddy.worker.document.WorldSnapshot.loadingView(old.columns()), bounds,
+                gg.swim.chunkdaddy.worker.document.WorldSnapshot.loadingView(edited.columns()),
+                request.has("minimumSimilarity") ? Json.number(request, "minimumSimilarity") : 0.98);
+    }
+
+    private JsonObject replaceBedrockRegions(JsonObject request) throws Exception {
+        Path base = singleBedrockRoot(Json.string(request, "basePath"));
+        Path overlay = singleBedrockRoot(Json.string(request, "overlayPath"));
+        List<ChunkRect> rectangles = new ArrayList<>();
+        for (JsonElement entry : Json.array(request, "rectangles")) {
+            JsonObject b = entry.getAsJsonObject();
+            rectangles.add(new ChunkRect(Json.integer(b, "minChunkX"), Json.integer(b, "minChunkZ"),
+                    Json.integer(b, "maxChunkX"), Json.integer(b, "maxChunkZ")));
+        }
+        Path staged = workspace.resolve("replacements").resolve(UUID.randomUUID().toString());
+        JsonObject result = gg.swim.chunkdaddy.worker.bedrock.BedrockRegionReplacer.replace(base, overlay, staged, rectangles);
         Path destination = Path.of(Json.string(request, "destination"));
         WorldPackager.publish(staged, destination, WorldPackager.OutputMode.valueOf(Json.string(request, "mode", "ZIP")));
         result.addProperty("path", destination.toString());

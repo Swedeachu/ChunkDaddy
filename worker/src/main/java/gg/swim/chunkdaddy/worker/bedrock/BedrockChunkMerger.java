@@ -115,7 +115,7 @@ public final class BedrockChunkMerger {
         return result;
     }
 
-    private static int networkVersion(Path world) throws Exception {
+    static int networkVersion(Path world) throws Exception {
         byte[] data = Files.readAllBytes(world.resolve("level.dat"));
         ByteBuffer input = ByteBuffer.wrap(data).order(ByteOrder.LITTLE_ENDIAN);
         input.position(8);

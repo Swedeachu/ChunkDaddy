@@ -40,6 +40,8 @@ behind the job it is cancelling.
 | --- | --- |
 | `capabilities` | Protocol version, worker build, Chunker revision, supported schemas, target profiles |
 | `inspect_source` | Extract a container if needed and list the world roots inside it |
+| `align_bedrock_region` | Match edited terrain to an existing footprint and verify translation; see [MapReplacement](MapReplacement.md) |
+| `replace_bedrock_regions` | Replace full occupied footprints, including air, preserving unrelated records and metadata |
 | `new_document` | Create a void Bedrock world |
 | `open_world` | Convert an existing Bedrock or Java world into a document |
 | `close_document` | Forget a document. Clipboard entries captured from it stay valid |

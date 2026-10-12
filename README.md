@@ -62,6 +62,22 @@ approval if Visual Studio C++ Build Tools are missing. Git for Windows is requir
 Launch `build/windows-release/chunkdaddy.exe` or `build/linux-release/chunkdaddy`.
 See [`docs/BuildAndRun.md`](docs/BuildAndRun.md) for prerequisites, manual builds and troubleshooting.
 
+## Updating maps inside an existing world
+
+The CLI worker supports `align_bedrock_region` to match an edited map against an existing
+chunk footprint and `replace_bedrock_regions` to overwrite occupied footprints, including
+air and deleted block entities. Alignment votes come from distinctive unchanged 8×8×8
+terrain tiles across separated chunks, then the complete footprint is checked. Ambiguous
+or substantially different maps are refused. This version supports horizontal chunk-aligned
+translation with unchanged height and orientation; it never guesses a rotation or block-level shift.
+Extra loaded chunks outside the aligned footprint are ignored. Unrelated database records,
+world settings and metadata are retained byte-for-byte; overlay packs are never imported.
+
+For Swim.gg, `scripts/update_sg_event_maps.py` applies this workflow to all three existing
+instances of each selected template, regenerates its shared map binary in the original
+coordinate frame, checks copies/PocketMine loading, and backs up both worlds and assets
+before publication. See [the CLI workflow](docs/MapReplacement.md).
+
 ## Releasing
 
 Double-click `scripts\release-windows.bat`, or run `bash scripts/release-linux.sh`. Each
