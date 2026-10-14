@@ -4,7 +4,7 @@ import unittest
 from pathlib import Path
 from types import SimpleNamespace
 from build_sg_events import sha256
-from update_sg_event_maps import assert_inputs, discover, snapshot_files
+from update_sg_event_maps import assert_inputs, discover, snapshot_files, patch_manifest_position
 
 
 class UpdateGuardsTest(unittest.TestCase):
@@ -51,6 +51,23 @@ class UpdateGuardsTest(unittest.TestCase):
         self.assertEqual(set(discover(incoming, {'SGFOUR', 'turbulence', 'zone85', 'Garrigal'})), {'SGFOUR', 'turbulence', 'zone85', 'Garrigal'})
         (incoming / 'unknown.mcworld').touch()
         with self.assertRaises(ValueError): discover(incoming, {'SGFOUR', 'turbulence', 'zone85', 'Garrigal'})
+
+    def test_exact_source_position_correction_preserves_offsets_and_other_points(self):
+        manifest = {'templates': {'Forlorn': {'sourceBounds': {'minChunkX': -30, 'minChunkZ': -32},
+                    'metadata': {'pointsOfInterest': [{'x': 548, 'y': 72, 'z': 542}, {'x': 123, 'y': 20, 'z': 456}]}}},
+                    'instances': [{'offset': {'x': 1000, 'y': 0, 'z': 2000}}]}
+        patch = {'template': 'Forlorn', 'field': 'pointsOfInterest', 'from': {'x': 68, 'y': 72, 'z': 30}, 'to': {'x': 68, 'y': 76, 'z': 30}}
+        patch_manifest_position(manifest, patch)
+        self.assertEqual(manifest['templates']['Forlorn']['metadata']['pointsOfInterest'], [{'x': 548, 'y': 76, 'z': 542}, {'x': 123, 'y': 20, 'z': 456}])
+        self.assertEqual(manifest['instances'], [{'offset': {'x': 1000, 'y': 0, 'z': 2000}}])
+        with self.assertRaises(ValueError): patch_manifest_position(manifest, patch)
+
+    def test_position_publication_only_allows_its_explicit_pending_assets(self):
+        self.report['runtimeAssetChanges'] = {'regions.json': 'new checksum'}
+        (self.sg / 'regions.json.pending').write_bytes(b'corrected manifest')
+        assert_inputs(self.args, self.report, allow_pending=True)
+        (self.sg / 'regions.json').write_bytes(b'concurrent manifest edit')
+        with self.assertRaises(ValueError): assert_inputs(self.args, self.report, allow_pending=True)
 
 
 if __name__ == '__main__': unittest.main()

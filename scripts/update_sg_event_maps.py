@@ -7,6 +7,7 @@ Use --incoming for names like 'SG4 (Fixed).mcworld', or --updates template-to-pa
 from __future__ import annotations
 
 import argparse
+import copy
 import json
 import os
 import re
@@ -49,6 +50,7 @@ def assert_inputs(args, report, allow_pending=False):
     current = snapshot_files(sg)
     if allow_pending:
         for name in report['updates']: current.pop(name + '/storm-map.bin.pending', None)
+        for relative in report.get('runtimeAssetChanges', {}): current.pop(relative + '.pending', None)
     if current != report['originalRuntimeAssets']: raise ValueError('Runtime map assets changed during staging')
     for name, digest in report['originalWorlds'].items():
         if sha256(args.swim_root / 'savedWorlds' / (name + '.zip')) != digest: raise ValueError('Installed world changed during staging')
@@ -84,6 +86,72 @@ def verify_updated_terrain(args, report):
     write_json(args.workspace / 'update-report.json', report)
 
 
+def replace_point(points, before, after):
+    matches = [i for i, point in enumerate(points) if point == before]
+    if len(matches) != 1: raise ValueError(f'Expected one exact position match for {before}, found {len(matches)}')
+    points[matches[0]] = copy.deepcopy(after)
+
+
+def patch_manifest_position(manifest, patch):
+    """Input coordinates are in the original source frame, never an instance's grid frame."""
+    template = manifest['templates'][patch['template']]
+    field = patch['field']
+    if field not in ('spawns', 'pointsOfInterest'): raise ValueError('Only spawn/POI corrections are supported')
+    before, after = patch['from'], patch['to']
+    for point in (before, after):
+        if set(point) != {'x', 'y', 'z'} or any(type(v) not in (int, float) for v in point.values()):
+            raise ValueError('Position correction must contain numeric XYZ coordinates')
+    bounds = template['sourceBounds']
+    def local(point):
+        return {'x': point['x'] - bounds['minChunkX'] * 16, 'y': point['y'], 'z': point['z'] - bounds['minChunkZ'] * 16}
+    replace_point(template['metadata'][field], local(before), local(after))
+
+
+def apply_position_updates(args, report):
+    patches = report.get('positionUpdates', [])
+    if not patches: return
+    staged = args.workspace / 'runtime-assets/sg'
+    manifests = {}
+    changed_files = set()
+    for patch in patches:
+        name = patch['template']
+        if name not in report['updates']: raise ValueError('Position corrections must target a replaced template')
+        world = report['updates'][name]['world']
+        if world not in manifests: manifests[world] = json.loads((staged / world / 'regions.json').read_text())
+        patch_manifest_position(manifests[world], patch)
+        filename = 'spawns.json' if patch['field'] == 'spawns' else 'positions.json'
+        path = staged / name / filename
+        points = json.loads(path.read_text())
+        replace_point(points, patch['from'], patch['to'])
+        write_json(path, points)
+        changed_files.add(name + '/' + filename)
+    for world, manifest in manifests.items():
+        path = staged / world / 'regions.json'
+        write_json(path, manifest)
+        changed_files.add(world + '/regions.json')
+        archive = args.workspace / (world + '.zip')
+        temporary = archive.with_suffix('.metadata-pending.zip')
+        # Replace just the companion; all archived world/database entry bytes are unchanged.
+        with zipfile.ZipFile(archive) as original, zipfile.ZipFile(temporary, 'w', compression=zipfile.ZIP_DEFLATED, compresslevel=1) as output:
+            for entry in original.infolist():
+                if entry.filename == 'regions.json': output.writestr(entry, path.read_bytes())
+                else:
+                    with original.open(entry) as source, output.open(entry, 'w') as target: shutil.copyfileobj(source, target)
+        if temporary.stat().st_size >= args.max_world_bytes: raise ValueError('Corrected world exceeds size limit')
+        with zipfile.ZipFile(temporary) as check:
+            if check.testzip() is not None or check.read('regions.json') != path.read_bytes(): raise ValueError('Corrected archive validation failed')
+        os.replace(temporary, archive)
+        record = report['worlds'][world]
+        record.update({'bytes': archive.stat().st_size, 'sha256': sha256(archive)})
+        directory = Path(record['replacement']['verifiedDirectory'])
+        write_json(directory / 'regions.json', manifest)
+        with (args.workspace / (world + '-pocketmine.log')).open('w') as log:
+            subprocess.run([args.php, '-d', 'memory_limit=2G', 'tests/SgWorldLoadRegression.php', str(directory)],
+                           cwd=args.swim_root / 'plugins/SwimCore', stdout=log, stderr=subprocess.STDOUT, check=True)
+    report['runtimeAssetChanges'] = {relative: sha256(staged / relative) for relative in sorted(changed_files)}
+    write_json(args.workspace / 'update-report.json', report)
+
+
 def publish(args, report):
     assert_inputs(args, report, allow_pending=True)
     saved = args.swim_root / 'savedWorlds'
@@ -114,6 +182,7 @@ def publish(args, report):
         if sha256(target) != update['sourceSha256']: raise ValueError('Edited source backup checksum mismatch')
     pairs = [(args.workspace / (name + '.zip'), saved / (name + '.zip')) for name in report['worlds']]
     pairs += [(args.workspace / 'runtime-assets/sg' / name / 'storm-map.bin', sg / name / 'storm-map.bin') for name in report['updates']]
+    pairs += [(args.workspace / 'runtime-assets/sg' / relative, sg / relative) for relative in report.get('runtimeAssetChanges', {})]
     for source, target in pairs:
         pending = target.with_name(target.name + '.pending')
         shutil.copy2(source, pending)
@@ -129,9 +198,10 @@ def publish(args, report):
             original = backup / target.name if target.parent == saved else backup / 'runtime-assets' / target.relative_to(sg)
             shutil.copy2(original, target)
         raise
-    # Geometry, spawns, pig/witch locations, offsets, IDs, layout and binary headers are invariant.
+    # Only explicitly corrected source points/manifests may change; all other assets are invariant.
     for relative, digest in report['originalRuntimeAssets'].items():
         if relative in {name + '/storm-map.bin' for name in report['updates']}: continue
+        digest = report.get('runtimeAssetChanges', {}).get(relative, digest)
         if sha256(sg / relative) != digest: raise ValueError('Coordinate metadata changed during publication')
     report['published'] = True
     report['backupDirectory'] = str(backup)
@@ -172,6 +242,7 @@ def main():
     parser.add_argument('--heap', default='12g')
     parser.add_argument('--profile', default='bedrock-1.21.130')
     parser.add_argument('--max-world-bytes', type=int, default=100_000_000)
+    parser.add_argument('--position-updates', type=Path, help='Explicit exact-match source-frame spawn/POI corrections as a JSON array')
     parser.add_argument('--publish', action='store_true')
     parser.add_argument('--publish-staged', action='store_true')
     args = parser.parse_args()
@@ -183,6 +254,8 @@ def main():
             if sha256(args.workspace / (name + '.zip')) != world['sha256']: raise ValueError('Staged world changed')
         for name, update in report['updates'].items():
             if sha256(args.workspace / 'runtime-assets/sg' / name / 'storm-map.bin') != update['binarySha256']: raise ValueError('Staged binary changed')
+        for relative, digest in report.get('runtimeAssetChanges', {}).items():
+            if sha256(args.workspace / 'runtime-assets/sg' / relative) != digest: raise ValueError('Staged coordinate correction changed')
         publish(args, report)
         return
     sg = args.swim_root / 'plugins/SwimCore/data/maps/sg'
@@ -200,6 +273,7 @@ def main():
     shutil.copytree(sg, staged_assets)
     report = {'runId': datetime.now(timezone.utc).strftime('%Y%m%dT%H%M%S%fZ'), 'published': False,
               'originalRuntimeAssets': snapshot_files(sg), 'originalWorlds': {}, 'updates': {}, 'worlds': {}}
+    if args.position_updates: report['positionUpdates'] = json.loads(args.position_updates.read_text())
     worker = Worker(args.classpath, args.workspace, args.java, ['-Xmx' + args.heap], args.workspace / 'worker.log')
     try:
         capabilities = worker.send({'type': 'capabilities'})
@@ -277,6 +351,7 @@ def main():
     finally:
         worker.close()
     verify_updated_terrain(args, report)
+    apply_position_updates(args, report)
     core = args.swim_root / 'plugins/SwimCore'
     subprocess.run([args.php, 'tests/SgRegionsRegression.php', str(args.workspace / 'runtime-assets'), '--aot'], cwd=core, check=True)
     assert_inputs(args, report)

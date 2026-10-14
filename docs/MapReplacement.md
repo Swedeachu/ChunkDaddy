@@ -38,6 +38,17 @@ requires 100% block-type agreement, the same translation and matching chest coun
 the edited source. Reports include matched anchors, similarity, ignored extra
 columns and chest counts. Compare `update-report.json` before publishing.
 
+Use `--position-updates corrections.json` when an existing spawn or pig/witch marker also
+needs correction. Each entry specifies `template`, `field` (`spawns` or `pointsOfInterest`),
+and exact source-frame `from`/`to` XYZ objects. Exactly one matching old point is required;
+missing or duplicate matches fail. The script updates the source/reference list, runtime
+manifest and the ZIP's embedded manifest together, validates corrected gameplay chunks,
+and backs up every old asset. Instance offsets and all unlisted positions stay unchanged.
+
+```json
+[{"template":"Forlorn","field":"pointsOfInterest","from":{"x":68,"y":72,"z":30},"to":{"x":68,"y":76,"z":30}}]
+```
+
 Add `--publish` to stage, validate and install in one run. To install an already validated
 run, repeat its arguments with `--publish-staged`. Publication checks that inputs and
 staged files have not changed. Backups contain old ZIPs, every runtime asset, edited
