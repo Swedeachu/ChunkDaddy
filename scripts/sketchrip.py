@@ -1038,6 +1038,10 @@ def main(argv: list[str] | None = None) -> int:
                         help="with --precision-shapes, skip slab top/bottom state corrections")
     parser.add_argument("--precision-no-fences", action="store_true",
                         help="with --precision-shapes, skip plank-to-fence proposals")
+    parser.add_argument("--geometry-evidence", action="store_true",
+                        help="opt-in measured partial-block family and signed stair facing recovery")
+    parser.add_argument("--geometry-axis-profile", choices=("mineways", "vanilla"),
+                        default="mineways", help="stair riser normal convention of the GLB exporter")
     parser.add_argument("--infer-states", action="store_true",
                         help="experimental high-confidence geometry refinement for slabs, stairs, panes, ladders, etc.")
     parser.add_argument("--world-y", type=int, default=64)
@@ -1189,6 +1193,8 @@ def main(argv: list[str] | None = None) -> int:
             report["source"] = attribution
         if args.precision_shapes and args.refine_schematic is None:
             args.infer_states = True
+        if args.geometry_evidence and args.refine_schematic is None:
+            args.infer_states = True
         if args.stair_orientation_only and args.refine_schematic is None:
             parser.error("--stair-orientation-only requires --refine-schematic")
         if args.infer_states or args.refine_schematic is not None:
@@ -1209,6 +1215,18 @@ def main(argv: list[str] | None = None) -> int:
                 changes, shape_report = infer(meshes, blocks, pack,
                                               report["scale_model_units_per_block"], args.up_axis)
                 blocks.update(changes)
+                if args.geometry_evidence:
+                    from sketchrip_shape_evidence import infer as infer_evidence_families
+                    hints = {}
+                    if args.atlas_map is not None:
+                        mapping = json.loads(args.atlas_map.read_text(encoding="utf-8"))
+                        hints = mapping.get("geometry_families", {})
+                    evidence_changes, evidence_report = infer_evidence_families(
+                        meshes, blocks, pack, report["scale_model_units_per_block"],
+                        args.up_axis, aliases=hints)
+                    blocks.update(evidence_changes)
+                    report["geometry_family_evidence"] = evidence_report
+                    report["requires_review"] = report.get("requires_review", False) or bool(evidence_changes)
                 # Slanted lever/torch faces were discarded by the axis-plane model.
                 # Refine only recognized directional small-block families using a
                 # bounded per-voxel 3D surface signature, leaving weak cases alone.
@@ -1288,6 +1306,19 @@ def main(argv: list[str] | None = None) -> int:
                 report["requires_review"] = bool(roof_changes) or report.get("requires_review", False)
             report["stair_roof_refinement"] = roof_report
             report["block_counts"] = dict(collections.Counter(blocks.values()))
+        if args.geometry_evidence:
+            from sketchrip_shape_evidence import refine_facing as refine_signed_risers
+            facing_changes, facing_report = refine_signed_risers(
+                meshes, blocks, report["scale_model_units_per_block"], args.up_axis,
+                axis_profile=args.geometry_axis_profile)
+            blocks.update(facing_changes)
+            report["signed_stair_facing"] = facing_report
+            report["requires_review"] = report.get("requires_review", False) or bool(facing_changes)
+            if args.profile in ("bedrock-1.26.0", "bedrock-1.26.40") and "stair_roof_refinement" in report:
+                from sketchrip_shape_evidence import verify_legacy_roofs
+                report["final_stair_roof_consistency"] = verify_legacy_roofs(
+                    blocks, report["stair_roof_refinement"], pack)
+            report["block_counts"] = dict(collections.Counter(blocks.values()))
         report["texture_uncertainty_policy"] = ("Geometry-only: original texture guesses unchanged"
             if args.refine_schematic is not None else
             "Strictly block if >0.05% of faces are uncertain; smaller counts are exported with a review warning.")
@@ -1316,8 +1347,9 @@ def main(argv: list[str] | None = None) -> int:
         # Keep the diagnostics/schematic for inspection but refuse to claim
         # an exact .mcworld when the user explicitly requests strict parity.
         unsatisfied = report.get("bedrock_stair_topology", {}).get("counts", {}).get("inconsistent_observations", 0)
+        unsatisfied = max(unsatisfied, report.get("final_stair_roof_consistency", {}).get("conflicts", 0))
         if args.require_exact_stairs and unsatisfied:
-            raise ValueError(f"{unsatisfied} stair components cannot reproduce the observed GLB footprints "
+            raise ValueError(f"{unsatisfied} stair roof/topology constraints remain unsatisfied "
                              f"under {args.profile} neighborhood rules. Diagnostic: {report_path}. "
                              "Try Bedrock 1.26.50 (explicit corner state) if your clients can load it.")
         if args.dry_run:

@@ -1,0 +1,235 @@
+{
+  "reference_nonair": 729739,
+  "predicted_nonair": 288691,
+  "translation": [
+    -167,
+    51,
+    -167
+  ],
+  "overlap": 288683,
+  "occupancy_precision": 0.999972,
+  "reference_coverage": 0.395598,
+  "material_accuracy_on_overlap": 0.957178,
+  "material_correct": 276321,
+  "top_material_mistakes": [
+    {
+      "predicted": "minecraft:lime_terracotta",
+      "actual": "minecraft:grass_block",
+      "count": 3425
+    },
+    {
+      "predicted": "minecraft:lime_terracotta",
+      "actual": "minecraft:green_concrete_powder",
+      "count": 3401
+    },
+    {
+      "predicted": "minecraft:snow_block",
+      "actual": "minecraft:snow_layer",
+      "count": 2341
+    },
+    {
+      "predicted": "minecraft:smooth_stone",
+      "actual": "minecraft:stone",
+      "count": 1008
+    },
+    {
+      "predicted": "minecraft:light_gray_concrete",
+      "actual": "minecraft:cobblestone",
+      "count": 841
+    },
+    {
+      "predicted": "minecraft:pitcher_crop",
+      "actual": "minecraft:lily_pad",
+      "count": 352
+    },
+    {
+      "predicted": "minecraft:spruce_planks",
+      "actual": "minecraft:crimson_planks",
+      "count": 247
+    },
+    {
+      "predicted": "minecraft:packed_mud",
+      "actual": "minecraft:green_concrete_powder",
+      "count": 155
+    },
+    {
+      "predicted": "minecraft:packed_mud",
+      "actual": "minecraft:grass_block",
+      "count": 140
+    },
+    {
+      "predicted": "minecraft:green_wool",
+      "actual": "minecraft:carpet",
+      "count": 127
+    },
+    {
+      "predicted": "minecraft:light_gray_wool",
+      "actual": "minecraft:carpet",
+      "count": 38
+    },
+    {
+      "predicted": "minecraft:yellow_terracotta",
+      "actual": "minecraft:yellow_concrete",
+      "count": 34
+    },
+    {
+      "predicted": "minecraft:mushroom_stem",
+      "actual": "minecraft:stone",
+      "count": 31
+    },
+    {
+      "predicted": "minecraft:spruce_wood",
+      "actual": "minecraft:spruce_log",
+      "count": 29
+    },
+    {
+      "predicted": "minecraft:light_blue_wool",
+      "actual": "minecraft:carpet",
+      "count": 24
+    },
+    {
+      "predicted": "minecraft:gray_wool",
+      "actual": "minecraft:carpet",
+      "count": 20
+    },
+    {
+      "predicted": "minecraft:oak_wood",
+      "actual": "minecraft:oak_log",
+      "count": 19
+    },
+    {
+      "predicted": "minecraft:birch",
+      "actual": "minecraft:birch_planks",
+      "count": 19
+    },
+    {
+      "predicted": "minecraft:acacia_wood",
+      "actual": "minecraft:acacia_log",
+      "count": 14
+    },
+    {
+      "predicted": "minecraft:black_concrete",
+      "actual": "minecraft:obsidian",
+      "count": 14
+    },
+    {
+      "predicted": "minecraft:tube_coral_block",
+      "actual": "minecraft:water",
+      "count": 13
+    },
+    {
+      "predicted": "minecraft:yellow_wool",
+      "actual": "minecraft:carpet",
+      "count": 13
+    },
+    {
+      "predicted": "minecraft:loom",
+      "actual": "minecraft:bookshelf",
+      "count": 12
+    },
+    {
+      "predicted": "minecraft:spruce_planks",
+      "actual": "minecraft:wall_sign",
+      "count": 8
+    },
+    {
+      "predicted": "minecraft:terracotta",
+      "actual": "minecraft:green_concrete_powder",
+      "count": 6
+    },
+    {
+      "predicted": "minecraft:terracotta",
+      "actual": "minecraft:grass_block",
+      "count": 6
+    },
+    {
+      "predicted": "minecraft:spruce_planks",
+      "actual": "minecraft:bookshelf",
+      "count": 6
+    },
+    {
+      "predicted": "minecraft:purple_concrete_powder",
+      "actual": "minecraft:purple_wool",
+      "count": 6
+    },
+    {
+      "predicted": "minecraft:furnace",
+      "actual": "minecraft:dispenser",
+      "count": 5
+    },
+    {
+      "predicted": "minecraft:quartz",
+      "actual": "minecraft:quartz_block",
+      "count": 4
+    },
+    {
+      "predicted": "minecraft:dandelion",
+      "actual": "minecraft:yellow_flower",
+      "count": 1
+    },
+    {
+      "predicted": "minecraft:smooth_quartz",
+      "actual": "minecraft:carpet",
+      "count": 1
+    },
+    {
+      "predicted": "minecraft:black_wool",
+      "actual": "minecraft:carpet",
+      "count": 1
+    },
+    {
+      "predicted": "minecraft:smooth_quartz",
+      "actual": "minecraft:white_wool",
+      "count": 1
+    }
+  ],
+  "shapes": {
+    "button": {
+      "reference_visible": 19,
+      "predicted": 19,
+      "correct_family": 19
+    },
+    "fence": {
+      "reference_visible": 957,
+      "predicted": 957,
+      "correct_family": 957
+    },
+    "ladder": {
+      "reference_visible": 46,
+      "predicted": 46,
+      "correct_family": 46
+    },
+    "pane": {
+      "reference_visible": 1985,
+      "predicted": 1915,
+      "correct_family": 1911
+    },
+    "slab": {
+      "reference_visible": 2310,
+      "predicted": 1222,
+      "correct_family": 1222
+    },
+    "stairs": {
+      "reference_visible": 1972,
+      "predicted": 1972,
+      "correct_family": 1972
+    },
+    "trapdoor": {
+      "reference_visible": 181,
+      "predicted": 181,
+      "correct_family": 181
+    },
+    "wall": {
+      "reference_visible": 757,
+      "predicted": 757,
+      "correct_family": 757
+    }
+  },
+  "stairs_facing": {
+    "compared": 1972,
+    "correct": 1930,
+    "accuracy": 0.978702,
+    "half_correct": 1972
+  },
+  "warning": "Surface/block-family scores do not imply hidden-block or exact state recovery."
+}

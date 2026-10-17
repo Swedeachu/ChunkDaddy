@@ -380,5 +380,13 @@
       "train_support": 239,
       "train_purity": 1.0
     }
+  },
+  "geometry_families": {
+    "minecraft:light_gray_concrete": {
+      "wall": "minecraft:cobblestone_wall"
+    },
+    "minecraft:tuff": {
+      "button": "minecraft:stone_button"
+    }
   }
 }

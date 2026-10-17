@@ -55,6 +55,13 @@ def model_vector(assets: VanillaAssets, state: str) -> np.ndarray:
     return vectorize(points, weights)
 
 
+def preserve_hidden_powered(previous: str, candidate: str) -> str:
+    """Geometry cannot prove powered=true on a newly inferred switch/button."""
+    if 'powered=true' in candidate and 'powered=true' not in previous:
+        return candidate.replace('powered=true', 'powered=false')
+    return candidate
+
+
 def infer(meshes: list, blocks: dict, pack, unit: float, up_axis: str,
           confidence: float = .76, margin: float = .018):
     """Recover visible facing/half/attached states only when supported by local mesh."""
@@ -157,6 +164,7 @@ def infer(meshes: list, blocks: dict, pack, unit: float, up_axis: str,
             previous = next((choices[j][0] for j in tied if choices[j][0] == raw), None)
             best_state = previous or sorted(choices[j][0] for j in tied)[0]
             ambiguous['invisible_properties'] += 1
+        best_state = preserve_hidden_powered(raw, best_state)
         if best_state != raw:
             proposals[point] = best_state
             if len(report_samples) < 100:
