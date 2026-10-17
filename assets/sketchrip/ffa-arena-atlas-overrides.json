@@ -1,0 +1,144 @@
+{
+  "source": "FFA Arena 300x300 by DevRoom; source GLB 11baf8c705414ea8bf9f833a1b1866e4",
+  "warning": "Some block species and states cannot be recovered from mesh pixels; approximate mappings remain review-required.",
+  "entries": {
+    "7cdd4088fc4e7ed620e1ddeaa31e8c51445df758bd2ebc9e324efefb340b036c": {
+      "block": "minecraft:dark_oak_leaves[persistent=true]",
+      "note": "approximate dark-green foliage species",
+      "atlas_x": 361,
+      "atlas_y": 971
+    },
+    "227b7e70a302a007b86387b4b680975562ec23859826ba830a0ff2ab02297c3c": {
+      "block": "minecraft:oak_leaves[persistent=true]",
+      "note": "approximate bright-green foliage species",
+      "atlas_x": 505,
+      "atlas_y": 953
+    },
+    "cd2c5a064db62946da4f027b1a330035d552914bf46490a6e3807a555c23fc5b": {
+      "block": "minecraft:oak_leaves[persistent=true]",
+      "note": "approximate foliage species",
+      "atlas_x": 937,
+      "atlas_y": 1007
+    },
+    "ad537fc009b685e41682ac07a0098adf87504333873468ef75f05bfab490f1d9": {
+      "block": "minecraft:spruce_leaves[persistent=true]",
+      "note": "approximate dark-green foliage species",
+      "atlas_x": 955,
+      "atlas_y": 953
+    },
+    "ed0db7a40db8a7cb484145e39620071cd43c80ca7e3728fd09896a41daa85008": {
+      "block": "minecraft:iron_bars",
+      "note": "recognizable iron bars sprite",
+      "atlas_x": 523,
+      "atlas_y": 989
+    },
+    "4dcda8afacc8595227b82e057dbb524a07b98bd7de2a166b9a1f21e98e6c459f": {
+      "block": "minecraft:lever",
+      "note": "recognizable lever sprite",
+      "atlas_x": 73,
+      "atlas_y": 953
+    },
+    "d5d42d4510ddee896d22edb17c5b3b9cf42064c03bca5e490c4e9b7726f3cfd3": {
+      "block": "minecraft:short_grass",
+      "note": "recognizable grass sprite",
+      "atlas_x": 703,
+      "atlas_y": 1007
+    },
+    "6c5f434bb936ce3735ea452cfaa90fe0940010282d80b98eb1bd778a3dce1f53": {
+      "block": "minecraft:dead_bush",
+      "note": "recognizable dead bush sprite",
+      "atlas_x": 991,
+      "atlas_y": 1007
+    },
+    "550bc5ffbc5930e84912e9a8855e70afa608cbb7a1a7692deb444e99bda39709": {
+      "block": "minecraft:ladder",
+      "note": "recognizable ladder sprite",
+      "atlas_x": 487,
+      "atlas_y": 989
+    },
+    "6e95f195f6e3e4ea21a5becf316ade74facc0cb6f4e16d774400af01f31b3cf2": {
+      "block": "minecraft:cobweb",
+      "note": "recognizable cobweb sprite",
+      "atlas_x": 199,
+      "atlas_y": 1007
+    },
+    "d0fc0645e73a435dda4a7a9b99cdb311b5528164cb75208dd82663998df7ecfc": {
+      "block": "minecraft:vine",
+      "note": "recognizable vine sprite",
+      "atlas_x": 559,
+      "atlas_y": 971
+    },
+    "9a22acdbbfe08d9df22f9d73cc13994ab453fc03fe28f7a4289f6b2c3b1206da": {
+      "block": "minecraft:chain",
+      "note": "approximate hanging chain variant",
+      "atlas_x": 883,
+      "atlas_y": 953
+    },
+    "ff62823223f70c3d09f7ab30c3c9b3d9067ace20a9e9b86db6e4761d25d84ebd": {
+      "block": "minecraft:iron_door",
+      "note": "approximate iron-door sprite; state unknown",
+      "atlas_x": 469,
+      "atlas_y": 989
+    },
+    "d27774fd7f5b949cb0772e84e9d80a6d668dfde442e1f542e4be8643bc6470af": {
+      "block": "minecraft:oxeye_daisy",
+      "note": "approximate white flower species",
+      "atlas_x": 559,
+      "atlas_y": 917
+    },
+    "42b6bdb7c413f75479250be6bc124ab79f8e41d4fe79c3912ed863433502d88b": {
+      "block": "minecraft:lilac",
+      "note": "approximate pink flower species",
+      "atlas_x": 379,
+      "atlas_y": 917
+    },
+    "565ad2022e65666ffe511df47b632cb6490aa736bba0d2e7349a986c446d54b3": {
+      "block": "minecraft:lilac",
+      "note": "approximate pink flower species",
+      "atlas_x": 361,
+      "atlas_y": 917
+    },
+    "f8ee83bb287331e5ce182475c26c033737fc2056945a38b6b989ea6e3acd6f2d": {
+      "block": "minecraft:sweet_berry_bush",
+      "note": "approximate berry bush growth state",
+      "atlas_x": 343,
+      "atlas_y": 917
+    },
+    "d77930ff69e546714778aa8607836f7f9cd42da8b932086908aa210652761f4e": {
+      "block": "minecraft:sweet_berry_bush",
+      "note": "approximate berry bush growth state",
+      "atlas_x": 325,
+      "atlas_y": 917
+    },
+    "f0a85370170e5a46b4f4776b1cbdf09ad2b24ba999baa63f4d2c15cbbfa3afbb": {
+      "block": "minecraft:fern",
+      "note": "approximate fern species",
+      "atlas_x": 307,
+      "atlas_y": 917
+    },
+    "426e2682e77759d8c3d72f63c9650246f514879099a8a92c633de37714052809": {
+      "block": "minecraft:fern",
+      "note": "approximate fern species",
+      "atlas_x": 289,
+      "atlas_y": 917
+    },
+    "d2ac729cdf86d765ac19da23caf36940baebdf51fdf4f153d1cb9396e665bd52": {
+      "block": "minecraft:red_tulip",
+      "note": "recognizable red flower, approximate species",
+      "atlas_x": 217,
+      "atlas_y": 1007
+    },
+    "e3bbd41451df239ad116443ad1bcd02d42b965c1a5c36045ed0f3fd3ff7fca3a": {
+      "block": "minecraft:dandelion",
+      "note": "recognizable yellow flower, approximate species",
+      "atlas_x": 235,
+      "atlas_y": 1007
+    },
+    "062b47ac9d070f1d312f72cbbcd08d527d3906e3431e2048c7a2bf4969048682": {
+      "block": "minecraft:oxeye_daisy",
+      "note": "recognizable white flower, approximate species",
+      "atlas_x": 469,
+      "atlas_y": 917
+    }
+  }
+}

@@ -1,0 +1,21 @@
+{
+  "type": "synthetic_regression_fixture",
+  "size_blocks": [
+    100,
+    1,
+    100
+  ],
+  "mesh_triangles": 20000,
+  "material_ids": [
+    "minecraft:stone",
+    "minecraft:dirt",
+    "minecraft:cobblestone",
+    "minecraft:oak_planks"
+  ],
+  "expected_block_positions": 10000,
+  "actual_block_positions": 10000,
+  "block_type_mismatches": 0,
+  "scale_units_per_block": 1.0,
+  "observed_reconstruction_seconds": 0.157,
+  "source": "Generated locally from the attached vanilla texture pack; NOT a downloaded Sketchfab model"
+}

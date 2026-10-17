@@ -1,0 +1,164 @@
+state,reason
+minecraft:air,No renderable model faces: minecraft:air
+minecraft:barrier,No renderable model faces: minecraft:barrier
+minecraft:black_banner,No renderable model faces: minecraft:black_banner
+minecraft:black_shulker_box,No renderable model faces: minecraft:black_shulker_box
+minecraft:black_wall_banner,No renderable model faces: minecraft:black_wall_banner
+minecraft:blue_banner,No renderable model faces: minecraft:blue_banner
+minecraft:blue_shulker_box,No renderable model faces: minecraft:blue_shulker_box
+minecraft:blue_wall_banner,No renderable model faces: minecraft:blue_wall_banner
+minecraft:brown_banner,No renderable model faces: minecraft:brown_banner
+minecraft:brown_shulker_box,No renderable model faces: minecraft:brown_shulker_box
+minecraft:brown_wall_banner,No renderable model faces: minecraft:brown_wall_banner
+minecraft:bubble_column,No renderable model faces: minecraft:bubble_column
+minecraft:cave_air,No renderable model faces: minecraft:cave_air
+minecraft:chest,No renderable model faces: minecraft:chest
+minecraft:conduit,No renderable model faces: minecraft:conduit
+minecraft:copper_chest,No renderable model faces: minecraft:copper_chest
+minecraft:copper_golem_statue,No renderable model faces: minecraft:copper_golem_statue
+minecraft:creeper_head,No renderable model faces: minecraft:creeper_head
+minecraft:creeper_wall_head,No renderable model faces: minecraft:creeper_wall_head
+minecraft:cyan_banner,No renderable model faces: minecraft:cyan_banner
+minecraft:cyan_shulker_box,No renderable model faces: minecraft:cyan_shulker_box
+minecraft:cyan_wall_banner,No renderable model faces: minecraft:cyan_wall_banner
+minecraft:decorated_pot,No renderable model faces: minecraft:decorated_pot
+minecraft:dragon_head,No renderable model faces: minecraft:dragon_head
+minecraft:dragon_wall_head,No renderable model faces: minecraft:dragon_wall_head
+minecraft:end_gateway,No renderable model faces: minecraft:end_gateway
+minecraft:end_portal,No renderable model faces: minecraft:end_portal
+minecraft:ender_chest,No renderable model faces: minecraft:ender_chest
+minecraft:exposed_copper_chest,No renderable model faces: minecraft:exposed_copper_chest
+minecraft:exposed_copper_golem_statue,No renderable model faces: minecraft:exposed_copper_golem_statue
+minecraft:gray_banner,No renderable model faces: minecraft:gray_banner
+minecraft:gray_shulker_box,No renderable model faces: minecraft:gray_shulker_box
+minecraft:gray_wall_banner,No renderable model faces: minecraft:gray_wall_banner
+minecraft:green_banner,No renderable model faces: minecraft:green_banner
+minecraft:green_shulker_box,No renderable model faces: minecraft:green_shulker_box
+minecraft:green_wall_banner,No renderable model faces: minecraft:green_wall_banner
+minecraft:heavy_core,"""There is no item named 'assets/minecraft/textures/all.png' in the archive"""
+minecraft:lava,No renderable model faces: minecraft:lava
+minecraft:light[level=0],No renderable model faces: minecraft:light[level=0]
+minecraft:light_blue_banner,No renderable model faces: minecraft:light_blue_banner
+minecraft:light_blue_shulker_box,No renderable model faces: minecraft:light_blue_shulker_box
+minecraft:light_blue_wall_banner,No renderable model faces: minecraft:light_blue_wall_banner
+minecraft:light_gray_banner,No renderable model faces: minecraft:light_gray_banner
+minecraft:light_gray_shulker_box,No renderable model faces: minecraft:light_gray_shulker_box
+minecraft:light_gray_wall_banner,No renderable model faces: minecraft:light_gray_wall_banner
+minecraft:lime_banner,No renderable model faces: minecraft:lime_banner
+minecraft:lime_shulker_box,No renderable model faces: minecraft:lime_shulker_box
+minecraft:lime_wall_banner,No renderable model faces: minecraft:lime_wall_banner
+minecraft:magenta_banner,No renderable model faces: minecraft:magenta_banner
+minecraft:magenta_shulker_box,No renderable model faces: minecraft:magenta_shulker_box
+minecraft:magenta_wall_banner,No renderable model faces: minecraft:magenta_wall_banner
+minecraft:moving_piston,No renderable model faces: minecraft:moving_piston
+minecraft:orange_banner,No renderable model faces: minecraft:orange_banner
+minecraft:orange_shulker_box,No renderable model faces: minecraft:orange_shulker_box
+minecraft:orange_wall_banner,No renderable model faces: minecraft:orange_wall_banner
+minecraft:oxidized_copper_chest,No renderable model faces: minecraft:oxidized_copper_chest
+minecraft:oxidized_copper_golem_statue,No renderable model faces: minecraft:oxidized_copper_golem_statue
+minecraft:piglin_head,No renderable model faces: minecraft:piglin_head
+minecraft:piglin_wall_head,No renderable model faces: minecraft:piglin_wall_head
+minecraft:pink_banner,No renderable model faces: minecraft:pink_banner
+minecraft:pink_shulker_box,No renderable model faces: minecraft:pink_shulker_box
+minecraft:pink_wall_banner,No renderable model faces: minecraft:pink_wall_banner
+minecraft:player_head,No renderable model faces: minecraft:player_head
+minecraft:player_wall_head,No renderable model faces: minecraft:player_wall_head
+minecraft:purple_banner,No renderable model faces: minecraft:purple_banner
+minecraft:purple_shulker_box,No renderable model faces: minecraft:purple_shulker_box
+minecraft:purple_wall_banner,No renderable model faces: minecraft:purple_wall_banner
+minecraft:red_banner,No renderable model faces: minecraft:red_banner
+minecraft:red_shulker_box,No renderable model faces: minecraft:red_shulker_box
+minecraft:red_wall_banner,No renderable model faces: minecraft:red_wall_banner
+minecraft:shulker_box,No renderable model faces: minecraft:shulker_box
+minecraft:skeleton_skull,No renderable model faces: minecraft:skeleton_skull
+minecraft:skeleton_wall_skull,No renderable model faces: minecraft:skeleton_wall_skull
+minecraft:structure_void,No renderable model faces: minecraft:structure_void
+minecraft:trapped_chest,No renderable model faces: minecraft:trapped_chest
+minecraft:void_air,No renderable model faces: minecraft:void_air
+minecraft:water,No renderable model faces: minecraft:water
+minecraft:waxed_copper_chest,No renderable model faces: minecraft:waxed_copper_chest
+minecraft:waxed_copper_golem_statue,No renderable model faces: minecraft:waxed_copper_golem_statue
+minecraft:waxed_exposed_copper_chest,No renderable model faces: minecraft:waxed_exposed_copper_chest
+minecraft:waxed_exposed_copper_golem_statue,No renderable model faces: minecraft:waxed_exposed_copper_golem_statue
+minecraft:waxed_oxidized_copper_chest,No renderable model faces: minecraft:waxed_oxidized_copper_chest
+minecraft:waxed_oxidized_copper_golem_statue,No renderable model faces: minecraft:waxed_oxidized_copper_golem_statue
+minecraft:waxed_weathered_copper_chest,No renderable model faces: minecraft:waxed_weathered_copper_chest
+minecraft:waxed_weathered_copper_golem_statue,No renderable model faces: minecraft:waxed_weathered_copper_golem_statue
+minecraft:weathered_copper_chest,No renderable model faces: minecraft:weathered_copper_chest
+minecraft:weathered_copper_golem_statue,No renderable model faces: minecraft:weathered_copper_golem_statue
+minecraft:white_banner,No renderable model faces: minecraft:white_banner
+minecraft:white_shulker_box,No renderable model faces: minecraft:white_shulker_box
+minecraft:white_wall_banner,No renderable model faces: minecraft:white_wall_banner
+minecraft:wither_skeleton_skull,No renderable model faces: minecraft:wither_skeleton_skull
+minecraft:wither_skeleton_wall_skull,No renderable model faces: minecraft:wither_skeleton_wall_skull
+minecraft:yellow_banner,No renderable model faces: minecraft:yellow_banner
+minecraft:yellow_shulker_box,No renderable model faces: minecraft:yellow_shulker_box
+minecraft:yellow_wall_banner,No renderable model faces: minecraft:yellow_wall_banner
+minecraft:zombie_head,No renderable model faces: minecraft:zombie_head
+minecraft:zombie_wall_head,No renderable model faces: minecraft:zombie_wall_head
+minecraft:light[level=1],No renderable model faces: minecraft:light[level=1]
+"minecraft:pitcher_crop[age=0,half=upper]","No renderable model faces: minecraft:pitcher_crop[age=0,half=upper]"
+minecraft:light[level=10],No renderable model faces: minecraft:light[level=10]
+"minecraft:acacia_hanging_sign[attached=false,rotation=11]",'axis'
+"minecraft:bamboo_hanging_sign[attached=false,rotation=11]",'axis'
+"minecraft:birch_hanging_sign[attached=false,rotation=11]",'axis'
+"minecraft:cherry_hanging_sign[attached=false,rotation=11]",'axis'
+"minecraft:crimson_hanging_sign[attached=false,rotation=11]",'axis'
+"minecraft:dark_oak_hanging_sign[attached=false,rotation=11]",'axis'
+"minecraft:jungle_hanging_sign[attached=false,rotation=11]",'axis'
+minecraft:light[level=11],No renderable model faces: minecraft:light[level=11]
+"minecraft:mangrove_hanging_sign[attached=false,rotation=11]",'axis'
+"minecraft:oak_hanging_sign[attached=false,rotation=11]",'axis'
+"minecraft:pale_oak_hanging_sign[attached=false,rotation=11]",'axis'
+"minecraft:pitcher_crop[age=1,half=upper]","No renderable model faces: minecraft:pitcher_crop[age=1,half=upper]"
+"minecraft:spruce_hanging_sign[attached=false,rotation=11]",'axis'
+"minecraft:warped_hanging_sign[attached=false,rotation=11]",'axis'
+minecraft:light[level=12],No renderable model faces: minecraft:light[level=12]
+minecraft:light[level=13],No renderable model faces: minecraft:light[level=13]
+"minecraft:pitcher_crop[age=2,half=upper]","No renderable model faces: minecraft:pitcher_crop[age=2,half=upper]"
+minecraft:light[level=14],No renderable model faces: minecraft:light[level=14]
+"minecraft:acacia_hanging_sign[attached=false,rotation=15]",'axis'
+"minecraft:bamboo_hanging_sign[attached=false,rotation=15]",'axis'
+"minecraft:birch_hanging_sign[attached=false,rotation=15]",'axis'
+"minecraft:cherry_hanging_sign[attached=false,rotation=15]",'axis'
+"minecraft:crimson_hanging_sign[attached=false,rotation=15]",'axis'
+"minecraft:dark_oak_hanging_sign[attached=false,rotation=15]",'axis'
+"minecraft:jungle_hanging_sign[attached=false,rotation=15]",'axis'
+minecraft:light[level=15],No renderable model faces: minecraft:light[level=15]
+"minecraft:mangrove_hanging_sign[attached=false,rotation=15]",'axis'
+"minecraft:oak_hanging_sign[attached=false,rotation=15]",'axis'
+"minecraft:pale_oak_hanging_sign[attached=false,rotation=15]",'axis'
+"minecraft:spruce_hanging_sign[attached=false,rotation=15]",'axis'
+"minecraft:warped_hanging_sign[attached=false,rotation=15]",'axis'
+minecraft:light[level=2],No renderable model faces: minecraft:light[level=2]
+"minecraft:acacia_hanging_sign[attached=false,rotation=3]",'axis'
+"minecraft:bamboo_hanging_sign[attached=false,rotation=3]",'axis'
+"minecraft:birch_hanging_sign[attached=false,rotation=3]",'axis'
+"minecraft:cherry_hanging_sign[attached=false,rotation=3]",'axis'
+"minecraft:crimson_hanging_sign[attached=false,rotation=3]",'axis'
+"minecraft:dark_oak_hanging_sign[attached=false,rotation=3]",'axis'
+"minecraft:jungle_hanging_sign[attached=false,rotation=3]",'axis'
+minecraft:light[level=3],No renderable model faces: minecraft:light[level=3]
+"minecraft:mangrove_hanging_sign[attached=false,rotation=3]",'axis'
+"minecraft:oak_hanging_sign[attached=false,rotation=3]",'axis'
+"minecraft:pale_oak_hanging_sign[attached=false,rotation=3]",'axis'
+"minecraft:spruce_hanging_sign[attached=false,rotation=3]",'axis'
+"minecraft:warped_hanging_sign[attached=false,rotation=3]",'axis'
+minecraft:light[level=4],No renderable model faces: minecraft:light[level=4]
+minecraft:light[level=5],No renderable model faces: minecraft:light[level=5]
+minecraft:light[level=6],No renderable model faces: minecraft:light[level=6]
+"minecraft:acacia_hanging_sign[attached=false,rotation=7]",'axis'
+"minecraft:bamboo_hanging_sign[attached=false,rotation=7]",'axis'
+"minecraft:birch_hanging_sign[attached=false,rotation=7]",'axis'
+"minecraft:cherry_hanging_sign[attached=false,rotation=7]",'axis'
+"minecraft:crimson_hanging_sign[attached=false,rotation=7]",'axis'
+"minecraft:dark_oak_hanging_sign[attached=false,rotation=7]",'axis'
+"minecraft:jungle_hanging_sign[attached=false,rotation=7]",'axis'
+minecraft:light[level=7],No renderable model faces: minecraft:light[level=7]
+"minecraft:mangrove_hanging_sign[attached=false,rotation=7]",'axis'
+"minecraft:oak_hanging_sign[attached=false,rotation=7]",'axis'
+"minecraft:pale_oak_hanging_sign[attached=false,rotation=7]",'axis'
+"minecraft:spruce_hanging_sign[attached=false,rotation=7]",'axis'
+"minecraft:warped_hanging_sign[attached=false,rotation=7]",'axis'
+minecraft:light[level=8],No renderable model faces: minecraft:light[level=8]
+minecraft:light[level=9],No renderable model faces: minecraft:light[level=9]

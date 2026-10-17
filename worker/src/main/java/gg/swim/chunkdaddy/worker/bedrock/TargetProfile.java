@@ -36,7 +36,7 @@ public record TargetProfile(String id,
      *
      * <p>Order matters: the New World dialog selects the first entry when the user has no
      * remembered preference, and the safe default is the profile the most builds can open,
-     * not the newest writer available.
+     * not the newest profile available.
      *
      * <p>The build height range of Y -64..319 is the common modern Overworld range and is
      * expressed here per profile rather than hardcoded across the codebase, because it is
@@ -44,6 +44,14 @@ public record TargetProfile(String id,
      */
     public static List<TargetProfile> all() {
         List<TargetProfile> profiles = new ArrayList<>();
+        profiles.add(new TargetProfile(
+                "bedrock-1.26.0",
+                "Bedrock 26.0",
+                BedrockDataVersion.V1_26_0.getVersion(),
+                -4, 19, true, CHUNKER_COMMIT,
+                "", "1.26.0", "",
+                "Supported by the pinned Chunker writer, but not yet independently "
+                        + "smoke-tested in a Bedrock 1.26.0 client/server."));
         profiles.add(new TargetProfile(
                 "bedrock-1.26.40",
                 "Bedrock 26.40",
@@ -95,9 +103,9 @@ public record TargetProfile(String id,
         return verifiedClient;
     }
 
-    /** Retained for the protocol shape; every offered profile targets a released build. */
+    /** Retained for the protocol shape; this can be experimental. */
     public boolean fullyVerified() {
-        return true;
+        return !verifiedBds.isBlank() && !verifiedClient.isBlank() && !verifiedTungsten.isBlank();
     }
 
     /** Wording for the UI: what this profile means for whoever opens the world. */

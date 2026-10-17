@@ -13,6 +13,11 @@ Three modes:
   repl                Read requests from stdin, write results to stdout, ids added for
                       you. For piping from another program.
 
+SketchRip mode:
+
+  --sketchrip [MODEL]   Reconstruct a Minecraft schematic from a textured model,
+                       then use ChunkDaddy to export a .mcworld.
+
 Every mode prints protocol results to stdout as JSON Lines and everything else - progress,
 worker logs, timings - to stderr, so stdout stays machine readable when piped.
 """
@@ -235,6 +240,37 @@ def parse_pairs(pairs: list[str]) -> dict:
 
 
 def main() -> int:
+    # Headless model reconstruction delegates Bedrock writing to the existing worker.
+    if "--sketchrip" in sys.argv[1:]:
+        arguments = [value for value in sys.argv[1:] if value != "--sketchrip"]
+        root = Path(__file__).resolve().parent.parent
+        if "--setup" in arguments:
+            command = [sys.executable, str(root / "scripts" / "sketchrip_setup.py")]
+            command += [value for value in arguments if value != "--setup"]
+            return subprocess.run(command, check=False).returncode
+        from _sketchrip_doctor import doctor
+        if "--doctor" in arguments:
+            ok, info = doctor(root)
+            return 0 if ok and info["texture_pack"] else 1
+        ok, info = doctor(root, quiet=True)
+        if not ok:
+            print("SketchRip Python dependencies missing: " + ", ".join(info["missing_packages"]),
+                  file=sys.stderr)
+            print(f'Run: "{sys.executable}" -m pip install -r requirements-sketchrip.txt',
+                  file=sys.stderr)
+            print("Or run: python scripts/chunkdaddy_cli.py --sketchrip --setup", file=sys.stderr)
+            return 2
+        if "--texture-lab" in arguments:
+            arguments = [value for value in arguments if value != "--texture-lab"]
+            from sketchrip_texture_lab import main as texture_lab_main
+            return texture_lab_main(arguments)
+        if "--reference" in arguments:
+            arguments = [value for value in arguments if value != "--reference"]
+            from sketchrip_reference import main as reference_main
+            return reference_main(arguments)
+        from sketchrip import main as sketchrip_main
+        return sketchrip_main(arguments)
+
     parser = argparse.ArgumentParser(description=__doc__,
                                      formatter_class=argparse.RawDescriptionHelpFormatter)
     parser.add_argument("--classpath", default=os.environ.get("CHUNKDADDY_CLASSPATH"),
@@ -253,7 +289,7 @@ def main() -> int:
     call.add_argument("type")
     call.add_argument("pairs", nargs="*")
 
-    sub.add_parser("repl", help="requests on stdin, results on stdout")
+    sub.add_parser("repl", help="requests on stdin, results to stdout")
 
     args = parser.parse_args()
     if not args.classpath:

@@ -1,0 +1,978 @@
+{
+  "states": 10237,
+  "uniquely_correct": 6815,
+  "indistinguishable": 3422,
+  "wrong_or_unmatched": 0,
+  "unique_accuracy": 0.6657223796033994,
+  "deterministic_atlas_treatment": true,
+  "atlas_tiles_read": 1227,
+  "ambiguous_examples": [
+    {
+      "coord": "21,0,0",
+      "expected": "minecraft:acacia_planks",
+      "candidates": [
+        "minecraft:acacia_planks",
+        "minecraft:acacia_slab[type=double]"
+      ],
+      "candidate_count": 2
+    },
+    {
+      "coord": "30,0,0",
+      "expected": "minecraft:acacia_shelf[facing=east,powered=false,side_chain=center]",
+      "candidates": [
+        "minecraft:acacia_shelf[facing=east,powered=false,side_chain=center]",
+        "minecraft:acacia_shelf[facing=east,powered=false,side_chain=left]",
+        "minecraft:acacia_shelf[facing=east,powered=false,side_chain=right]",
+        "minecraft:acacia_shelf[facing=east,powered=false,side_chain=unconnected]"
+      ],
+      "candidate_count": 4
+    },
+    {
+      "coord": "39,0,0",
+      "expected": "minecraft:acacia_stairs[facing=east,half=bottom,shape=inner_left]",
+      "candidates": [
+        "minecraft:acacia_stairs[facing=east,half=bottom,shape=inner_left]",
+        "minecraft:acacia_stairs[facing=north,half=bottom,shape=inner_right]"
+      ],
+      "candidate_count": 2
+    },
+    {
+      "coord": "69,0,0",
+      "expected": "minecraft:andesite",
+      "candidates": [
+        "minecraft:andesite",
+        "minecraft:andesite_slab[type=double]"
+      ],
+      "candidate_count": 2
+    },
+    {
+      "coord": "75,0,0",
+      "expected": "minecraft:andesite_stairs[facing=east,half=bottom,shape=inner_left]",
+      "candidates": [
+        "minecraft:andesite_stairs[facing=east,half=bottom,shape=inner_left]",
+        "minecraft:andesite_stairs[facing=north,half=bottom,shape=inner_right]"
+      ],
+      "candidate_count": 2
+    },
+    {
+      "coord": "120,0,0",
+      "expected": "minecraft:bamboo_mosaic",
+      "candidates": [
+        "minecraft:bamboo_mosaic",
+        "minecraft:bamboo_mosaic_slab[type=double]"
+      ],
+      "candidate_count": 2
+    },
+    {
+      "coord": "126,0,0",
+      "expected": "minecraft:bamboo_mosaic_stairs[facing=east,half=bottom,shape=inner_left]",
+      "candidates": [
+        "minecraft:bamboo_mosaic_stairs[facing=east,half=bottom,shape=inner_left]",
+        "minecraft:bamboo_mosaic_stairs[facing=north,half=bottom,shape=inner_right]"
+      ],
+      "candidate_count": 2
+    },
+    {
+      "coord": "129,0,0",
+      "expected": "minecraft:bamboo_planks",
+      "candidates": [
+        "minecraft:bamboo_planks",
+        "minecraft:bamboo_slab[type=double]"
+      ],
+      "candidate_count": 2
+    },
+    {
+      "coord": "138,0,0",
+      "expected": "minecraft:bamboo_shelf[facing=east,powered=false,side_chain=center]",
+      "candidates": [
+        "minecraft:bamboo_shelf[facing=east,powered=false,side_chain=center]",
+        "minecraft:bamboo_shelf[facing=east,powered=false,side_chain=left]",
+        "minecraft:bamboo_shelf[facing=east,powered=false,side_chain=right]",
+        "minecraft:bamboo_shelf[facing=east,powered=false,side_chain=unconnected]"
+      ],
+      "candidate_count": 4
+    },
+    {
+      "coord": "147,0,0",
+      "expected": "minecraft:bamboo_stairs[facing=east,half=bottom,shape=inner_left]",
+      "candidates": [
+        "minecraft:bamboo_stairs[facing=east,half=bottom,shape=inner_left]",
+        "minecraft:bamboo_stairs[facing=north,half=bottom,shape=inner_right]"
+      ],
+      "candidate_count": 2
+    },
+    {
+      "coord": "171,0,0",
+      "expected": "minecraft:bee_nest[facing=east,honey_level=0]",
+      "candidates": [
+        "minecraft:bee_nest[facing=east,honey_level=0]",
+        "minecraft:bee_nest[facing=east,honey_level=1]",
+        "minecraft:bee_nest[facing=east,honey_level=2]",
+        "minecraft:bee_nest[facing=east,honey_level=3]",
+        "minecraft:bee_nest[facing=east,honey_level=4]"
+      ],
+      "candidate_count": 5
+    },
+    {
+      "coord": "174,0,0",
+      "expected": "minecraft:beehive[facing=east,honey_level=0]",
+      "candidates": [
+        "minecraft:beehive[facing=east,honey_level=0]",
+        "minecraft:beehive[facing=east,honey_level=1]",
+        "minecraft:beehive[facing=east,honey_level=2]",
+        "minecraft:beehive[facing=east,honey_level=3]",
+        "minecraft:beehive[facing=east,honey_level=4]"
+      ],
+      "candidate_count": 5
+    },
+    {
+      "coord": "210,0,0",
+      "expected": "minecraft:birch_planks",
+      "candidates": [
+        "minecraft:birch_planks",
+        "minecraft:birch_slab[type=double]"
+      ],
+      "candidate_count": 2
+    },
+    {
+      "coord": "219,0,0",
+      "expected": "minecraft:birch_shelf[facing=east,powered=false,side_chain=center]",
+      "candidates": [
+        "minecraft:birch_shelf[facing=east,powered=false,side_chain=center]",
+        "minecraft:birch_shelf[facing=east,powered=false,side_chain=left]",
+        "minecraft:birch_shelf[facing=east,powered=false,side_chain=right]",
+        "minecraft:birch_shelf[facing=east,powered=false,side_chain=unconnected]"
+      ],
+      "candidate_count": 4
+    },
+    {
+      "coord": "228,0,0",
+      "expected": "minecraft:birch_stairs[facing=east,half=bottom,shape=inner_left]",
+      "candidates": [
+        "minecraft:birch_stairs[facing=east,half=bottom,shape=inner_left]",
+        "minecraft:birch_stairs[facing=north,half=bottom,shape=inner_right]"
+      ],
+      "candidate_count": 2
+    },
+    {
+      "coord": "276,0,0",
+      "expected": "minecraft:blackstone",
+      "candidates": [
+        "minecraft:blackstone",
+        "minecraft:blackstone_slab[type=double]"
+      ],
+      "candidate_count": 2
+    },
+    {
+      "coord": "282,0,0",
+      "expected": "minecraft:blackstone_stairs[facing=east,half=bottom,shape=inner_left]",
+      "candidates": [
+        "minecraft:blackstone_stairs[facing=east,half=bottom,shape=inner_left]",
+        "minecraft:blackstone_stairs[facing=north,half=bottom,shape=inner_right]"
+      ],
+      "candidate_count": 2
+    },
+    {
+      "coord": "48,0,3",
+      "expected": "minecraft:brick_stairs[facing=east,half=bottom,shape=inner_left]",
+      "candidates": [
+        "minecraft:brick_stairs[facing=east,half=bottom,shape=inner_left]",
+        "minecraft:brick_stairs[facing=north,half=bottom,shape=inner_right]"
+      ],
+      "candidate_count": 2
+    },
+    {
+      "coord": "54,0,3",
+      "expected": "minecraft:bricks",
+      "candidates": [
+        "minecraft:bricks",
+        "minecraft:brick_slab[type=double]"
+      ],
+      "candidate_count": 2
+    },
+    {
+      "coord": "81,0,3",
+      "expected": "minecraft:brown_mushroom_block[down=false,east=false,north=false,south=false,up=false,west=false]",
+      "candidates": [
+        "minecraft:brown_mushroom_block[down=false,east=false,north=false,south=false,up=false,west=false]",
+        "minecraft:mushroom_stem[down=false,east=false,north=false,south=false,up=false,west=false]",
+        "minecraft:red_mushroom_block[down=false,east=false,north=false,south=false,up=false,west=false]"
+      ],
+      "candidate_count": 3
+    },
+    {
+      "coord": "126,0,3",
+      "expected": "minecraft:calibrated_sculk_sensor[facing=east,sculk_sensor_phase=active]",
+      "candidates": [
+        "minecraft:calibrated_sculk_sensor[facing=east,sculk_sensor_phase=active]",
+        "minecraft:calibrated_sculk_sensor[facing=east,sculk_sensor_phase=cooldown]"
+      ],
+      "candidate_count": 2
+    },
+    {
+      "coord": "129,0,3",
+      "expected": "minecraft:campfire[facing=east,lit=false]",
+      "candidates": [
+        "minecraft:campfire[facing=east,lit=false]",
+        "minecraft:soul_campfire[facing=east,lit=false]"
+      ],
+      "candidate_count": 2
+    },
+    {
+      "coord": "138,0,3",
+      "expected": "minecraft:carrots[age=0]",
+      "candidates": [
+        "minecraft:carrots[age=0]",
+        "minecraft:carrots[age=1]"
+      ],
+      "candidate_count": 2
+    },
+    {
+      "coord": "180,0,3",
+      "expected": "minecraft:cherry_planks",
+      "candidates": [
+        "minecraft:cherry_planks",
+        "minecraft:cherry_slab[type=double]"
+      ],
+      "candidate_count": 2
+    },
+    {
+      "coord": "189,0,3",
+      "expected": "minecraft:cherry_shelf[facing=east,powered=false,side_chain=center]",
+      "candidates": [
+        "minecraft:cherry_shelf[facing=east,powered=false,side_chain=center]",
+        "minecraft:cherry_shelf[facing=east,powered=false,side_chain=left]",
+        "minecraft:cherry_shelf[facing=east,powered=false,side_chain=right]",
+        "minecraft:cherry_shelf[facing=east,powered=false,side_chain=unconnected]"
+      ],
+      "candidate_count": 4
+    },
+    {
+      "coord": "198,0,3",
+      "expected": "minecraft:cherry_stairs[facing=east,half=bottom,shape=inner_left]",
+      "candidates": [
+        "minecraft:cherry_stairs[facing=east,half=bottom,shape=inner_left]",
+        "minecraft:cherry_stairs[facing=north,half=bottom,shape=inner_right]"
+      ],
+      "candidate_count": 2
+    },
+    {
+      "coord": "222,0,3",
+      "expected": "minecraft:chiseled_copper",
+      "candidates": [
+        "minecraft:chiseled_copper",
+        "minecraft:waxed_chiseled_copper"
+      ],
+      "candidate_count": 2
+    },
+    {
+      "coord": "246,0,3",
+      "expected": "minecraft:chiseled_stone_bricks",
+      "candidates": [
+        "minecraft:chiseled_stone_bricks",
+        "minecraft:infested_chiseled_stone_bricks"
+      ],
+      "candidate_count": 2
+    },
+    {
+      "coord": "258,0,3",
+      "expected": "minecraft:chorus_flower[age=0]",
+      "candidates": [
+        "minecraft:chorus_flower[age=0]",
+        "minecraft:chorus_flower[age=1]",
+        "minecraft:chorus_flower[age=2]",
+        "minecraft:chorus_flower[age=3]",
+        "minecraft:chorus_flower[age=4]"
+      ],
+      "candidate_count": 5
+    },
+    {
+      "coord": "264,0,3",
+      "expected": "minecraft:cinnabar",
+      "candidates": [
+        "minecraft:cinnabar",
+        "minecraft:cinnabar_slab[type=double]"
+      ],
+      "candidate_count": 2
+    },
+    {
+      "coord": "270,0,3",
+      "expected": "minecraft:cinnabar_brick_stairs[facing=east,half=bottom,shape=inner_left]",
+      "candidates": [
+        "minecraft:cinnabar_brick_stairs[facing=east,half=bottom,shape=inner_left]",
+        "minecraft:cinnabar_brick_stairs[facing=north,half=bottom,shape=inner_right]"
+      ],
+      "candidate_count": 2
+    },
+    {
+      "coord": "276,0,3",
+      "expected": "minecraft:cinnabar_bricks",
+      "candidates": [
+        "minecraft:cinnabar_bricks",
+        "minecraft:cinnabar_brick_slab[type=double]"
+      ],
+      "candidate_count": 2
+    },
+    {
+      "coord": "282,0,3",
+      "expected": "minecraft:cinnabar_stairs[facing=east,half=bottom,shape=inner_left]",
+      "candidates": [
+        "minecraft:cinnabar_stairs[facing=east,half=bottom,shape=inner_left]",
+        "minecraft:cinnabar_stairs[facing=north,half=bottom,shape=inner_right]"
+      ],
+      "candidate_count": 2
+    },
+    {
+      "coord": "303,0,3",
+      "expected": "minecraft:cobbled_deepslate",
+      "candidates": [
+        "minecraft:cobbled_deepslate",
+        "minecraft:cobbled_deepslate_slab[type=double]"
+      ],
+      "candidate_count": 2
+    },
+    {
+      "coord": "3,0,6",
+      "expected": "minecraft:cobbled_deepslate_stairs[facing=east,half=bottom,shape=inner_left]",
+      "candidates": [
+        "minecraft:cobbled_deepslate_stairs[facing=east,half=bottom,shape=inner_left]",
+        "minecraft:cobbled_deepslate_stairs[facing=north,half=bottom,shape=inner_right]"
+      ],
+      "candidate_count": 2
+    },
+    {
+      "coord": "9,0,6",
+      "expected": "minecraft:cobblestone",
+      "candidates": [
+        "minecraft:cobblestone",
+        "minecraft:infested_cobblestone",
+        "minecraft:cobblestone_slab[type=double]"
+      ],
+      "candidate_count": 3
+    },
+    {
+      "coord": "15,0,6",
+      "expected": "minecraft:cobblestone_stairs[facing=east,half=bottom,shape=inner_left]",
+      "candidates": [
+        "minecraft:cobblestone_stairs[facing=east,half=bottom,shape=inner_left]",
+        "minecraft:cobblestone_stairs[facing=north,half=bottom,shape=inner_right]"
+      ],
+      "candidate_count": 2
+    },
+    {
+      "coord": "36,0,6",
+      "expected": "minecraft:copper_bars[east=false,north=false,south=false,west=false]",
+      "candidates": [
+        "minecraft:copper_bars[east=false,north=false,south=false,west=false]",
+        "minecraft:waxed_copper_bars[east=false,north=false,south=false,west=false]"
+      ],
+      "candidate_count": 2
+    },
+    {
+      "coord": "39,0,6",
+      "expected": "minecraft:copper_block",
+      "candidates": [
+        "minecraft:copper_block",
+        "minecraft:waxed_copper_block"
+      ],
+      "candidate_count": 2
+    },
+    {
+      "coord": "42,0,6",
+      "expected": "minecraft:copper_bulb[lit=false,powered=false]",
+      "candidates": [
+        "minecraft:copper_bulb[lit=false,powered=false]",
+        "minecraft:waxed_copper_bulb[lit=false,powered=false]"
+      ],
+      "candidate_count": 2
+    },
+    {
+      "coord": "45,0,6",
+      "expected": "minecraft:copper_chain[axis=x]",
+      "candidates": [
+        "minecraft:copper_chain[axis=x]",
+        "minecraft:waxed_copper_chain[axis=x]"
+      ],
+      "candidate_count": 2
+    },
+    {
+      "coord": "48,0,6",
+      "expected": "minecraft:copper_door[facing=east,half=lower,hinge=left,open=false]",
+      "candidates": [
+        "minecraft:copper_door[facing=east,half=lower,hinge=left,open=false]",
+        "minecraft:waxed_copper_door[facing=east,half=lower,hinge=left,open=false]"
+      ],
+      "candidate_count": 2
+    },
+    {
+      "coord": "51,0,6",
+      "expected": "minecraft:copper_grate",
+      "candidates": [
+        "minecraft:copper_grate",
+        "minecraft:waxed_copper_grate"
+      ],
+      "candidate_count": 2
+    },
+    {
+      "coord": "54,0,6",
+      "expected": "minecraft:copper_lantern[hanging=false]",
+      "candidates": [
+        "minecraft:copper_lantern[hanging=false]",
+        "minecraft:waxed_copper_lantern[hanging=false]"
+      ],
+      "candidate_count": 2
+    },
+    {
+      "coord": "63,0,6",
+      "expected": "minecraft:copper_trapdoor[facing=east,half=bottom,open=false]",
+      "candidates": [
+        "minecraft:copper_trapdoor[facing=east,half=bottom,open=false]",
+        "minecraft:waxed_copper_trapdoor[facing=east,half=bottom,open=false]",
+        "minecraft:copper_trapdoor[facing=north,half=bottom,open=false]",
+        "minecraft:waxed_copper_trapdoor[facing=north,half=bottom,open=false]",
+        "minecraft:copper_trapdoor[facing=south,half=bottom,open=false]",
+        "minecraft:waxed_copper_trapdoor[facing=south,half=bottom,open=false]",
+        "minecraft:copper_trapdoor[facing=west,half=bottom,open=false]",
+        "minecraft:waxed_copper_trapdoor[facing=west,half=bottom,open=false]"
+      ],
+      "candidate_count": 8
+    },
+    {
+      "coord": "84,0,6",
+      "expected": "minecraft:cracked_stone_bricks",
+      "candidates": [
+        "minecraft:cracked_stone_bricks",
+        "minecraft:infested_cracked_stone_bricks"
+      ],
+      "candidate_count": 2
+    },
+    {
+      "coord": "120,0,6",
+      "expected": "minecraft:crimson_planks",
+      "candidates": [
+        "minecraft:crimson_planks",
+        "minecraft:crimson_slab[type=double]"
+      ],
+      "candidate_count": 2
+    },
+    {
+      "coord": "129,0,6",
+      "expected": "minecraft:crimson_shelf[facing=east,powered=false,side_chain=center]",
+      "candidates": [
+        "minecraft:crimson_shelf[facing=east,powered=false,side_chain=center]",
+        "minecraft:crimson_shelf[facing=east,powered=false,side_chain=left]",
+        "minecraft:crimson_shelf[facing=east,powered=false,side_chain=right]",
+        "minecraft:crimson_shelf[facing=east,powered=false,side_chain=unconnected]"
+      ],
+      "candidate_count": 4
+    },
+    {
+      "coord": "138,0,6",
+      "expected": "minecraft:crimson_stairs[facing=east,half=bottom,shape=inner_left]",
+      "candidates": [
+        "minecraft:crimson_stairs[facing=east,half=bottom,shape=inner_left]",
+        "minecraft:crimson_stairs[facing=north,half=bottom,shape=inner_right]"
+      ],
+      "candidate_count": 2
+    },
+    {
+      "coord": "156,0,6",
+      "expected": "minecraft:cut_copper",
+      "candidates": [
+        "minecraft:cut_copper",
+        "minecraft:waxed_cut_copper",
+        "minecraft:cut_copper_slab[type=double]",
+        "minecraft:waxed_cut_copper_slab[type=double]"
+      ],
+      "candidate_count": 4
+    },
+    {
+      "coord": "159,0,6",
+      "expected": "minecraft:cut_copper_slab[type=bottom]",
+      "candidates": [
+        "minecraft:cut_copper_slab[type=bottom]",
+        "minecraft:waxed_cut_copper_slab[type=bottom]"
+      ],
+      "candidate_count": 2
+    },
+    {
+      "coord": "162,0,6",
+      "expected": "minecraft:cut_copper_stairs[facing=east,half=bottom,shape=inner_left]",
+      "candidates": [
+        "minecraft:cut_copper_stairs[facing=east,half=bottom,shape=inner_left]",
+        "minecraft:waxed_cut_copper_stairs[facing=east,half=bottom,shape=inner_left]",
+        "minecraft:cut_copper_stairs[facing=north,half=bottom,shape=inner_right]",
+        "minecraft:waxed_cut_copper_stairs[facing=north,half=bottom,shape=inner_right]"
+      ],
+      "candidate_count": 4
+    },
+    {
+      "coord": "165,0,6",
+      "expected": "minecraft:cut_red_sandstone",
+      "candidates": [
+        "minecraft:cut_red_sandstone",
+        "minecraft:cut_red_sandstone_slab[type=double]"
+      ],
+      "candidate_count": 2
+    },
+    {
+      "coord": "171,0,6",
+      "expected": "minecraft:cut_sandstone",
+      "candidates": [
+        "minecraft:cut_sandstone",
+        "minecraft:cut_sandstone_slab[type=double]"
+      ],
+      "candidate_count": 2
+    },
+    {
+      "coord": "237,0,6",
+      "expected": "minecraft:dark_oak_planks",
+      "candidates": [
+        "minecraft:dark_oak_planks",
+        "minecraft:dark_oak_slab[type=double]"
+      ],
+      "candidate_count": 2
+    },
+    {
+      "coord": "246,0,6",
+      "expected": "minecraft:dark_oak_shelf[facing=east,powered=false,side_chain=center]",
+      "candidates": [
+        "minecraft:dark_oak_shelf[facing=east,powered=false,side_chain=center]",
+        "minecraft:dark_oak_shelf[facing=east,powered=false,side_chain=left]",
+        "minecraft:dark_oak_shelf[facing=east,powered=false,side_chain=right]",
+        "minecraft:dark_oak_shelf[facing=east,powered=false,side_chain=unconnected]"
+      ],
+      "candidate_count": 4
+    },
+    {
+      "coord": "255,0,6",
+      "expected": "minecraft:dark_oak_stairs[facing=east,half=bottom,shape=inner_left]",
+      "candidates": [
+        "minecraft:dark_oak_stairs[facing=east,half=bottom,shape=inner_left]",
+        "minecraft:dark_oak_stairs[facing=north,half=bottom,shape=inner_right]"
+      ],
+      "candidate_count": 2
+    },
+    {
+      "coord": "258,0,6",
+      "expected": "minecraft:dark_oak_trapdoor[facing=east,half=bottom,open=false]",
+      "candidates": [
+        "minecraft:dark_oak_trapdoor[facing=east,half=bottom,open=false]",
+        "minecraft:dark_oak_trapdoor[facing=north,half=bottom,open=false]",
+        "minecraft:dark_oak_trapdoor[facing=south,half=bottom,open=false]",
+        "minecraft:dark_oak_trapdoor[facing=west,half=bottom,open=false]"
+      ],
+      "candidate_count": 4
+    },
+    {
+      "coord": "270,0,6",
+      "expected": "minecraft:dark_prismarine",
+      "candidates": [
+        "minecraft:dark_prismarine",
+        "minecraft:dark_prismarine_slab[type=double]"
+      ],
+      "candidate_count": 2
+    },
+    {
+      "coord": "276,0,6",
+      "expected": "minecraft:dark_prismarine_stairs[facing=east,half=bottom,shape=inner_left]",
+      "candidates": [
+        "minecraft:dark_prismarine_stairs[facing=east,half=bottom,shape=inner_left]",
+        "minecraft:dark_prismarine_stairs[facing=north,half=bottom,shape=inner_right]"
+      ],
+      "candidate_count": 2
+    },
+    {
+      "coord": "39,0,9",
+      "expected": "minecraft:deepslate[axis=x]",
+      "candidates": [
+        "minecraft:deepslate[axis=x]",
+        "minecraft:infested_deepslate[axis=x]"
+      ],
+      "candidate_count": 2
+    },
+    {
+      "coord": "45,0,9",
+      "expected": "minecraft:deepslate_brick_stairs[facing=east,half=bottom,shape=inner_left]",
+      "candidates": [
+        "minecraft:deepslate_brick_stairs[facing=east,half=bottom,shape=inner_left]",
+        "minecraft:deepslate_brick_stairs[facing=north,half=bottom,shape=inner_right]"
+      ],
+      "candidate_count": 2
+    },
+    {
+      "coord": "51,0,9",
+      "expected": "minecraft:deepslate_bricks",
+      "candidates": [
+        "minecraft:deepslate_bricks",
+        "minecraft:deepslate_brick_slab[type=double]"
+      ],
+      "candidate_count": 2
+    },
+    {
+      "coord": "81,0,9",
+      "expected": "minecraft:deepslate_tile_stairs[facing=east,half=bottom,shape=inner_left]",
+      "candidates": [
+        "minecraft:deepslate_tile_stairs[facing=east,half=bottom,shape=inner_left]",
+        "minecraft:deepslate_tile_stairs[facing=north,half=bottom,shape=inner_right]"
+      ],
+      "candidate_count": 2
+    },
+    {
+      "coord": "87,0,9",
+      "expected": "minecraft:deepslate_tiles",
+      "candidates": [
+        "minecraft:deepslate_tiles",
+        "minecraft:deepslate_tile_slab[type=double]"
+      ],
+      "candidate_count": 2
+    },
+    {
+      "coord": "99,0,9",
+      "expected": "minecraft:diorite",
+      "candidates": [
+        "minecraft:diorite",
+        "minecraft:diorite_slab[type=double]"
+      ],
+      "candidate_count": 2
+    },
+    {
+      "coord": "105,0,9",
+      "expected": "minecraft:diorite_stairs[facing=east,half=bottom,shape=inner_left]",
+      "candidates": [
+        "minecraft:diorite_stairs[facing=east,half=bottom,shape=inner_left]",
+        "minecraft:diorite_stairs[facing=north,half=bottom,shape=inner_right]"
+      ],
+      "candidate_count": 2
+    },
+    {
+      "coord": "156,0,9",
+      "expected": "minecraft:end_stone_brick_stairs[facing=east,half=bottom,shape=inner_left]",
+      "candidates": [
+        "minecraft:end_stone_brick_stairs[facing=east,half=bottom,shape=inner_left]",
+        "minecraft:end_stone_brick_stairs[facing=north,half=bottom,shape=inner_right]"
+      ],
+      "candidate_count": 2
+    },
+    {
+      "coord": "162,0,9",
+      "expected": "minecraft:end_stone_bricks",
+      "candidates": [
+        "minecraft:end_stone_bricks",
+        "minecraft:end_stone_brick_slab[type=double]"
+      ],
+      "candidate_count": 2
+    },
+    {
+      "coord": "165,0,9",
+      "expected": "minecraft:exposed_chiseled_copper",
+      "candidates": [
+        "minecraft:exposed_chiseled_copper",
+        "minecraft:waxed_exposed_chiseled_copper"
+      ],
+      "candidate_count": 2
+    },
+    {
+      "coord": "168,0,9",
+      "expected": "minecraft:exposed_copper",
+      "candidates": [
+        "minecraft:exposed_copper",
+        "minecraft:waxed_exposed_copper"
+      ],
+      "candidate_count": 2
+    },
+    {
+      "coord": "171,0,9",
+      "expected": "minecraft:exposed_copper_bars[east=false,north=false,south=false,west=false]",
+      "candidates": [
+        "minecraft:exposed_copper_bars[east=false,north=false,south=false,west=false]",
+        "minecraft:waxed_exposed_copper_bars[east=false,north=false,south=false,west=false]"
+      ],
+      "candidate_count": 2
+    },
+    {
+      "coord": "174,0,9",
+      "expected": "minecraft:exposed_copper_bulb[lit=false,powered=false]",
+      "candidates": [
+        "minecraft:exposed_copper_bulb[lit=false,powered=false]",
+        "minecraft:waxed_exposed_copper_bulb[lit=false,powered=false]"
+      ],
+      "candidate_count": 2
+    },
+    {
+      "coord": "177,0,9",
+      "expected": "minecraft:exposed_copper_chain[axis=x]",
+      "candidates": [
+        "minecraft:exposed_copper_chain[axis=x]",
+        "minecraft:waxed_exposed_copper_chain[axis=x]"
+      ],
+      "candidate_count": 2
+    },
+    {
+      "coord": "180,0,9",
+      "expected": "minecraft:exposed_copper_door[facing=east,half=lower,hinge=left,open=false]",
+      "candidates": [
+        "minecraft:exposed_copper_door[facing=east,half=lower,hinge=left,open=false]",
+        "minecraft:waxed_exposed_copper_door[facing=east,half=lower,hinge=left,open=false]"
+      ],
+      "candidate_count": 2
+    },
+    {
+      "coord": "183,0,9",
+      "expected": "minecraft:exposed_copper_grate",
+      "candidates": [
+        "minecraft:exposed_copper_grate",
+        "minecraft:waxed_exposed_copper_grate"
+      ],
+      "candidate_count": 2
+    },
+    {
+      "coord": "186,0,9",
+      "expected": "minecraft:exposed_copper_lantern[hanging=false]",
+      "candidates": [
+        "minecraft:exposed_copper_lantern[hanging=false]",
+        "minecraft:waxed_exposed_copper_lantern[hanging=false]"
+      ],
+      "candidate_count": 2
+    },
+    {
+      "coord": "189,0,9",
+      "expected": "minecraft:exposed_copper_trapdoor[facing=east,half=bottom,open=false]",
+      "candidates": [
+        "minecraft:exposed_copper_trapdoor[facing=east,half=bottom,open=false]",
+        "minecraft:waxed_exposed_copper_trapdoor[facing=east,half=bottom,open=false]",
+        "minecraft:exposed_copper_trapdoor[facing=north,half=bottom,open=false]",
+        "minecraft:waxed_exposed_copper_trapdoor[facing=north,half=bottom,open=false]",
+        "minecraft:exposed_copper_trapdoor[facing=south,half=bottom,open=false]",
+        "minecraft:waxed_exposed_copper_trapdoor[facing=south,half=bottom,open=false]",
+        "minecraft:exposed_copper_trapdoor[facing=west,half=bottom,open=false]",
+        "minecraft:waxed_exposed_copper_trapdoor[facing=west,half=bottom,open=false]"
+      ],
+      "candidate_count": 8
+    },
+    {
+      "coord": "192,0,9",
+      "expected": "minecraft:exposed_cut_copper",
+      "candidates": [
+        "minecraft:exposed_cut_copper",
+        "minecraft:waxed_exposed_cut_copper",
+        "minecraft:exposed_cut_copper_slab[type=double]",
+        "minecraft:waxed_exposed_cut_copper_slab[type=double]"
+      ],
+      "candidate_count": 4
+    },
+    {
+      "coord": "195,0,9",
+      "expected": "minecraft:exposed_cut_copper_slab[type=bottom]",
+      "candidates": [
+        "minecraft:exposed_cut_copper_slab[type=bottom]",
+        "minecraft:waxed_exposed_cut_copper_slab[type=bottom]"
+      ],
+      "candidate_count": 2
+    },
+    {
+      "coord": "198,0,9",
+      "expected": "minecraft:exposed_cut_copper_stairs[facing=east,half=bottom,shape=inner_left]",
+      "candidates": [
+        "minecraft:exposed_cut_copper_stairs[facing=east,half=bottom,shape=inner_left]",
+        "minecraft:waxed_exposed_cut_copper_stairs[facing=east,half=bottom,shape=inner_left]",
+        "minecraft:exposed_cut_copper_stairs[facing=north,half=bottom,shape=inner_right]",
+        "minecraft:waxed_exposed_cut_copper_stairs[facing=north,half=bottom,shape=inner_right]"
+      ],
+      "candidate_count": 4
+    },
+    {
+      "coord": "201,0,9",
+      "expected": "minecraft:exposed_lightning_rod[facing=down,powered=false]",
+      "candidates": [
+        "minecraft:exposed_lightning_rod[facing=down,powered=false]",
+        "minecraft:waxed_exposed_lightning_rod[facing=down,powered=false]"
+      ],
+      "candidate_count": 2
+    },
+    {
+      "coord": "204,0,9",
+      "expected": "minecraft:farmland[moisture=0]",
+      "candidates": [
+        "minecraft:farmland[moisture=0]",
+        "minecraft:farmland[moisture=1]",
+        "minecraft:farmland[moisture=2]",
+        "minecraft:farmland[moisture=3]",
+        "minecraft:farmland[moisture=4]",
+        "minecraft:farmland[moisture=5]",
+        "minecraft:farmland[moisture=6]"
+      ],
+      "candidate_count": 7
+    },
+    {
+      "coord": "261,0,9",
+      "expected": "minecraft:glow_lichen[down=false,east=false,north=false,south=false,up=false,west=false]",
+      "candidates": [
+        "minecraft:glow_lichen[down=false,east=false,north=false,south=false,up=false,west=false]",
+        "minecraft:glow_lichen[down=true,east=true,north=true,south=true,up=true,west=true]"
+      ],
+      "candidate_count": 2
+    },
+    {
+      "coord": "276,0,9",
+      "expected": "minecraft:granite",
+      "candidates": [
+        "minecraft:granite",
+        "minecraft:granite_slab[type=double]"
+      ],
+      "candidate_count": 2
+    },
+    {
+      "coord": "282,0,9",
+      "expected": "minecraft:granite_stairs[facing=east,half=bottom,shape=inner_left]",
+      "candidates": [
+        "minecraft:granite_stairs[facing=east,half=bottom,shape=inner_left]",
+        "minecraft:granite_stairs[facing=north,half=bottom,shape=inner_right]"
+      ],
+      "candidate_count": 2
+    },
+    {
+      "coord": "90,0,12",
+      "expected": "minecraft:infested_chiseled_stone_bricks",
+      "candidates": [
+        "minecraft:chiseled_stone_bricks",
+        "minecraft:infested_chiseled_stone_bricks"
+      ],
+      "candidate_count": 2
+    },
+    {
+      "coord": "93,0,12",
+      "expected": "minecraft:infested_cobblestone",
+      "candidates": [
+        "minecraft:cobblestone",
+        "minecraft:infested_cobblestone",
+        "minecraft:cobblestone_slab[type=double]"
+      ],
+      "candidate_count": 3
+    },
+    {
+      "coord": "96,0,12",
+      "expected": "minecraft:infested_cracked_stone_bricks",
+      "candidates": [
+        "minecraft:cracked_stone_bricks",
+        "minecraft:infested_cracked_stone_bricks"
+      ],
+      "candidate_count": 2
+    },
+    {
+      "coord": "99,0,12",
+      "expected": "minecraft:infested_deepslate[axis=x]",
+      "candidates": [
+        "minecraft:deepslate[axis=x]",
+        "minecraft:infested_deepslate[axis=x]"
+      ],
+      "candidate_count": 2
+    },
+    {
+      "coord": "102,0,12",
+      "expected": "minecraft:infested_mossy_stone_bricks",
+      "candidates": [
+        "minecraft:infested_mossy_stone_bricks",
+        "minecraft:mossy_stone_bricks",
+        "minecraft:mossy_stone_brick_slab[type=double]"
+      ],
+      "candidate_count": 3
+    },
+    {
+      "coord": "105,0,12",
+      "expected": "minecraft:infested_stone",
+      "candidates": [
+        "minecraft:infested_stone",
+        "minecraft:stone",
+        "minecraft:stone_slab[type=double]"
+      ],
+      "candidate_count": 3
+    },
+    {
+      "coord": "108,0,12",
+      "expected": "minecraft:infested_stone_bricks",
+      "candidates": [
+        "minecraft:infested_stone_bricks",
+        "minecraft:stone_bricks",
+        "minecraft:stone_brick_slab[type=double]"
+      ],
+      "candidate_count": 3
+    },
+    {
+      "coord": "126,0,12",
+      "expected": "minecraft:iron_trapdoor[facing=east,half=bottom,open=false]",
+      "candidates": [
+        "minecraft:iron_trapdoor[facing=east,half=bottom,open=false]",
+        "minecraft:iron_trapdoor[facing=north,half=bottom,open=false]",
+        "minecraft:iron_trapdoor[facing=south,half=bottom,open=false]",
+        "minecraft:iron_trapdoor[facing=west,half=bottom,open=false]"
+      ],
+      "candidate_count": 4
+    },
+    {
+      "coord": "162,0,12",
+      "expected": "minecraft:jungle_planks",
+      "candidates": [
+        "minecraft:jungle_planks",
+        "minecraft:jungle_slab[type=double]"
+      ],
+      "candidate_count": 2
+    },
+    {
+      "coord": "171,0,12",
+      "expected": "minecraft:jungle_shelf[facing=east,powered=false,side_chain=center]",
+      "candidates": [
+        "minecraft:jungle_shelf[facing=east,powered=false,side_chain=center]",
+        "minecraft:jungle_shelf[facing=east,powered=false,side_chain=left]",
+        "minecraft:jungle_shelf[facing=east,powered=false,side_chain=right]",
+        "minecraft:jungle_shelf[facing=east,powered=false,side_chain=unconnected]"
+      ],
+      "candidate_count": 4
+    },
+    {
+      "coord": "180,0,12",
+      "expected": "minecraft:jungle_stairs[facing=east,half=bottom,shape=inner_left]",
+      "candidates": [
+        "minecraft:jungle_stairs[facing=east,half=bottom,shape=inner_left]",
+        "minecraft:jungle_stairs[facing=north,half=bottom,shape=inner_right]"
+      ],
+      "candidate_count": 2
+    },
+    {
+      "coord": "300,0,12",
+      "expected": "minecraft:lightning_rod[facing=down,powered=false]",
+      "candidates": [
+        "minecraft:lightning_rod[facing=down,powered=false]",
+        "minecraft:waxed_lightning_rod[facing=down,powered=false]"
+      ],
+      "candidate_count": 2
+    },
+    {
+      "coord": "102,0,15",
+      "expected": "minecraft:mangrove_planks",
+      "candidates": [
+        "minecraft:mangrove_planks",
+        "minecraft:mangrove_slab[type=double]"
+      ],
+      "candidate_count": 2
+    },
+    {
+      "coord": "108,0,15",
+      "expected": "minecraft:mangrove_propagule[age=0,hanging=false]",
+      "candidates": [
+        "minecraft:mangrove_propagule[age=0,hanging=false]",
+        "minecraft:mangrove_propagule[age=1,hanging=false]",
+        "minecraft:mangrove_propagule[age=2,hanging=false]",
+        "minecraft:mangrove_propagule[age=3,hanging=false]",
+        "minecraft:mangrove_propagule[age=4,hanging=false]"
+      ],
+      "candidate_count": 5
+    }
+  ],
+  "failures": [],
+  "limitations": [
+    "The fixture uses pack JSON model geometry, not Mineways output.",
+    "Identical rendered models cannot resolve invisible blockstate properties.",
+    "Isolated cells do not test neighboring-block culling or connection updates."
+  ]
+}

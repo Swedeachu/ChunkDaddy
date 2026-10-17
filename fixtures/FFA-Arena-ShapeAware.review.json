@@ -1,0 +1,2889 @@
+{
+  "proposed_changes": 17935,
+  "inspect_first_200": [
+    {
+      "voxel": [
+        109,
+        5,
+        123
+      ],
+      "from": "minecraft:oak_planks",
+      "to": "minecraft:oak_stairs[facing=east,half=top,shape=straight]",
+      "confidence_kind": "partial_planes",
+      "similarity": 0.9581,
+      "margin": 0.9581,
+      "fractional_area": 1.503,
+      "equivalent_states": []
+    },
+    {
+      "voxel": [
+        111,
+        5,
+        123
+      ],
+      "from": "minecraft:oak_planks",
+      "to": "minecraft:oak_stairs[facing=west,half=top,shape=straight]",
+      "confidence_kind": "partial_planes",
+      "similarity": 0.9581,
+      "margin": 0.9581,
+      "fractional_area": 1.503,
+      "equivalent_states": []
+    },
+    {
+      "voxel": [
+        101,
+        6,
+        129
+      ],
+      "from": "minecraft:oak_planks",
+      "to": "minecraft:oak_stairs[facing=east,half=top,shape=straight]",
+      "confidence_kind": "partial_planes",
+      "similarity": 0.9581,
+      "margin": 0.9581,
+      "fractional_area": 1.498,
+      "equivalent_states": []
+    },
+    {
+      "voxel": [
+        103,
+        6,
+        129
+      ],
+      "from": "minecraft:oak_planks",
+      "to": "minecraft:oak_stairs[facing=west,half=top,shape=straight]",
+      "confidence_kind": "partial_planes",
+      "similarity": 0.9581,
+      "margin": 0.9581,
+      "fractional_area": 1.498,
+      "equivalent_states": []
+    },
+    {
+      "voxel": [
+        110,
+        7,
+        122
+      ],
+      "from": "minecraft:oak_planks",
+      "to": "minecraft:oak_stairs[facing=south,half=top,shape=outer_right]",
+      "confidence_kind": "partial_planes",
+      "similarity": 0.861,
+      "margin": 0.861,
+      "fractional_area": 1.496,
+      "equivalent_states": [
+        "minecraft:oak_stairs[facing=south,half=top,shape=outer_right]",
+        "minecraft:oak_stairs[facing=west,half=top,shape=outer_left]"
+      ]
+    },
+    {
+      "voxel": [
+        110,
+        7,
+        124
+      ],
+      "from": "minecraft:oak_planks",
+      "to": "minecraft:oak_stairs[facing=east,half=top,shape=outer_left]",
+      "confidence_kind": "partial_planes",
+      "similarity": 0.8613,
+      "margin": 0.8613,
+      "fractional_area": 1.499,
+      "equivalent_states": [
+        "minecraft:oak_stairs[facing=east,half=top,shape=outer_left]",
+        "minecraft:oak_stairs[facing=north,half=top,shape=outer_right]"
+      ]
+    },
+    {
+      "voxel": [
+        102,
+        7,
+        128
+      ],
+      "from": "minecraft:oak_planks",
+      "to": "minecraft:oak_stairs[facing=south,half=top,shape=outer_right]",
+      "confidence_kind": "partial_planes",
+      "similarity": 0.8613,
+      "margin": 0.8613,
+      "fractional_area": 1.499,
+      "equivalent_states": [
+        "minecraft:oak_stairs[facing=south,half=top,shape=outer_right]",
+        "minecraft:oak_stairs[facing=west,half=top,shape=outer_left]"
+      ]
+    },
+    {
+      "voxel": [
+        102,
+        7,
+        130
+      ],
+      "from": "minecraft:oak_planks",
+      "to": "minecraft:oak_stairs[facing=east,half=top,shape=outer_left]",
+      "confidence_kind": "partial_planes",
+      "similarity": 0.8612,
+      "margin": 0.8612,
+      "fractional_area": 1.499,
+      "equivalent_states": [
+        "minecraft:oak_stairs[facing=east,half=top,shape=outer_left]",
+        "minecraft:oak_stairs[facing=north,half=top,shape=outer_right]"
+      ]
+    },
+    {
+      "voxel": [
+        200,
+        9,
+        11
+      ],
+      "from": "minecraft:oak_planks",
+      "to": "minecraft:oak_slab[type=top]",
+      "confidence_kind": "partial_planes",
+      "similarity": 0.9033,
+      "margin": 0.9033,
+      "fractional_area": 1.003,
+      "equivalent_states": []
+    },
+    {
+      "voxel": [
+        200,
+        9,
+        12
+      ],
+      "from": "minecraft:oak_planks",
+      "to": "minecraft:oak_slab[type=top]",
+      "confidence_kind": "partial_planes",
+      "similarity": 0.8943,
+      "margin": 0.8943,
+      "fractional_area": 1.003,
+      "equivalent_states": []
+    },
+    {
+      "voxel": [
+        200,
+        9,
+        13
+      ],
+      "from": "minecraft:oak_planks",
+      "to": "minecraft:oak_slab[type=top]",
+      "confidence_kind": "partial_planes",
+      "similarity": 0.9032,
+      "margin": 0.9032,
+      "fractional_area": 0.999,
+      "equivalent_states": []
+    },
+    {
+      "voxel": [
+        199,
+        9,
+        14
+      ],
+      "from": "minecraft:oak_planks",
+      "to": "minecraft:oak_slab[type=top]",
+      "confidence_kind": "partial_planes",
+      "similarity": 0.9155,
+      "margin": 0.9155,
+      "fractional_area": 1.0,
+      "equivalent_states": []
+    },
+    {
+      "voxel": [
+        199,
+        9,
+        15
+      ],
+      "from": "minecraft:oak_planks",
+      "to": "minecraft:oak_slab[type=top]",
+      "confidence_kind": "partial_planes",
+      "similarity": 0.8942,
+      "margin": 0.8942,
+      "fractional_area": 0.996,
+      "equivalent_states": []
+    },
+    {
+      "voxel": [
+        199,
+        9,
+        16
+      ],
+      "from": "minecraft:oak_planks",
+      "to": "minecraft:oak_slab[type=top]",
+      "confidence_kind": "partial_planes",
+      "similarity": 0.9033,
+      "margin": 0.9033,
+      "fractional_area": 1.0,
+      "equivalent_states": []
+    },
+    {
+      "voxel": [
+        198,
+        9,
+        17
+      ],
+      "from": "minecraft:oak_planks",
+      "to": "minecraft:oak_slab[type=top]",
+      "confidence_kind": "partial_planes",
+      "similarity": 0.9032,
+      "margin": 0.9032,
+      "fractional_area": 0.999,
+      "equivalent_states": []
+    },
+    {
+      "voxel": [
+        152,
+        9,
+        18
+      ],
+      "from": "minecraft:oak_planks",
+      "to": "minecraft:oak_slab[type=top]",
+      "confidence_kind": "partial_planes",
+      "similarity": 0.8943,
+      "margin": 0.8943,
+      "fractional_area": 1.003,
+      "equivalent_states": []
+    },
+    {
+      "voxel": [
+        251,
+        9,
+        18
+      ],
+      "from": "minecraft:oak_planks",
+      "to": "minecraft:oak_slab[type=top]",
+      "confidence_kind": "partial_planes",
+      "similarity": 0.9033,
+      "margin": 0.9033,
+      "fractional_area": 1.003,
+      "equivalent_states": []
+    },
+    {
+      "voxel": [
+        151,
+        9,
+        19
+      ],
+      "from": "minecraft:oak_planks",
+      "to": "minecraft:oak_slab[type=top]",
+      "confidence_kind": "partial_planes",
+      "similarity": 0.8942,
+      "margin": 0.8942,
+      "fractional_area": 0.996,
+      "equivalent_states": []
+    },
+    {
+      "voxel": [
+        152,
+        9,
+        19
+      ],
+      "from": "minecraft:oak_planks",
+      "to": "minecraft:oak_slab[type=top]",
+      "confidence_kind": "partial_planes",
+      "similarity": 0.8943,
+      "margin": 0.8943,
+      "fractional_area": 0.999,
+      "equivalent_states": []
+    },
+    {
+      "voxel": [
+        250,
+        9,
+        19
+      ],
+      "from": "minecraft:oak_planks",
+      "to": "minecraft:oak_slab[type=top]",
+      "confidence_kind": "partial_planes",
+      "similarity": 0.8943,
+      "margin": 0.8943,
+      "fractional_area": 0.999,
+      "equivalent_states": []
+    },
+    {
+      "voxel": [
+        251,
+        9,
+        19
+      ],
+      "from": "minecraft:oak_planks",
+      "to": "minecraft:oak_slab[type=top]",
+      "confidence_kind": "partial_planes",
+      "similarity": 0.8943,
+      "margin": 0.8943,
+      "fractional_area": 0.999,
+      "equivalent_states": []
+    },
+    {
+      "voxel": [
+        150,
+        9,
+        20
+      ],
+      "from": "minecraft:oak_planks",
+      "to": "minecraft:oak_slab[type=top]",
+      "confidence_kind": "partial_planes",
+      "similarity": 0.8873,
+      "margin": 0.8873,
+      "fractional_area": 1.003,
+      "equivalent_states": []
+    },
+    {
+      "voxel": [
+        151,
+        9,
+        20
+      ],
+      "from": "minecraft:oak_planks",
+      "to": "minecraft:oak_slab[type=top]",
+      "confidence_kind": "partial_planes",
+      "similarity": 0.8873,
+      "margin": 0.8873,
+      "fractional_area": 1.0,
+      "equivalent_states": []
+    },
+    {
+      "voxel": [
+        152,
+        9,
+        20
+      ],
+      "from": "minecraft:oak_planks",
+      "to": "minecraft:oak_slab[type=top]",
+      "confidence_kind": "partial_planes",
+      "similarity": 0.8943,
+      "margin": 0.8943,
+      "fractional_area": 1.003,
+      "equivalent_states": []
+    },
+    {
+      "voxel": [
+        153,
+        9,
+        20
+      ],
+      "from": "minecraft:oak_planks",
+      "to": "minecraft:oak_slab[type=top]",
+      "confidence_kind": "partial_planes",
+      "similarity": 0.9032,
+      "margin": 0.9032,
+      "fractional_area": 1.0,
+      "equivalent_states": []
+    },
+    {
+      "voxel": [
+        248,
+        9,
+        20
+      ],
+      "from": "minecraft:oak_planks",
+      "to": "minecraft:oak_slab[type=top]",
+      "confidence_kind": "partial_planes",
+      "similarity": 0.8873,
+      "margin": 0.8873,
+      "fractional_area": 1.003,
+      "equivalent_states": []
+    },
+    {
+      "voxel": [
+        249,
+        9,
+        20
+      ],
+      "from": "minecraft:oak_planks",
+      "to": "minecraft:oak_slab[type=top]",
+      "confidence_kind": "partial_planes",
+      "similarity": 0.8943,
+      "margin": 0.8943,
+      "fractional_area": 1.0,
+      "equivalent_states": []
+    },
+    {
+      "voxel": [
+        250,
+        9,
+        20
+      ],
+      "from": "minecraft:oak_planks",
+      "to": "minecraft:oak_slab[type=top]",
+      "confidence_kind": "partial_planes",
+      "similarity": 0.8943,
+      "margin": 0.8943,
+      "fractional_area": 1.003,
+      "equivalent_states": []
+    },
+    {
+      "voxel": [
+        152,
+        9,
+        21
+      ],
+      "from": "minecraft:oak_planks",
+      "to": "minecraft:oak_slab[type=top]",
+      "confidence_kind": "partial_planes",
+      "similarity": 0.8873,
+      "margin": 0.8873,
+      "fractional_area": 1.003,
+      "equivalent_states": []
+    },
+    {
+      "voxel": [
+        153,
+        9,
+        21
+      ],
+      "from": "minecraft:oak_planks",
+      "to": "minecraft:oak_slab[type=top]",
+      "confidence_kind": "partial_planes",
+      "similarity": 0.8943,
+      "margin": 0.8943,
+      "fractional_area": 1.0,
+      "equivalent_states": []
+    },
+    {
+      "voxel": [
+        249,
+        9,
+        21
+      ],
+      "from": "minecraft:oak_planks",
+      "to": "minecraft:oak_slab[type=top]",
+      "confidence_kind": "partial_planes",
+      "similarity": 0.8873,
+      "margin": 0.8873,
+      "fractional_area": 1.0,
+      "equivalent_states": []
+    },
+    {
+      "voxel": [
+        250,
+        9,
+        21
+      ],
+      "from": "minecraft:oak_planks",
+      "to": "minecraft:oak_slab[type=top]",
+      "confidence_kind": "partial_planes",
+      "similarity": 0.8943,
+      "margin": 0.8943,
+      "fractional_area": 1.003,
+      "equivalent_states": []
+    },
+    {
+      "voxel": [
+        153,
+        9,
+        22
+      ],
+      "from": "minecraft:oak_planks",
+      "to": "minecraft:oak_slab[type=top]",
+      "confidence_kind": "partial_planes",
+      "similarity": 0.8942,
+      "margin": 0.8942,
+      "fractional_area": 0.996,
+      "equivalent_states": []
+    },
+    {
+      "voxel": [
+        154,
+        9,
+        22
+      ],
+      "from": "minecraft:oak_planks",
+      "to": "minecraft:oak_slab[type=top]",
+      "confidence_kind": "partial_planes",
+      "similarity": 0.9033,
+      "margin": 0.9033,
+      "fractional_area": 0.999,
+      "equivalent_states": []
+    },
+    {
+      "voxel": [
+        250,
+        9,
+        22
+      ],
+      "from": "minecraft:oak_planks",
+      "to": "minecraft:oak_slab[type=top]",
+      "confidence_kind": "partial_planes",
+      "similarity": 0.8943,
+      "margin": 0.8943,
+      "fractional_area": 0.999,
+      "equivalent_states": []
+    },
+    {
+      "voxel": [
+        152,
+        9,
+        23
+      ],
+      "from": "minecraft:oak_planks",
+      "to": "minecraft:oak_slab[type=top]",
+      "confidence_kind": "partial_planes",
+      "similarity": 0.8943,
+      "margin": 0.8943,
+      "fractional_area": 1.003,
+      "equivalent_states": []
+    },
+    {
+      "voxel": [
+        153,
+        9,
+        23
+      ],
+      "from": "minecraft:oak_planks",
+      "to": "minecraft:oak_slab[type=top]",
+      "confidence_kind": "partial_planes",
+      "similarity": 0.8943,
+      "margin": 0.8943,
+      "fractional_area": 1.0,
+      "equivalent_states": []
+    },
+    {
+      "voxel": [
+        250,
+        9,
+        23
+      ],
+      "from": "minecraft:oak_planks",
+      "to": "minecraft:oak_slab[type=top]",
+      "confidence_kind": "partial_planes",
+      "similarity": 0.8943,
+      "margin": 0.8943,
+      "fractional_area": 1.003,
+      "equivalent_states": []
+    },
+    {
+      "voxel": [
+        151,
+        9,
+        24
+      ],
+      "from": "minecraft:oak_planks",
+      "to": "minecraft:oak_slab[type=top]",
+      "confidence_kind": "partial_planes",
+      "similarity": 0.8872,
+      "margin": 0.8872,
+      "fractional_area": 0.996,
+      "equivalent_states": []
+    },
+    {
+      "voxel": [
+        152,
+        9,
+        24
+      ],
+      "from": "minecraft:oak_planks",
+      "to": "minecraft:oak_slab[type=top]",
+      "confidence_kind": "partial_planes",
+      "similarity": 0.8873,
+      "margin": 0.8873,
+      "fractional_area": 0.999,
+      "equivalent_states": []
+    },
+    {
+      "voxel": [
+        153,
+        9,
+        24
+      ],
+      "from": "minecraft:oak_planks",
+      "to": "minecraft:oak_slab[type=top]",
+      "confidence_kind": "partial_planes",
+      "similarity": 0.8872,
+      "margin": 0.8872,
+      "fractional_area": 0.996,
+      "equivalent_states": []
+    },
+    {
+      "voxel": [
+        249,
+        9,
+        24
+      ],
+      "from": "minecraft:oak_planks",
+      "to": "minecraft:oak_slab[type=top]",
+      "confidence_kind": "partial_planes",
+      "similarity": 0.8942,
+      "margin": 0.8942,
+      "fractional_area": 0.996,
+      "equivalent_states": []
+    },
+    {
+      "voxel": [
+        250,
+        9,
+        24
+      ],
+      "from": "minecraft:oak_planks",
+      "to": "minecraft:oak_slab[type=top]",
+      "confidence_kind": "partial_planes",
+      "similarity": 0.8943,
+      "margin": 0.8943,
+      "fractional_area": 0.999,
+      "equivalent_states": []
+    },
+    {
+      "voxel": [
+        133,
+        9,
+        32
+      ],
+      "from": "minecraft:oak_planks",
+      "to": "minecraft:oak_slab[type=top]",
+      "confidence_kind": "partial_planes",
+      "similarity": 0.9414,
+      "margin": 0.9414,
+      "fractional_area": 1.003,
+      "equivalent_states": []
+    },
+    {
+      "voxel": [
+        138,
+        9,
+        32
+      ],
+      "from": "minecraft:oak_planks",
+      "to": "minecraft:oak_slab[type=top]",
+      "confidence_kind": "partial_planes",
+      "similarity": 0.9414,
+      "margin": 0.9414,
+      "fractional_area": 1.0,
+      "equivalent_states": []
+    },
+    {
+      "voxel": [
+        133,
+        9,
+        37
+      ],
+      "from": "minecraft:oak_planks",
+      "to": "minecraft:oak_slab[type=top]",
+      "confidence_kind": "partial_planes",
+      "similarity": 0.9414,
+      "margin": 0.9414,
+      "fractional_area": 1.003,
+      "equivalent_states": []
+    },
+    {
+      "voxel": [
+        138,
+        9,
+        37
+      ],
+      "from": "minecraft:oak_planks",
+      "to": "minecraft:oak_slab[type=top]",
+      "confidence_kind": "partial_planes",
+      "similarity": 0.9414,
+      "margin": 0.9414,
+      "fractional_area": 1.0,
+      "equivalent_states": []
+    },
+    {
+      "voxel": [
+        122,
+        9,
+        45
+      ],
+      "from": "minecraft:oak_planks",
+      "to": "minecraft:oak_slab[type=top]",
+      "confidence_kind": "partial_planes",
+      "similarity": 0.9414,
+      "margin": 0.9414,
+      "fractional_area": 0.996,
+      "equivalent_states": []
+    },
+    {
+      "voxel": [
+        128,
+        9,
+        45
+      ],
+      "from": "minecraft:oak_planks",
+      "to": "minecraft:oak_slab[type=top]",
+      "confidence_kind": "partial_planes",
+      "similarity": 0.9414,
+      "margin": 0.9414,
+      "fractional_area": 0.999,
+      "equivalent_states": []
+    },
+    {
+      "voxel": [
+        122,
+        9,
+        51
+      ],
+      "from": "minecraft:oak_planks",
+      "to": "minecraft:oak_slab[type=top]",
+      "confidence_kind": "partial_planes",
+      "similarity": 0.9414,
+      "margin": 0.9414,
+      "fractional_area": 0.996,
+      "equivalent_states": []
+    },
+    {
+      "voxel": [
+        128,
+        9,
+        51
+      ],
+      "from": "minecraft:oak_planks",
+      "to": "minecraft:oak_slab[type=top]",
+      "confidence_kind": "partial_planes",
+      "similarity": 0.9414,
+      "margin": 0.9414,
+      "fractional_area": 0.999,
+      "equivalent_states": []
+    },
+    {
+      "voxel": [
+        242,
+        9,
+        67
+      ],
+      "from": "minecraft:oak_planks",
+      "to": "minecraft:oak_slab[type=top]",
+      "confidence_kind": "partial_planes",
+      "similarity": 0.8872,
+      "margin": 0.8872,
+      "fractional_area": 0.996,
+      "equivalent_states": []
+    },
+    {
+      "voxel": [
+        243,
+        9,
+        67
+      ],
+      "from": "minecraft:oak_planks",
+      "to": "minecraft:oak_slab[type=top]",
+      "confidence_kind": "partial_planes",
+      "similarity": 0.9033,
+      "margin": 0.9033,
+      "fractional_area": 0.999,
+      "equivalent_states": []
+    },
+    {
+      "voxel": [
+        243,
+        9,
+        68
+      ],
+      "from": "minecraft:oak_planks",
+      "to": "minecraft:oak_slab[type=top]",
+      "confidence_kind": "partial_planes",
+      "similarity": 0.8873,
+      "margin": 0.8873,
+      "fractional_area": 1.003,
+      "equivalent_states": []
+    },
+    {
+      "voxel": [
+        244,
+        9,
+        68
+      ],
+      "from": "minecraft:oak_planks",
+      "to": "minecraft:oak_slab[type=top]",
+      "confidence_kind": "partial_planes",
+      "similarity": 0.9033,
+      "margin": 0.9033,
+      "fractional_area": 1.003,
+      "equivalent_states": []
+    },
+    {
+      "voxel": [
+        244,
+        9,
+        69
+      ],
+      "from": "minecraft:oak_planks",
+      "to": "minecraft:oak_slab[type=top]",
+      "confidence_kind": "partial_planes",
+      "similarity": 0.8943,
+      "margin": 0.8943,
+      "fractional_area": 1.003,
+      "equivalent_states": []
+    },
+    {
+      "voxel": [
+        245,
+        9,
+        69
+      ],
+      "from": "minecraft:oak_planks",
+      "to": "minecraft:oak_slab[type=top]",
+      "confidence_kind": "partial_planes",
+      "similarity": 0.9032,
+      "margin": 0.9032,
+      "fractional_area": 1.0,
+      "equivalent_states": []
+    },
+    {
+      "voxel": [
+        243,
+        9,
+        70
+      ],
+      "from": "minecraft:oak_planks",
+      "to": "minecraft:oak_slab[type=top]",
+      "confidence_kind": "partial_planes",
+      "similarity": 0.8943,
+      "margin": 0.8943,
+      "fractional_area": 0.999,
+      "equivalent_states": []
+    },
+    {
+      "voxel": [
+        244,
+        9,
+        70
+      ],
+      "from": "minecraft:oak_planks",
+      "to": "minecraft:oak_slab[type=top]",
+      "confidence_kind": "partial_planes",
+      "similarity": 0.8943,
+      "margin": 0.8943,
+      "fractional_area": 0.999,
+      "equivalent_states": []
+    },
+    {
+      "voxel": [
+        245,
+        9,
+        70
+      ],
+      "from": "minecraft:oak_planks",
+      "to": "minecraft:oak_slab[type=top]",
+      "confidence_kind": "partial_planes",
+      "similarity": 0.8942,
+      "margin": 0.8942,
+      "fractional_area": 0.996,
+      "equivalent_states": []
+    },
+    {
+      "voxel": [
+        243,
+        9,
+        71
+      ],
+      "from": "minecraft:oak_planks",
+      "to": "minecraft:oak_slab[type=top]",
+      "confidence_kind": "partial_planes",
+      "similarity": 0.8873,
+      "margin": 0.8873,
+      "fractional_area": 1.003,
+      "equivalent_states": []
+    },
+    {
+      "voxel": [
+        244,
+        9,
+        71
+      ],
+      "from": "minecraft:oak_planks",
+      "to": "minecraft:oak_slab[type=top]",
+      "confidence_kind": "partial_planes",
+      "similarity": 0.8873,
+      "margin": 0.8873,
+      "fractional_area": 1.003,
+      "equivalent_states": []
+    },
+    {
+      "voxel": [
+        245,
+        9,
+        71
+      ],
+      "from": "minecraft:oak_planks",
+      "to": "minecraft:oak_slab[type=top]",
+      "confidence_kind": "partial_planes",
+      "similarity": 0.8873,
+      "margin": 0.8873,
+      "fractional_area": 1.0,
+      "equivalent_states": []
+    },
+    {
+      "voxel": [
+        89,
+        9,
+        80
+      ],
+      "from": "minecraft:oak_planks",
+      "to": "minecraft:oak_slab[type=top]",
+      "confidence_kind": "partial_planes",
+      "similarity": 0.8943,
+      "margin": 0.8943,
+      "fractional_area": 1.003,
+      "equivalent_states": []
+    },
+    {
+      "voxel": [
+        90,
+        9,
+        80
+      ],
+      "from": "minecraft:oak_planks",
+      "to": "minecraft:oak_slab[type=top]",
+      "confidence_kind": "partial_planes",
+      "similarity": 0.8873,
+      "margin": 0.8873,
+      "fractional_area": 1.0,
+      "equivalent_states": []
+    },
+    {
+      "voxel": [
+        93,
+        9,
+        80
+      ],
+      "from": "minecraft:oak_planks",
+      "to": "minecraft:oak_slab[type=top]",
+      "confidence_kind": "partial_planes",
+      "similarity": 0.8873,
+      "margin": 0.8873,
+      "fractional_area": 1.0,
+      "equivalent_states": []
+    },
+    {
+      "voxel": [
+        89,
+        9,
+        81
+      ],
+      "from": "minecraft:oak_planks",
+      "to": "minecraft:oak_slab[type=top]",
+      "confidence_kind": "partial_planes",
+      "similarity": 0.9032,
+      "margin": 0.9032,
+      "fractional_area": 0.999,
+      "equivalent_states": []
+    },
+    {
+      "voxel": [
+        90,
+        9,
+        81
+      ],
+      "from": "minecraft:oak_planks",
+      "to": "minecraft:oak_slab[type=top]",
+      "confidence_kind": "partial_planes",
+      "similarity": 0.8942,
+      "margin": 0.8942,
+      "fractional_area": 0.996,
+      "equivalent_states": []
+    },
+    {
+      "voxel": [
+        91,
+        9,
+        81
+      ],
+      "from": "minecraft:oak_planks",
+      "to": "minecraft:oak_slab[type=top]",
+      "confidence_kind": "partial_planes",
+      "similarity": 0.8943,
+      "margin": 0.8943,
+      "fractional_area": 0.999,
+      "equivalent_states": []
+    },
+    {
+      "voxel": [
+        92,
+        9,
+        81
+      ],
+      "from": "minecraft:oak_planks",
+      "to": "minecraft:oak_slab[type=top]",
+      "confidence_kind": "partial_planes",
+      "similarity": 0.8943,
+      "margin": 0.8943,
+      "fractional_area": 0.999,
+      "equivalent_states": []
+    },
+    {
+      "voxel": [
+        93,
+        9,
+        81
+      ],
+      "from": "minecraft:oak_planks",
+      "to": "minecraft:oak_slab[type=top]",
+      "confidence_kind": "partial_planes",
+      "similarity": 0.8942,
+      "margin": 0.8942,
+      "fractional_area": 0.996,
+      "equivalent_states": []
+    },
+    {
+      "voxel": [
+        94,
+        9,
+        81
+      ],
+      "from": "minecraft:oak_planks",
+      "to": "minecraft:oak_slab[type=top]",
+      "confidence_kind": "partial_planes",
+      "similarity": 0.8873,
+      "margin": 0.8873,
+      "fractional_area": 0.999,
+      "equivalent_states": []
+    },
+    {
+      "voxel": [
+        89,
+        9,
+        82
+      ],
+      "from": "minecraft:oak_planks",
+      "to": "minecraft:oak_slab[type=top]",
+      "confidence_kind": "partial_planes",
+      "similarity": 0.9033,
+      "margin": 0.9033,
+      "fractional_area": 1.003,
+      "equivalent_states": []
+    },
+    {
+      "voxel": [
+        91,
+        9,
+        82
+      ],
+      "from": "minecraft:oak_planks",
+      "to": "minecraft:oak_slab[type=top]",
+      "confidence_kind": "partial_planes",
+      "similarity": 0.9033,
+      "margin": 0.9033,
+      "fractional_area": 1.003,
+      "equivalent_states": []
+    },
+    {
+      "voxel": [
+        92,
+        9,
+        82
+      ],
+      "from": "minecraft:oak_planks",
+      "to": "minecraft:oak_slab[type=top]",
+      "confidence_kind": "partial_planes",
+      "similarity": 0.8943,
+      "margin": 0.8943,
+      "fractional_area": 1.003,
+      "equivalent_states": []
+    },
+    {
+      "voxel": [
+        93,
+        9,
+        82
+      ],
+      "from": "minecraft:oak_planks",
+      "to": "minecraft:oak_slab[type=top]",
+      "confidence_kind": "partial_planes",
+      "similarity": 0.8943,
+      "margin": 0.8943,
+      "fractional_area": 1.0,
+      "equivalent_states": []
+    },
+    {
+      "voxel": [
+        94,
+        9,
+        82
+      ],
+      "from": "minecraft:oak_planks",
+      "to": "minecraft:oak_slab[type=top]",
+      "confidence_kind": "partial_planes",
+      "similarity": 0.8943,
+      "margin": 0.8943,
+      "fractional_area": 1.003,
+      "equivalent_states": []
+    },
+    {
+      "voxel": [
+        95,
+        9,
+        82
+      ],
+      "from": "minecraft:oak_planks",
+      "to": "minecraft:oak_slab[type=top]",
+      "confidence_kind": "partial_planes",
+      "similarity": 0.8873,
+      "margin": 0.8873,
+      "fractional_area": 1.0,
+      "equivalent_states": []
+    },
+    {
+      "voxel": [
+        92,
+        9,
+        83
+      ],
+      "from": "minecraft:oak_planks",
+      "to": "minecraft:oak_slab[type=top]",
+      "confidence_kind": "partial_planes",
+      "similarity": 0.9032,
+      "margin": 0.9032,
+      "fractional_area": 0.999,
+      "equivalent_states": []
+    },
+    {
+      "voxel": [
+        95,
+        9,
+        83
+      ],
+      "from": "minecraft:oak_planks",
+      "to": "minecraft:oak_slab[type=top]",
+      "confidence_kind": "partial_planes",
+      "similarity": 0.9032,
+      "margin": 0.9032,
+      "fractional_area": 0.996,
+      "equivalent_states": []
+    },
+    {
+      "voxel": [
+        96,
+        9,
+        83
+      ],
+      "from": "minecraft:oak_planks",
+      "to": "minecraft:oak_slab[type=top]",
+      "confidence_kind": "partial_planes",
+      "similarity": 0.8873,
+      "margin": 0.8873,
+      "fractional_area": 0.999,
+      "equivalent_states": []
+    },
+    {
+      "voxel": [
+        122,
+        9,
+        138
+      ],
+      "from": "minecraft:oak_planks",
+      "to": "minecraft:oak_slab[type=top]",
+      "confidence_kind": "partial_planes",
+      "similarity": 0.9155,
+      "margin": 0.9155,
+      "fractional_area": 0.996,
+      "equivalent_states": []
+    },
+    {
+      "voxel": [
+        123,
+        9,
+        138
+      ],
+      "from": "minecraft:oak_planks",
+      "to": "minecraft:oak_slab[type=top]",
+      "confidence_kind": "partial_planes",
+      "similarity": 0.9033,
+      "margin": 0.9033,
+      "fractional_area": 0.999,
+      "equivalent_states": []
+    },
+    {
+      "voxel": [
+        121,
+        9,
+        139
+      ],
+      "from": "minecraft:oak_planks",
+      "to": "minecraft:oak_slab[type=top]",
+      "confidence_kind": "partial_planes",
+      "similarity": 0.9155,
+      "margin": 0.9155,
+      "fractional_area": 1.003,
+      "equivalent_states": []
+    },
+    {
+      "voxel": [
+        122,
+        9,
+        139
+      ],
+      "from": "minecraft:oak_planks",
+      "to": "minecraft:oak_slab[type=top]",
+      "confidence_kind": "partial_planes",
+      "similarity": 0.8943,
+      "margin": 0.8943,
+      "fractional_area": 1.0,
+      "equivalent_states": []
+    },
+    {
+      "voxel": [
+        123,
+        9,
+        139
+      ],
+      "from": "minecraft:oak_planks",
+      "to": "minecraft:oak_slab[type=top]",
+      "confidence_kind": "partial_planes",
+      "similarity": 0.8943,
+      "margin": 0.8943,
+      "fractional_area": 1.003,
+      "equivalent_states": []
+    },
+    {
+      "voxel": [
+        124,
+        9,
+        139
+      ],
+      "from": "minecraft:oak_planks",
+      "to": "minecraft:oak_stairs[facing=south,half=bottom,shape=outer_right]",
+      "confidence_kind": "partial_planes",
+      "similarity": 0.837,
+      "margin": 0.837,
+      "fractional_area": 1.501,
+      "equivalent_states": [
+        "minecraft:oak_stairs[facing=south,half=bottom,shape=outer_right]",
+        "minecraft:oak_stairs[facing=west,half=bottom,shape=outer_left]"
+      ]
+    },
+    {
+      "voxel": [
+        125,
+        9,
+        139
+      ],
+      "from": "minecraft:oak_planks",
+      "to": "minecraft:oak_slab[type=top]",
+      "confidence_kind": "partial_planes",
+      "similarity": 0.9033,
+      "margin": 0.9033,
+      "fractional_area": 1.003,
+      "equivalent_states": []
+    },
+    {
+      "voxel": [
+        126,
+        9,
+        139
+      ],
+      "from": "minecraft:oak_planks",
+      "to": "minecraft:oak_slab[type=top]",
+      "confidence_kind": "partial_planes",
+      "similarity": 0.8942,
+      "margin": 0.8942,
+      "fractional_area": 1.0,
+      "equivalent_states": []
+    },
+    {
+      "voxel": [
+        120,
+        9,
+        140
+      ],
+      "from": "minecraft:oak_planks",
+      "to": "minecraft:oak_slab[type=top]",
+      "confidence_kind": "partial_planes",
+      "similarity": 0.8943,
+      "margin": 0.8943,
+      "fractional_area": 1.003,
+      "equivalent_states": []
+    },
+    {
+      "voxel": [
+        121,
+        9,
+        140
+      ],
+      "from": "minecraft:oak_planks",
+      "to": "minecraft:oak_slab[type=top]",
+      "confidence_kind": "partial_planes",
+      "similarity": 0.8943,
+      "margin": 0.8943,
+      "fractional_area": 1.003,
+      "equivalent_states": []
+    },
+    {
+      "voxel": [
+        122,
+        9,
+        140
+      ],
+      "from": "minecraft:oak_planks",
+      "to": "minecraft:oak_slab[type=top]",
+      "confidence_kind": "partial_planes",
+      "similarity": 0.8943,
+      "margin": 0.8943,
+      "fractional_area": 1.0,
+      "equivalent_states": []
+    },
+    {
+      "voxel": [
+        123,
+        9,
+        140
+      ],
+      "from": "minecraft:oak_planks",
+      "to": "minecraft:oak_slab[type=top]",
+      "confidence_kind": "partial_planes",
+      "similarity": 0.8873,
+      "margin": 0.8873,
+      "fractional_area": 1.003,
+      "equivalent_states": []
+    },
+    {
+      "voxel": [
+        124,
+        9,
+        140
+      ],
+      "from": "minecraft:oak_planks",
+      "to": "minecraft:oak_slab[type=top]",
+      "confidence_kind": "partial_planes",
+      "similarity": 0.8943,
+      "margin": 0.8943,
+      "fractional_area": 1.0,
+      "equivalent_states": []
+    },
+    {
+      "voxel": [
+        125,
+        9,
+        140
+      ],
+      "from": "minecraft:oak_planks",
+      "to": "minecraft:oak_slab[type=top]",
+      "confidence_kind": "partial_planes",
+      "similarity": 0.8873,
+      "margin": 0.8873,
+      "fractional_area": 1.003,
+      "equivalent_states": []
+    },
+    {
+      "voxel": [
+        121,
+        9,
+        141
+      ],
+      "from": "minecraft:oak_planks",
+      "to": "minecraft:oak_slab[type=top]",
+      "confidence_kind": "partial_planes",
+      "similarity": 0.8873,
+      "margin": 0.8873,
+      "fractional_area": 0.999,
+      "equivalent_states": []
+    },
+    {
+      "voxel": [
+        122,
+        9,
+        141
+      ],
+      "from": "minecraft:oak_planks",
+      "to": "minecraft:oak_slab[type=top]",
+      "confidence_kind": "partial_planes",
+      "similarity": 0.8872,
+      "margin": 0.8872,
+      "fractional_area": 0.996,
+      "equivalent_states": []
+    },
+    {
+      "voxel": [
+        89,
+        9,
+        147
+      ],
+      "from": "minecraft:oak_planks",
+      "to": "minecraft:oak_slab[type=top]",
+      "confidence_kind": "partial_planes",
+      "similarity": 0.9032,
+      "margin": 0.9032,
+      "fractional_area": 0.999,
+      "equivalent_states": []
+    },
+    {
+      "voxel": [
+        90,
+        9,
+        147
+      ],
+      "from": "minecraft:oak_planks",
+      "to": "minecraft:oak_slab[type=top]",
+      "confidence_kind": "partial_planes",
+      "similarity": 0.8942,
+      "margin": 0.8942,
+      "fractional_area": 0.996,
+      "equivalent_states": []
+    },
+    {
+      "voxel": [
+        91,
+        9,
+        147
+      ],
+      "from": "minecraft:oak_planks",
+      "to": "minecraft:oak_slab[type=top]",
+      "confidence_kind": "partial_planes",
+      "similarity": 0.8943,
+      "margin": 0.8943,
+      "fractional_area": 0.999,
+      "equivalent_states": []
+    },
+    {
+      "voxel": [
+        89,
+        9,
+        148
+      ],
+      "from": "minecraft:oak_planks",
+      "to": "minecraft:oak_slab[type=top]",
+      "confidence_kind": "partial_planes",
+      "similarity": 0.9033,
+      "margin": 0.9033,
+      "fractional_area": 1.003,
+      "equivalent_states": []
+    },
+    {
+      "voxel": [
+        90,
+        9,
+        148
+      ],
+      "from": "minecraft:oak_planks",
+      "to": "minecraft:oak_slab[type=top]",
+      "confidence_kind": "partial_planes",
+      "similarity": 0.8943,
+      "margin": 0.8943,
+      "fractional_area": 1.0,
+      "equivalent_states": []
+    },
+    {
+      "voxel": [
+        90,
+        9,
+        149
+      ],
+      "from": "minecraft:oak_planks",
+      "to": "minecraft:oak_slab[type=top]",
+      "confidence_kind": "partial_planes",
+      "similarity": 0.8943,
+      "margin": 0.8943,
+      "fractional_area": 1.0,
+      "equivalent_states": []
+    },
+    {
+      "voxel": [
+        89,
+        9,
+        150
+      ],
+      "from": "minecraft:oak_planks",
+      "to": "minecraft:oak_slab[type=top]",
+      "confidence_kind": "partial_planes",
+      "similarity": 0.9155,
+      "margin": 0.9155,
+      "fractional_area": 0.999,
+      "equivalent_states": []
+    },
+    {
+      "voxel": [
+        90,
+        9,
+        150
+      ],
+      "from": "minecraft:oak_planks",
+      "to": "minecraft:oak_slab[type=top]",
+      "confidence_kind": "partial_planes",
+      "similarity": 0.8942,
+      "margin": 0.8942,
+      "fractional_area": 0.996,
+      "equivalent_states": []
+    },
+    {
+      "voxel": [
+        89,
+        9,
+        151
+      ],
+      "from": "minecraft:oak_planks",
+      "to": "minecraft:oak_slab[type=top]",
+      "confidence_kind": "partial_planes",
+      "similarity": 0.9033,
+      "margin": 0.9033,
+      "fractional_area": 1.003,
+      "equivalent_states": []
+    },
+    {
+      "voxel": [
+        90,
+        9,
+        151
+      ],
+      "from": "minecraft:oak_planks",
+      "to": "minecraft:oak_slab[type=top]",
+      "confidence_kind": "partial_planes",
+      "similarity": 0.8873,
+      "margin": 0.8873,
+      "fractional_area": 1.0,
+      "equivalent_states": []
+    },
+    {
+      "voxel": [
+        219,
+        9,
+        151
+      ],
+      "from": "minecraft:oak_planks",
+      "to": "minecraft:oak_slab[type=top]",
+      "confidence_kind": "partial_planes",
+      "similarity": 0.8873,
+      "margin": 0.8873,
+      "fractional_area": 1.003,
+      "equivalent_states": []
+    },
+    {
+      "voxel": [
+        220,
+        9,
+        151
+      ],
+      "from": "minecraft:oak_planks",
+      "to": "minecraft:oak_slab[type=top]",
+      "confidence_kind": "partial_planes",
+      "similarity": 0.8873,
+      "margin": 0.8873,
+      "fractional_area": 1.0,
+      "equivalent_states": []
+    },
+    {
+      "voxel": [
+        221,
+        9,
+        151
+      ],
+      "from": "minecraft:oak_planks",
+      "to": "minecraft:oak_slab[type=top]",
+      "confidence_kind": "partial_planes",
+      "similarity": 0.8943,
+      "margin": 0.8943,
+      "fractional_area": 1.003,
+      "equivalent_states": []
+    },
+    {
+      "voxel": [
+        90,
+        9,
+        152
+      ],
+      "from": "minecraft:oak_planks",
+      "to": "minecraft:oak_slab[type=top]",
+      "confidence_kind": "partial_planes",
+      "similarity": 0.9032,
+      "margin": 0.9032,
+      "fractional_area": 0.996,
+      "equivalent_states": []
+    },
+    {
+      "voxel": [
+        91,
+        9,
+        152
+      ],
+      "from": "minecraft:oak_planks",
+      "to": "minecraft:oak_slab[type=top]",
+      "confidence_kind": "partial_planes",
+      "similarity": 0.8873,
+      "margin": 0.8873,
+      "fractional_area": 0.999,
+      "equivalent_states": []
+    },
+    {
+      "voxel": [
+        221,
+        9,
+        152
+      ],
+      "from": "minecraft:oak_planks",
+      "to": "minecraft:oak_slab[type=top]",
+      "confidence_kind": "partial_planes",
+      "similarity": 0.8943,
+      "margin": 0.8943,
+      "fractional_area": 0.999,
+      "equivalent_states": []
+    },
+    {
+      "voxel": [
+        90,
+        9,
+        153
+      ],
+      "from": "minecraft:oak_planks",
+      "to": "minecraft:oak_slab[type=top]",
+      "confidence_kind": "partial_planes",
+      "similarity": 0.8943,
+      "margin": 0.8943,
+      "fractional_area": 1.0,
+      "equivalent_states": []
+    },
+    {
+      "voxel": [
+        220,
+        9,
+        153
+      ],
+      "from": "minecraft:oak_planks",
+      "to": "minecraft:oak_slab[type=top]",
+      "confidence_kind": "partial_planes",
+      "similarity": 0.8943,
+      "margin": 0.8943,
+      "fractional_area": 1.0,
+      "equivalent_states": []
+    },
+    {
+      "voxel": [
+        221,
+        9,
+        153
+      ],
+      "from": "minecraft:oak_planks",
+      "to": "minecraft:oak_slab[type=top]",
+      "confidence_kind": "partial_planes",
+      "similarity": 0.8943,
+      "margin": 0.8943,
+      "fractional_area": 1.003,
+      "equivalent_states": []
+    },
+    {
+      "voxel": [
+        222,
+        9,
+        153
+      ],
+      "from": "minecraft:oak_planks",
+      "to": "minecraft:oak_slab[type=top]",
+      "confidence_kind": "partial_planes",
+      "similarity": 0.9033,
+      "margin": 0.9033,
+      "fractional_area": 1.003,
+      "equivalent_states": []
+    },
+    {
+      "voxel": [
+        219,
+        9,
+        154
+      ],
+      "from": "minecraft:oak_planks",
+      "to": "minecraft:oak_slab[type=top]",
+      "confidence_kind": "partial_planes",
+      "similarity": 0.8873,
+      "margin": 0.8873,
+      "fractional_area": 0.999,
+      "equivalent_states": []
+    },
+    {
+      "voxel": [
+        220,
+        9,
+        154
+      ],
+      "from": "minecraft:oak_planks",
+      "to": "minecraft:oak_slab[type=top]",
+      "confidence_kind": "partial_planes",
+      "similarity": 0.8942,
+      "margin": 0.8942,
+      "fractional_area": 0.996,
+      "equivalent_states": []
+    },
+    {
+      "voxel": [
+        221,
+        9,
+        154
+      ],
+      "from": "minecraft:oak_planks",
+      "to": "minecraft:oak_slab[type=top]",
+      "confidence_kind": "partial_planes",
+      "similarity": 0.8943,
+      "margin": 0.8943,
+      "fractional_area": 0.999,
+      "equivalent_states": []
+    },
+    {
+      "voxel": [
+        220,
+        9,
+        155
+      ],
+      "from": "minecraft:oak_planks",
+      "to": "minecraft:oak_slab[type=top]",
+      "confidence_kind": "partial_planes",
+      "similarity": 0.8943,
+      "margin": 0.8943,
+      "fractional_area": 1.0,
+      "equivalent_states": []
+    },
+    {
+      "voxel": [
+        220,
+        9,
+        156
+      ],
+      "from": "minecraft:oak_planks",
+      "to": "minecraft:oak_slab[type=top]",
+      "confidence_kind": "partial_planes",
+      "similarity": 0.8943,
+      "margin": 0.8943,
+      "fractional_area": 1.0,
+      "equivalent_states": []
+    },
+    {
+      "voxel": [
+        219,
+        9,
+        157
+      ],
+      "from": "minecraft:oak_planks",
+      "to": "minecraft:oak_slab[type=top]",
+      "confidence_kind": "partial_planes",
+      "similarity": 0.8873,
+      "margin": 0.8873,
+      "fractional_area": 0.999,
+      "equivalent_states": []
+    },
+    {
+      "voxel": [
+        220,
+        9,
+        157
+      ],
+      "from": "minecraft:oak_planks",
+      "to": "minecraft:oak_slab[type=top]",
+      "confidence_kind": "partial_planes",
+      "similarity": 0.8872,
+      "margin": 0.8872,
+      "fractional_area": 0.996,
+      "equivalent_states": []
+    },
+    {
+      "voxel": [
+        168,
+        9,
+        160
+      ],
+      "from": "minecraft:oak_planks",
+      "to": "minecraft:oak_slab[type=top]",
+      "confidence_kind": "partial_planes",
+      "similarity": 0.8943,
+      "margin": 0.8943,
+      "fractional_area": 1.003,
+      "equivalent_states": []
+    },
+    {
+      "voxel": [
+        169,
+        9,
+        160
+      ],
+      "from": "minecraft:oak_planks",
+      "to": "minecraft:oak_slab[type=top]",
+      "confidence_kind": "partial_planes",
+      "similarity": 0.8873,
+      "margin": 0.8873,
+      "fractional_area": 1.003,
+      "equivalent_states": []
+    },
+    {
+      "voxel": [
+        167,
+        9,
+        161
+      ],
+      "from": "minecraft:oak_planks",
+      "to": "minecraft:oak_slab[type=top]",
+      "confidence_kind": "partial_planes",
+      "similarity": 0.8942,
+      "margin": 0.8942,
+      "fractional_area": 0.996,
+      "equivalent_states": []
+    },
+    {
+      "voxel": [
+        168,
+        9,
+        161
+      ],
+      "from": "minecraft:oak_planks",
+      "to": "minecraft:oak_slab[type=top]",
+      "confidence_kind": "partial_planes",
+      "similarity": 0.8943,
+      "margin": 0.8943,
+      "fractional_area": 0.999,
+      "equivalent_states": []
+    },
+    {
+      "voxel": [
+        169,
+        9,
+        161
+      ],
+      "from": "minecraft:oak_planks",
+      "to": "minecraft:oak_slab[type=top]",
+      "confidence_kind": "partial_planes",
+      "similarity": 0.8943,
+      "margin": 0.8943,
+      "fractional_area": 0.999,
+      "equivalent_states": []
+    },
+    {
+      "voxel": [
+        170,
+        9,
+        161
+      ],
+      "from": "minecraft:oak_planks",
+      "to": "minecraft:oak_slab[type=top]",
+      "confidence_kind": "partial_planes",
+      "similarity": 0.8942,
+      "margin": 0.8942,
+      "fractional_area": 0.996,
+      "equivalent_states": []
+    },
+    {
+      "voxel": [
+        165,
+        9,
+        162
+      ],
+      "from": "minecraft:oak_planks",
+      "to": "minecraft:oak_slab[type=top]",
+      "confidence_kind": "partial_planes",
+      "similarity": 0.8943,
+      "margin": 0.8943,
+      "fractional_area": 1.0,
+      "equivalent_states": []
+    },
+    {
+      "voxel": [
+        166,
+        9,
+        162
+      ],
+      "from": "minecraft:oak_planks",
+      "to": "minecraft:oak_slab[type=top]",
+      "confidence_kind": "partial_planes",
+      "similarity": 0.8943,
+      "margin": 0.8943,
+      "fractional_area": 1.003,
+      "equivalent_states": []
+    },
+    {
+      "voxel": [
+        167,
+        9,
+        162
+      ],
+      "from": "minecraft:oak_planks",
+      "to": "minecraft:oak_slab[type=top]",
+      "confidence_kind": "partial_planes",
+      "similarity": 0.8943,
+      "margin": 0.8943,
+      "fractional_area": 1.0,
+      "equivalent_states": []
+    },
+    {
+      "voxel": [
+        164,
+        9,
+        163
+      ],
+      "from": "minecraft:oak_planks",
+      "to": "minecraft:oak_slab[type=top]",
+      "confidence_kind": "partial_planes",
+      "similarity": 0.8943,
+      "margin": 0.8943,
+      "fractional_area": 0.999,
+      "equivalent_states": []
+    },
+    {
+      "voxel": [
+        165,
+        9,
+        163
+      ],
+      "from": "minecraft:oak_planks",
+      "to": "minecraft:oak_slab[type=top]",
+      "confidence_kind": "partial_planes",
+      "similarity": 0.8942,
+      "margin": 0.8942,
+      "fractional_area": 0.996,
+      "equivalent_states": []
+    },
+    {
+      "voxel": [
+        166,
+        9,
+        163
+      ],
+      "from": "minecraft:oak_planks",
+      "to": "minecraft:oak_slab[type=top]",
+      "confidence_kind": "partial_planes",
+      "similarity": 0.8943,
+      "margin": 0.8943,
+      "fractional_area": 0.999,
+      "equivalent_states": []
+    },
+    {
+      "voxel": [
+        167,
+        9,
+        163
+      ],
+      "from": "minecraft:oak_planks",
+      "to": "minecraft:oak_slab[type=top]",
+      "confidence_kind": "partial_planes",
+      "similarity": 0.8942,
+      "margin": 0.8942,
+      "fractional_area": 0.996,
+      "equivalent_states": []
+    },
+    {
+      "voxel": [
+        165,
+        9,
+        164
+      ],
+      "from": "minecraft:oak_planks",
+      "to": "minecraft:oak_slab[type=top]",
+      "confidence_kind": "partial_planes",
+      "similarity": 0.9033,
+      "margin": 0.9033,
+      "fractional_area": 1.0,
+      "equivalent_states": []
+    },
+    {
+      "voxel": [
+        166,
+        9,
+        164
+      ],
+      "from": "minecraft:oak_planks",
+      "to": "minecraft:oak_slab[type=top]",
+      "confidence_kind": "partial_planes",
+      "similarity": 0.8943,
+      "margin": 0.8943,
+      "fractional_area": 1.003,
+      "equivalent_states": []
+    },
+    {
+      "voxel": [
+        165,
+        9,
+        165
+      ],
+      "from": "minecraft:oak_planks",
+      "to": "minecraft:oak_slab[type=top]",
+      "confidence_kind": "partial_planes",
+      "similarity": 0.9033,
+      "margin": 0.9033,
+      "fractional_area": 1.0,
+      "equivalent_states": []
+    },
+    {
+      "voxel": [
+        166,
+        9,
+        178
+      ],
+      "from": "minecraft:oak_planks",
+      "to": "minecraft:oak_slab[type=top]",
+      "confidence_kind": "partial_planes",
+      "similarity": 0.9155,
+      "margin": 0.9155,
+      "fractional_area": 1.003,
+      "equivalent_states": []
+    },
+    {
+      "voxel": [
+        165,
+        9,
+        179
+      ],
+      "from": "minecraft:oak_planks",
+      "to": "minecraft:oak_slab[type=top]",
+      "confidence_kind": "partial_planes",
+      "similarity": 0.9155,
+      "margin": 0.9155,
+      "fractional_area": 0.996,
+      "equivalent_states": []
+    },
+    {
+      "voxel": [
+        166,
+        9,
+        179
+      ],
+      "from": "minecraft:oak_planks",
+      "to": "minecraft:oak_slab[type=top]",
+      "confidence_kind": "partial_planes",
+      "similarity": 0.8943,
+      "margin": 0.8943,
+      "fractional_area": 0.999,
+      "equivalent_states": []
+    },
+    {
+      "voxel": [
+        167,
+        9,
+        179
+      ],
+      "from": "minecraft:oak_planks",
+      "to": "minecraft:oak_slab[type=top]",
+      "confidence_kind": "partial_planes",
+      "similarity": 0.9032,
+      "margin": 0.9032,
+      "fractional_area": 0.996,
+      "equivalent_states": []
+    },
+    {
+      "voxel": [
+        163,
+        9,
+        180
+      ],
+      "from": "minecraft:oak_planks",
+      "to": "minecraft:oak_slab[type=top]",
+      "confidence_kind": "partial_planes",
+      "similarity": 0.9033,
+      "margin": 0.9033,
+      "fractional_area": 1.0,
+      "equivalent_states": []
+    },
+    {
+      "voxel": [
+        164,
+        9,
+        180
+      ],
+      "from": "minecraft:oak_planks",
+      "to": "minecraft:oak_slab[type=top]",
+      "confidence_kind": "partial_planes",
+      "similarity": 0.9033,
+      "margin": 0.9033,
+      "fractional_area": 1.003,
+      "equivalent_states": []
+    },
+    {
+      "voxel": [
+        165,
+        9,
+        180
+      ],
+      "from": "minecraft:oak_planks",
+      "to": "minecraft:oak_slab[type=top]",
+      "confidence_kind": "partial_planes",
+      "similarity": 0.8943,
+      "margin": 0.8943,
+      "fractional_area": 1.0,
+      "equivalent_states": []
+    },
+    {
+      "voxel": [
+        166,
+        9,
+        180
+      ],
+      "from": "minecraft:oak_planks",
+      "to": "minecraft:oak_slab[type=top]",
+      "confidence_kind": "partial_planes",
+      "similarity": 0.8943,
+      "margin": 0.8943,
+      "fractional_area": 1.003,
+      "equivalent_states": []
+    },
+    {
+      "voxel": [
+        167,
+        9,
+        180
+      ],
+      "from": "minecraft:oak_planks",
+      "to": "minecraft:oak_slab[type=top]",
+      "confidence_kind": "partial_planes",
+      "similarity": 0.8943,
+      "margin": 0.8943,
+      "fractional_area": 1.0,
+      "equivalent_states": []
+    },
+    {
+      "voxel": [
+        168,
+        9,
+        180
+      ],
+      "from": "minecraft:oak_planks",
+      "to": "minecraft:oak_slab[type=top]",
+      "confidence_kind": "partial_planes",
+      "similarity": 0.9033,
+      "margin": 0.9033,
+      "fractional_area": 1.003,
+      "equivalent_states": []
+    },
+    {
+      "voxel": [
+        169,
+        9,
+        180
+      ],
+      "from": "minecraft:oak_planks",
+      "to": "minecraft:oak_slab[type=top]",
+      "confidence_kind": "partial_planes",
+      "similarity": 0.8873,
+      "margin": 0.8873,
+      "fractional_area": 1.003,
+      "equivalent_states": []
+    },
+    {
+      "voxel": [
+        164,
+        9,
+        181
+      ],
+      "from": "minecraft:oak_planks",
+      "to": "minecraft:oak_slab[type=top]",
+      "confidence_kind": "partial_planes",
+      "similarity": 0.8943,
+      "margin": 0.8943,
+      "fractional_area": 1.003,
+      "equivalent_states": []
+    },
+    {
+      "voxel": [
+        165,
+        9,
+        181
+      ],
+      "from": "minecraft:oak_planks",
+      "to": "minecraft:oak_slab[type=top]",
+      "confidence_kind": "partial_planes",
+      "similarity": 0.8873,
+      "margin": 0.8873,
+      "fractional_area": 1.0,
+      "equivalent_states": []
+    },
+    {
+      "voxel": [
+        166,
+        9,
+        181
+      ],
+      "from": "minecraft:oak_planks",
+      "to": "minecraft:oak_slab[type=top]",
+      "confidence_kind": "partial_planes",
+      "similarity": 0.8873,
+      "margin": 0.8873,
+      "fractional_area": 1.003,
+      "equivalent_states": []
+    },
+    {
+      "voxel": [
+        167,
+        9,
+        181
+      ],
+      "from": "minecraft:oak_planks",
+      "to": "minecraft:oak_slab[type=top]",
+      "confidence_kind": "partial_planes",
+      "similarity": 0.8943,
+      "margin": 0.8943,
+      "fractional_area": 1.0,
+      "equivalent_states": []
+    },
+    {
+      "voxel": [
+        8,
+        9,
+        188
+      ],
+      "from": "minecraft:oak_planks",
+      "to": "minecraft:oak_slab[type=top]",
+      "confidence_kind": "partial_planes",
+      "similarity": 0.9414,
+      "margin": 0.9414,
+      "fractional_area": 1.0,
+      "equivalent_states": []
+    },
+    {
+      "voxel": [
+        13,
+        9,
+        188
+      ],
+      "from": "minecraft:oak_planks",
+      "to": "minecraft:oak_slab[type=top]",
+      "confidence_kind": "partial_planes",
+      "similarity": 0.9414,
+      "margin": 0.9414,
+      "fractional_area": 1.0,
+      "equivalent_states": []
+    },
+    {
+      "voxel": [
+        8,
+        9,
+        193
+      ],
+      "from": "minecraft:oak_planks",
+      "to": "minecraft:oak_slab[type=top]",
+      "confidence_kind": "partial_planes",
+      "similarity": 0.9414,
+      "margin": 0.9414,
+      "fractional_area": 0.996,
+      "equivalent_states": []
+    },
+    {
+      "voxel": [
+        13,
+        9,
+        193
+      ],
+      "from": "minecraft:oak_planks",
+      "to": "minecraft:oak_slab[type=top]",
+      "confidence_kind": "partial_planes",
+      "similarity": 0.9414,
+      "margin": 0.9414,
+      "fractional_area": 0.996,
+      "equivalent_states": []
+    },
+    {
+      "voxel": [
+        122,
+        9,
+        212
+      ],
+      "from": "minecraft:oak_planks",
+      "to": "minecraft:oak_slab[type=top]",
+      "confidence_kind": "partial_planes",
+      "similarity": 0.9033,
+      "margin": 0.9033,
+      "fractional_area": 1.0,
+      "equivalent_states": []
+    },
+    {
+      "voxel": [
+        123,
+        9,
+        212
+      ],
+      "from": "minecraft:oak_planks",
+      "to": "minecraft:oak_slab[type=top]",
+      "confidence_kind": "partial_planes",
+      "similarity": 0.8943,
+      "margin": 0.8943,
+      "fractional_area": 1.003,
+      "equivalent_states": []
+    },
+    {
+      "voxel": [
+        122,
+        9,
+        213
+      ],
+      "from": "minecraft:oak_planks",
+      "to": "minecraft:oak_slab[type=top]",
+      "confidence_kind": "partial_planes",
+      "similarity": 0.9033,
+      "margin": 0.9033,
+      "fractional_area": 1.0,
+      "equivalent_states": []
+    },
+    {
+      "voxel": [
+        121,
+        9,
+        214
+      ],
+      "from": "minecraft:oak_planks",
+      "to": "minecraft:oak_slab[type=top]",
+      "confidence_kind": "partial_planes",
+      "similarity": 0.9155,
+      "margin": 0.9155,
+      "fractional_area": 0.999,
+      "equivalent_states": []
+    },
+    {
+      "voxel": [
+        122,
+        9,
+        214
+      ],
+      "from": "minecraft:oak_planks",
+      "to": "minecraft:oak_slab[type=top]",
+      "confidence_kind": "partial_planes",
+      "similarity": 0.8872,
+      "margin": 0.8872,
+      "fractional_area": 0.996,
+      "equivalent_states": []
+    },
+    {
+      "voxel": [
+        122,
+        9,
+        215
+      ],
+      "from": "minecraft:oak_planks",
+      "to": "minecraft:oak_slab[type=top]",
+      "confidence_kind": "partial_planes",
+      "similarity": 0.9033,
+      "margin": 0.9033,
+      "fractional_area": 1.0,
+      "equivalent_states": []
+    },
+    {
+      "voxel": [
+        123,
+        9,
+        215
+      ],
+      "from": "minecraft:oak_planks",
+      "to": "minecraft:oak_slab[type=top]",
+      "confidence_kind": "partial_planes",
+      "similarity": 0.8873,
+      "margin": 0.8873,
+      "fractional_area": 1.003,
+      "equivalent_states": []
+    },
+    {
+      "voxel": [
+        123,
+        9,
+        216
+      ],
+      "from": "minecraft:oak_planks",
+      "to": "minecraft:oak_slab[type=top]",
+      "confidence_kind": "partial_planes",
+      "similarity": 0.8943,
+      "margin": 0.8943,
+      "fractional_area": 0.999,
+      "equivalent_states": []
+    },
+    {
+      "voxel": [
+        123,
+        9,
+        217
+      ],
+      "from": "minecraft:oak_planks",
+      "to": "minecraft:oak_slab[type=top]",
+      "confidence_kind": "partial_planes",
+      "similarity": 0.9033,
+      "margin": 0.9033,
+      "fractional_area": 1.003,
+      "equivalent_states": []
+    },
+    {
+      "voxel": [
+        124,
+        9,
+        217
+      ],
+      "from": "minecraft:oak_planks",
+      "to": "minecraft:oak_slab[type=top]",
+      "confidence_kind": "partial_planes",
+      "similarity": 0.8943,
+      "margin": 0.8943,
+      "fractional_area": 1.0,
+      "equivalent_states": []
+    },
+    {
+      "voxel": [
+        189,
+        9,
+        217
+      ],
+      "from": "minecraft:oak_planks",
+      "to": "minecraft:oak_slab[type=top]",
+      "confidence_kind": "partial_planes",
+      "similarity": 0.8943,
+      "margin": 0.8943,
+      "fractional_area": 1.0,
+      "equivalent_states": []
+    },
+    {
+      "voxel": [
+        49,
+        9,
+        218
+      ],
+      "from": "minecraft:oak_planks",
+      "to": "minecraft:oak_slab[type=top]",
+      "confidence_kind": "partial_planes",
+      "similarity": 0.9414,
+      "margin": 0.9414,
+      "fractional_area": 0.996,
+      "equivalent_states": []
+    },
+    {
+      "voxel": [
+        54,
+        9,
+        218
+      ],
+      "from": "minecraft:oak_planks",
+      "to": "minecraft:oak_slab[type=top]",
+      "confidence_kind": "partial_planes",
+      "similarity": 0.9414,
+      "margin": 0.9414,
+      "fractional_area": 0.996,
+      "equivalent_states": []
+    },
+    {
+      "voxel": [
+        123,
+        9,
+        218
+      ],
+      "from": "minecraft:oak_planks",
+      "to": "minecraft:oak_slab[type=top]",
+      "confidence_kind": "partial_planes",
+      "similarity": 0.9032,
+      "margin": 0.9032,
+      "fractional_area": 0.999,
+      "equivalent_states": []
+    },
+    {
+      "voxel": [
+        188,
+        9,
+        218
+      ],
+      "from": "minecraft:oak_planks",
+      "to": "minecraft:oak_slab[type=top]",
+      "confidence_kind": "partial_planes",
+      "similarity": 0.8943,
+      "margin": 0.8943,
+      "fractional_area": 0.999,
+      "equivalent_states": []
+    },
+    {
+      "voxel": [
+        189,
+        9,
+        218
+      ],
+      "from": "minecraft:oak_planks",
+      "to": "minecraft:oak_slab[type=top]",
+      "confidence_kind": "partial_planes",
+      "similarity": 0.8942,
+      "margin": 0.8942,
+      "fractional_area": 0.996,
+      "equivalent_states": []
+    },
+    {
+      "voxel": [
+        186,
+        9,
+        219
+      ],
+      "from": "minecraft:oak_planks",
+      "to": "minecraft:oak_slab[type=top]",
+      "confidence_kind": "partial_planes",
+      "similarity": 0.8943,
+      "margin": 0.8943,
+      "fractional_area": 1.003,
+      "equivalent_states": []
+    },
+    {
+      "voxel": [
+        187,
+        9,
+        219
+      ],
+      "from": "minecraft:oak_planks",
+      "to": "minecraft:oak_slab[type=top]",
+      "confidence_kind": "partial_planes",
+      "similarity": 0.8943,
+      "margin": 0.8943,
+      "fractional_area": 1.0,
+      "equivalent_states": []
+    },
+    {
+      "voxel": [
+        188,
+        9,
+        219
+      ],
+      "from": "minecraft:oak_planks",
+      "to": "minecraft:oak_slab[type=top]",
+      "confidence_kind": "partial_planes",
+      "similarity": 0.8943,
+      "margin": 0.8943,
+      "fractional_area": 1.003,
+      "equivalent_states": []
+    },
+    {
+      "voxel": [
+        186,
+        9,
+        220
+      ],
+      "from": "minecraft:oak_planks",
+      "to": "minecraft:oak_slab[type=top]",
+      "confidence_kind": "partial_planes",
+      "similarity": 0.8943,
+      "margin": 0.8943,
+      "fractional_area": 1.003,
+      "equivalent_states": []
+    },
+    {
+      "voxel": [
+        187,
+        9,
+        220
+      ],
+      "from": "minecraft:oak_planks",
+      "to": "minecraft:oak_slab[type=top]",
+      "confidence_kind": "partial_planes",
+      "similarity": 0.8943,
+      "margin": 0.8943,
+      "fractional_area": 1.0,
+      "equivalent_states": []
+    },
+    {
+      "voxel": [
+        185,
+        9,
+        221
+      ],
+      "from": "minecraft:oak_planks",
+      "to": "minecraft:oak_slab[type=top]",
+      "confidence_kind": "partial_planes",
+      "similarity": 0.8873,
+      "margin": 0.8873,
+      "fractional_area": 0.999,
+      "equivalent_states": []
+    },
+    {
+      "voxel": [
+        186,
+        9,
+        221
+      ],
+      "from": "minecraft:oak_planks",
+      "to": "minecraft:oak_slab[type=top]",
+      "confidence_kind": "partial_planes",
+      "similarity": 0.8943,
+      "margin": 0.8943,
+      "fractional_area": 0.999,
+      "equivalent_states": []
+    },
+    {
+      "voxel": [
+        49,
+        9,
+        223
+      ],
+      "from": "minecraft:oak_planks",
+      "to": "minecraft:oak_slab[type=top]",
+      "confidence_kind": "partial_planes",
+      "similarity": 0.9414,
+      "margin": 0.9414,
+      "fractional_area": 0.996,
+      "equivalent_states": []
+    },
+    {
+      "voxel": [
+        54,
+        9,
+        223
+      ],
+      "from": "minecraft:oak_planks",
+      "to": "minecraft:oak_slab[type=top]",
+      "confidence_kind": "partial_planes",
+      "similarity": 0.9414,
+      "margin": 0.9414,
+      "fractional_area": 0.996,
+      "equivalent_states": []
+    },
+    {
+      "voxel": [
+        76,
+        9,
+        223
+      ],
+      "from": "minecraft:oak_planks",
+      "to": "minecraft:oak_slab[type=top]",
+      "confidence_kind": "partial_planes",
+      "similarity": 0.9155,
+      "margin": 0.9155,
+      "fractional_area": 0.996,
+      "equivalent_states": []
+    },
+    {
+      "voxel": [
+        75,
+        9,
+        224
+      ],
+      "from": "minecraft:oak_planks",
+      "to": "minecraft:oak_slab[type=top]",
+      "confidence_kind": "partial_planes",
+      "similarity": 0.9155,
+      "margin": 0.9155,
+      "fractional_area": 1.003,
+      "equivalent_states": []
+    },
+    {
+      "voxel": [
+        76,
+        9,
+        224
+      ],
+      "from": "minecraft:oak_planks",
+      "to": "minecraft:oak_slab[type=top]",
+      "confidence_kind": "partial_planes",
+      "similarity": 0.8943,
+      "margin": 0.8943,
+      "fractional_area": 1.0,
+      "equivalent_states": []
+    },
+    {
+      "voxel": [
+        77,
+        9,
+        224
+      ],
+      "from": "minecraft:oak_planks",
+      "to": "minecraft:oak_slab[type=top]",
+      "confidence_kind": "partial_planes",
+      "similarity": 0.9033,
+      "margin": 0.9033,
+      "fractional_area": 1.003,
+      "equivalent_states": []
+    },
+    {
+      "voxel": [
+        78,
+        9,
+        224
+      ],
+      "from": "minecraft:oak_planks",
+      "to": "minecraft:oak_slab[type=top]",
+      "confidence_kind": "partial_planes",
+      "similarity": 0.9032,
+      "margin": 0.9032,
+      "fractional_area": 1.0,
+      "equivalent_states": []
+    },
+    {
+      "voxel": [
+        57,
+        9,
+        225
+      ],
+      "from": "minecraft:oak_planks",
+      "to": "minecraft:oak_slab[type=top]",
+      "confidence_kind": "partial_planes",
+      "similarity": 0.9414,
+      "margin": 0.9414,
+      "fractional_area": 0.999,
+      "equivalent_states": []
+    },
+    {
+      "voxel": [
+        63,
+        9,
+        225
+      ],
+      "from": "minecraft:oak_planks",
+      "to": "minecraft:oak_slab[type=top]",
+      "confidence_kind": "partial_planes",
+      "similarity": 0.9414,
+      "margin": 0.9414,
+      "fractional_area": 0.999,
+      "equivalent_states": []
+    },
+    {
+      "voxel": [
+        74,
+        9,
+        225
+      ],
+      "from": "minecraft:oak_planks",
+      "to": "minecraft:oak_slab[type=top]",
+      "confidence_kind": "partial_planes",
+      "similarity": 0.8943,
+      "margin": 0.8943,
+      "fractional_area": 0.999,
+      "equivalent_states": []
+    },
+    {
+      "voxel": [
+        75,
+        9,
+        225
+      ],
+      "from": "minecraft:oak_planks",
+      "to": "minecraft:oak_slab[type=top]",
+      "confidence_kind": "partial_planes",
+      "similarity": 0.8873,
+      "margin": 0.8873,
+      "fractional_area": 0.999,
+      "equivalent_states": []
+    },
+    {
+      "voxel": [
+        76,
+        9,
+        225
+      ],
+      "from": "minecraft:oak_planks",
+      "to": "minecraft:oak_slab[type=top]",
+      "confidence_kind": "partial_planes",
+      "similarity": 0.8872,
+      "margin": 0.8872,
+      "fractional_area": 0.996,
+      "equivalent_states": []
+    },
+    {
+      "voxel": [
+        77,
+        9,
+        225
+      ],
+      "from": "minecraft:oak_planks",
+      "to": "minecraft:oak_slab[type=top]",
+      "confidence_kind": "partial_planes",
+      "similarity": 0.8873,
+      "margin": 0.8873,
+      "fractional_area": 0.999,
+      "equivalent_states": []
+    },
+    {
+      "voxel": [
+        78,
+        9,
+        225
+      ],
+      "from": "minecraft:oak_planks",
+      "to": "minecraft:oak_slab[type=top]",
+      "confidence_kind": "partial_planes",
+      "similarity": 0.8872,
+      "margin": 0.8872,
+      "fractional_area": 0.996,
+      "equivalent_states": []
+    },
+    {
+      "voxel": [
+        79,
+        9,
+        225
+      ],
+      "from": "minecraft:oak_planks",
+      "to": "minecraft:oak_slab[type=top]",
+      "confidence_kind": "partial_planes",
+      "similarity": 0.8943,
+      "margin": 0.8943,
+      "fractional_area": 0.999,
+      "equivalent_states": []
+    },
+    {
+      "voxel": [
+        202,
+        9,
+        227
+      ],
+      "from": "minecraft:oak_planks",
+      "to": "minecraft:oak_slab[type=top]",
+      "confidence_kind": "partial_planes",
+      "similarity": 0.9033,
+      "margin": 0.9033,
+      "fractional_area": 0.999,
+      "equivalent_states": []
+    },
+    {
+      "voxel": [
+        201,
+        9,
+        228
+      ],
+      "from": "minecraft:oak_planks",
+      "to": "minecraft:oak_slab[type=top]",
+      "confidence_kind": "partial_planes",
+      "similarity": 0.9155,
+      "margin": 0.9155,
+      "fractional_area": 1.0,
+      "equivalent_states": []
+    },
+    {
+      "voxel": [
+        202,
+        9,
+        228
+      ],
+      "from": "minecraft:oak_planks",
+      "to": "minecraft:oak_slab[type=top]",
+      "confidence_kind": "partial_planes",
+      "similarity": 0.8873,
+      "margin": 0.8873,
+      "fractional_area": 1.003,
+      "equivalent_states": []
+    }
+  ],
+  "sampled_voxels": 35114,
+  "template_textures": 28,
+  "unsupported_templates": 0,
+  "counts": {
+    "aligned_local_faces": 1529490,
+    "fractional_geometry_voxels": 35114,
+    "no_fractional_shape_evidence": 316084,
+    "half_height_faces": 27470,
+    "half_vertical_faces": 14011,
+    "stair_like_internal_planes": 10167,
+    "slab_like_internal_planes": 17303,
+    "partial_material_families": {
+      "spruce_planks": 7784,
+      "light_gray_concrete": 6133,
+      "oak_planks": 5911,
+      "bricks": 5772,
+      "smooth_stone": 3074,
+      "stone_bricks": 2148,
+      "dark_oak_planks": 1674,
+      "iron_bars": 1212,
+      "oak_trapdoor": 698,
+      "birch_planks": 216,
+      "smooth_stone_slab": 176,
+      "oak_fence_gate": 76,
+      "quartz_block": 59,
+      "anvil": 41,
+      "jungle_planks": 36,
+      "white_stained_glass": 36,
+      "mycelium": 20,
+      "cauldron": 9,
+      "spruce_fence_gate": 6,
+      "cut_sandstone": 6
+    },
+    "ambiguous_or_low_confidence": 10568,
+    "inferred_stairs": 8231,
+    "visually_equivalent_states": 5816,
+    "inferred_slab": 9693,
+    "inferred_gate": 11
+  },
+  "policy": "Geometry-aware; abstain when family or orientation is ambiguous",
+  "schematic_dimensions": [
+    307,
+    142,
+    307
+  ],
+  "occupied_blocks": 351198,
+  "family_counts": {
+    "minecraft:oak_stairs": 997,
+    "minecraft:oak_slab": 1601,
+    "minecraft:oak_fence_gate": 11,
+    "minecraft:dark_oak_slab": 1674,
+    "minecraft:smooth_stone_slab": 1575,
+    "minecraft:jungle_slab": 36,
+    "minecraft:birch_stairs": 128,
+    "minecraft:birch_slab": 56,
+    "minecraft:stone_brick_stairs": 1498,
+    "minecraft:stone_brick_slab": 235,
+    "minecraft:spruce_stairs": 4748,
+    "minecraft:spruce_slab": 1376,
+    "minecraft:brick_stairs": 860,
+    "minecraft:brick_slab": 3140
+  },
+  "source": "Source GLB: 11baf8c705414ea8bf9f833a1b1866e4.glb; texture alignment from previous local reconstruction",
+  "limitations": [
+    "Geometry-equivalent states are not guaranteed to preserve invisible properties.",
+    "Texture/shape accuracy on the complete original world is unverified.",
+    "Occluded original blocks cannot be recovered.",
+    "Actual Bedrock mcworld load not verified."
+  ]
+}

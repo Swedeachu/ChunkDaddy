@@ -1,0 +1,4206 @@
+{
+  "source": {
+    "local_model": "/mnt/data/11baf8c705414ea8bf9f833a1b1866e4.glb"
+  },
+  "refinement_input": "/mnt/data/SketchRip-StairOrientation-Final.schem",
+  "scale_model_units_per_block": 0.007042280237527157,
+  "counts": {
+    "input_blocks": 351198
+  },
+  "requires_review": true,
+  "small_block_orientation": {
+    "recognized": 726,
+    "surface_triangles": 7040,
+    "proposals": 0,
+    "rejected": {
+      "weak_geometry": 702,
+      "no_surface_evidence": 24
+    },
+    "samples": [],
+    "notice": "Only visible geometry is matched; powered and hidden properties are not recoverable"
+  },
+  "geometry_state_inference": {
+    "proposed_changes": 2070,
+    "inspect_first_200": [
+      {
+        "voxel": [
+          111,
+          5,
+          123
+        ],
+        "from": "minecraft:oak_stairs[facing=east,half=top,shape=straight]",
+        "to": "minecraft:oak_stairs[facing=west,half=top,shape=straight]",
+        "confidence_kind": "partial_planes",
+        "similarity": 1.0,
+        "margin": 1.0,
+        "fractional_area": 1.503,
+        "equivalent_states": []
+      },
+      {
+        "voxel": [
+          103,
+          6,
+          129
+        ],
+        "from": "minecraft:oak_stairs[facing=east,half=top,shape=straight]",
+        "to": "minecraft:oak_stairs[facing=west,half=top,shape=straight]",
+        "confidence_kind": "partial_planes",
+        "similarity": 1.0,
+        "margin": 1.0,
+        "fractional_area": 1.498,
+        "equivalent_states": []
+      },
+      {
+        "voxel": [
+          138,
+          10,
+          35
+        ],
+        "from": "minecraft:oak_stairs[facing=north,half=bottom,shape=straight]",
+        "to": "minecraft:oak_stairs[facing=south,half=bottom,shape=straight]",
+        "confidence_kind": "partial_planes",
+        "similarity": 0.9902,
+        "margin": 0.9902,
+        "fractional_area": 1.496,
+        "equivalent_states": []
+      },
+      {
+        "voxel": [
+          171,
+          10,
+          38
+        ],
+        "from": "minecraft:oak_stairs[facing=east,half=top,shape=straight]",
+        "to": "minecraft:oak_stairs[facing=west,half=top,shape=straight]",
+        "confidence_kind": "partial_planes",
+        "similarity": 0.9592,
+        "margin": 0.9592,
+        "fractional_area": 1.498,
+        "equivalent_states": []
+      },
+      {
+        "voxel": [
+          171,
+          10,
+          39
+        ],
+        "from": "minecraft:oak_stairs[facing=east,half=top,shape=straight]",
+        "to": "minecraft:oak_stairs[facing=west,half=top,shape=straight]",
+        "confidence_kind": "partial_planes",
+        "similarity": 0.9549,
+        "margin": 0.9549,
+        "fractional_area": 1.503,
+        "equivalent_states": []
+      },
+      {
+        "voxel": [
+          171,
+          10,
+          40
+        ],
+        "from": "minecraft:oak_stairs[facing=east,half=top,shape=straight]",
+        "to": "minecraft:oak_stairs[facing=west,half=top,shape=straight]",
+        "confidence_kind": "partial_planes",
+        "similarity": 0.9673,
+        "margin": 0.9673,
+        "fractional_area": 1.498,
+        "equivalent_states": []
+      },
+      {
+        "voxel": [
+          122,
+          10,
+          49
+        ],
+        "from": "minecraft:oak_stairs[facing=north,half=bottom,shape=straight]",
+        "to": "minecraft:oak_stairs[facing=south,half=bottom,shape=straight]",
+        "confidence_kind": "partial_planes",
+        "similarity": 0.9902,
+        "margin": 0.9902,
+        "fractional_area": 1.496,
+        "equivalent_states": []
+      },
+      {
+        "voxel": [
+          128,
+          10,
+          49
+        ],
+        "from": "minecraft:oak_stairs[facing=north,half=bottom,shape=straight]",
+        "to": "minecraft:oak_stairs[facing=south,half=bottom,shape=straight]",
+        "confidence_kind": "partial_planes",
+        "similarity": 0.9902,
+        "margin": 0.9902,
+        "fractional_area": 1.5,
+        "equivalent_states": []
+      },
+      {
+        "voxel": [
+          13,
+          10,
+          191
+        ],
+        "from": "minecraft:oak_stairs[facing=north,half=bottom,shape=straight]",
+        "to": "minecraft:oak_stairs[facing=south,half=bottom,shape=straight]",
+        "confidence_kind": "partial_planes",
+        "similarity": 0.9902,
+        "margin": 0.9902,
+        "fractional_area": 1.496,
+        "equivalent_states": []
+      },
+      {
+        "voxel": [
+          54,
+          10,
+          221
+        ],
+        "from": "minecraft:oak_stairs[facing=north,half=bottom,shape=straight]",
+        "to": "minecraft:oak_stairs[facing=south,half=bottom,shape=straight]",
+        "confidence_kind": "partial_planes",
+        "similarity": 0.9902,
+        "margin": 0.9902,
+        "fractional_area": 1.496,
+        "equivalent_states": []
+      },
+      {
+        "voxel": [
+          57,
+          10,
+          229
+        ],
+        "from": "minecraft:oak_stairs[facing=north,half=bottom,shape=straight]",
+        "to": "minecraft:oak_stairs[facing=south,half=bottom,shape=straight]",
+        "confidence_kind": "partial_planes",
+        "similarity": 0.9902,
+        "margin": 0.9902,
+        "fractional_area": 1.503,
+        "equivalent_states": []
+      },
+      {
+        "voxel": [
+          63,
+          10,
+          229
+        ],
+        "from": "minecraft:oak_stairs[facing=north,half=bottom,shape=straight]",
+        "to": "minecraft:oak_stairs[facing=south,half=bottom,shape=straight]",
+        "confidence_kind": "partial_planes",
+        "similarity": 0.9902,
+        "margin": 0.9902,
+        "fractional_area": 1.503,
+        "equivalent_states": []
+      },
+      {
+        "voxel": [
+          140,
+          10,
+          246
+        ],
+        "from": "minecraft:oak_stairs[facing=north,half=bottom,shape=straight]",
+        "to": "minecraft:oak_stairs[facing=south,half=bottom,shape=straight]",
+        "confidence_kind": "partial_planes",
+        "similarity": 0.9902,
+        "margin": 0.9902,
+        "fractional_area": 1.5,
+        "equivalent_states": []
+      },
+      {
+        "voxel": [
+          76,
+          10,
+          251
+        ],
+        "from": "minecraft:oak_stairs[facing=north,half=bottom,shape=straight]",
+        "to": "minecraft:oak_stairs[facing=south,half=bottom,shape=straight]",
+        "confidence_kind": "partial_planes",
+        "similarity": 0.9902,
+        "margin": 0.9902,
+        "fractional_area": 1.499,
+        "equivalent_states": []
+      },
+      {
+        "voxel": [
+          80,
+          10,
+          254
+        ],
+        "from": "minecraft:oak_stairs[facing=north,half=bottom,shape=straight]",
+        "to": "minecraft:oak_stairs[facing=south,half=bottom,shape=straight]",
+        "confidence_kind": "partial_planes",
+        "similarity": 0.9902,
+        "margin": 0.9902,
+        "fractional_area": 1.503,
+        "equivalent_states": []
+      },
+      {
+        "voxel": [
+          86,
+          10,
+          254
+        ],
+        "from": "minecraft:oak_stairs[facing=north,half=bottom,shape=straight]",
+        "to": "minecraft:oak_stairs[facing=south,half=bottom,shape=straight]",
+        "confidence_kind": "partial_planes",
+        "similarity": 0.9902,
+        "margin": 0.9902,
+        "fractional_area": 1.503,
+        "equivalent_states": []
+      },
+      {
+        "voxel": [
+          134,
+          11,
+          32
+        ],
+        "from": "minecraft:oak_stairs[facing=east,half=top,shape=straight]",
+        "to": "minecraft:oak_stairs[facing=west,half=top,shape=straight]",
+        "confidence_kind": "partial_planes",
+        "similarity": 0.9251,
+        "margin": 0.9251,
+        "fractional_area": 1.501,
+        "equivalent_states": []
+      },
+      {
+        "voxel": [
+          133,
+          11,
+          34
+        ],
+        "from": "minecraft:oak_stairs[facing=north,half=bottom,shape=straight]",
+        "to": "minecraft:oak_stairs[facing=south,half=bottom,shape=straight]",
+        "confidence_kind": "partial_planes",
+        "similarity": 0.9448,
+        "margin": 0.9448,
+        "fractional_area": 1.503,
+        "equivalent_states": []
+      },
+      {
+        "voxel": [
+          134,
+          11,
+          37
+        ],
+        "from": "minecraft:oak_stairs[facing=east,half=top,shape=straight]",
+        "to": "minecraft:oak_stairs[facing=west,half=top,shape=straight]",
+        "confidence_kind": "partial_planes",
+        "similarity": 0.9251,
+        "margin": 0.9251,
+        "fractional_area": 1.501,
+        "equivalent_states": []
+      },
+      {
+        "voxel": [
+          172,
+          11,
+          38
+        ],
+        "from": "minecraft:oak_stairs[facing=east,half=top,shape=straight]",
+        "to": "minecraft:oak_stairs[facing=west,half=top,shape=straight]",
+        "confidence_kind": "partial_planes",
+        "similarity": 0.962,
+        "margin": 0.962,
+        "fractional_area": 1.495,
+        "equivalent_states": []
+      },
+      {
+        "voxel": [
+          172,
+          11,
+          39
+        ],
+        "from": "minecraft:oak_stairs[facing=east,half=top,shape=straight]",
+        "to": "minecraft:oak_stairs[facing=west,half=top,shape=straight]",
+        "confidence_kind": "partial_planes",
+        "similarity": 0.9581,
+        "margin": 0.9581,
+        "fractional_area": 1.501,
+        "equivalent_states": []
+      },
+      {
+        "voxel": [
+          172,
+          11,
+          40
+        ],
+        "from": "minecraft:oak_stairs[facing=east,half=top,shape=straight]",
+        "to": "minecraft:oak_stairs[facing=west,half=top,shape=straight]",
+        "confidence_kind": "partial_planes",
+        "similarity": 0.9696,
+        "margin": 0.9696,
+        "fractional_area": 1.495,
+        "equivalent_states": []
+      },
+      {
+        "voxel": [
+          239,
+          11,
+          40
+        ],
+        "from": "minecraft:oak_stairs[facing=east,half=top,shape=straight]",
+        "to": "minecraft:oak_stairs[facing=west,half=top,shape=straight]",
+        "confidence_kind": "partial_planes",
+        "similarity": 0.9251,
+        "margin": 0.9251,
+        "fractional_area": 1.498,
+        "equivalent_states": []
+      },
+      {
+        "voxel": [
+          243,
+          11,
+          40
+        ],
+        "from": "minecraft:oak_stairs[facing=east,half=top,shape=straight]",
+        "to": "minecraft:oak_stairs[facing=west,half=top,shape=straight]",
+        "confidence_kind": "partial_planes",
+        "similarity": 0.9251,
+        "margin": 0.9251,
+        "fractional_area": 1.498,
+        "equivalent_states": []
+      },
+      {
+        "voxel": [
+          247,
+          11,
+          40
+        ],
+        "from": "minecraft:oak_stairs[facing=east,half=top,shape=straight]",
+        "to": "minecraft:oak_stairs[facing=west,half=top,shape=straight]",
+        "confidence_kind": "partial_planes",
+        "similarity": 0.9251,
+        "margin": 0.9251,
+        "fractional_area": 1.495,
+        "equivalent_states": []
+      },
+      {
+        "voxel": [
+          239,
+          11,
+          46
+        ],
+        "from": "minecraft:oak_stairs[facing=east,half=top,shape=straight]",
+        "to": "minecraft:oak_stairs[facing=west,half=top,shape=straight]",
+        "confidence_kind": "partial_planes",
+        "similarity": 0.9251,
+        "margin": 0.9251,
+        "fractional_area": 1.503,
+        "equivalent_states": []
+      },
+      {
+        "voxel": [
+          243,
+          11,
+          46
+        ],
+        "from": "minecraft:oak_stairs[facing=east,half=top,shape=straight]",
+        "to": "minecraft:oak_stairs[facing=west,half=top,shape=straight]",
+        "confidence_kind": "partial_planes",
+        "similarity": 0.9251,
+        "margin": 0.9251,
+        "fractional_area": 1.503,
+        "equivalent_states": []
+      },
+      {
+        "voxel": [
+          247,
+          11,
+          46
+        ],
+        "from": "minecraft:oak_stairs[facing=east,half=top,shape=straight]",
+        "to": "minecraft:oak_stairs[facing=west,half=top,shape=straight]",
+        "confidence_kind": "partial_planes",
+        "similarity": 0.9251,
+        "margin": 0.9251,
+        "fractional_area": 1.501,
+        "equivalent_states": []
+      },
+      {
+        "voxel": [
+          123,
+          11,
+          51
+        ],
+        "from": "minecraft:oak_stairs[facing=east,half=top,shape=straight]",
+        "to": "minecraft:oak_stairs[facing=west,half=top,shape=straight]",
+        "confidence_kind": "partial_planes",
+        "similarity": 0.9251,
+        "margin": 0.9251,
+        "fractional_area": 1.498,
+        "equivalent_states": []
+      },
+      {
+        "voxel": [
+          9,
+          11,
+          188
+        ],
+        "from": "minecraft:oak_stairs[facing=east,half=top,shape=straight]",
+        "to": "minecraft:oak_stairs[facing=west,half=top,shape=straight]",
+        "confidence_kind": "partial_planes",
+        "similarity": 0.9251,
+        "margin": 0.9251,
+        "fractional_area": 1.503,
+        "equivalent_states": []
+      },
+      {
+        "voxel": [
+          8,
+          11,
+          190
+        ],
+        "from": "minecraft:oak_stairs[facing=north,half=bottom,shape=straight]",
+        "to": "minecraft:oak_stairs[facing=south,half=bottom,shape=straight]",
+        "confidence_kind": "partial_planes",
+        "similarity": 0.9448,
+        "margin": 0.9448,
+        "fractional_area": 1.499,
+        "equivalent_states": []
+      },
+      {
+        "voxel": [
+          9,
+          11,
+          193
+        ],
+        "from": "minecraft:oak_stairs[facing=east,half=top,shape=straight]",
+        "to": "minecraft:oak_stairs[facing=west,half=top,shape=straight]",
+        "confidence_kind": "partial_planes",
+        "similarity": 0.9251,
+        "margin": 0.9251,
+        "fractional_area": 1.498,
+        "equivalent_states": []
+      },
+      {
+        "voxel": [
+          50,
+          11,
+          218
+        ],
+        "from": "minecraft:oak_stairs[facing=east,half=top,shape=straight]",
+        "to": "minecraft:oak_stairs[facing=west,half=top,shape=straight]",
+        "confidence_kind": "partial_planes",
+        "similarity": 0.9251,
+        "margin": 0.9251,
+        "fractional_area": 1.498,
+        "equivalent_states": []
+      },
+      {
+        "voxel": [
+          49,
+          11,
+          220
+        ],
+        "from": "minecraft:oak_stairs[facing=north,half=bottom,shape=straight]",
+        "to": "minecraft:oak_stairs[facing=south,half=bottom,shape=straight]",
+        "confidence_kind": "partial_planes",
+        "similarity": 0.9448,
+        "margin": 0.9448,
+        "fractional_area": 1.499,
+        "equivalent_states": []
+      },
+      {
+        "voxel": [
+          50,
+          11,
+          223
+        ],
+        "from": "minecraft:oak_stairs[facing=east,half=top,shape=straight]",
+        "to": "minecraft:oak_stairs[facing=west,half=top,shape=straight]",
+        "confidence_kind": "partial_planes",
+        "similarity": 0.9251,
+        "margin": 0.9251,
+        "fractional_area": 1.498,
+        "equivalent_states": []
+      },
+      {
+        "voxel": [
+          58,
+          11,
+          231
+        ],
+        "from": "minecraft:oak_stairs[facing=east,half=top,shape=straight]",
+        "to": "minecraft:oak_stairs[facing=west,half=top,shape=straight]",
+        "confidence_kind": "partial_planes",
+        "similarity": 0.9251,
+        "margin": 0.9251,
+        "fractional_area": 1.503,
+        "equivalent_states": []
+      },
+      {
+        "voxel": [
+          136,
+          11,
+          243
+        ],
+        "from": "minecraft:oak_stairs[facing=east,half=top,shape=straight]",
+        "to": "minecraft:oak_stairs[facing=west,half=top,shape=straight]",
+        "confidence_kind": "partial_planes",
+        "similarity": 0.9251,
+        "margin": 0.9251,
+        "fractional_area": 1.495,
+        "equivalent_states": []
+      },
+      {
+        "voxel": [
+          135,
+          11,
+          245
+        ],
+        "from": "minecraft:oak_stairs[facing=north,half=bottom,shape=straight]",
+        "to": "minecraft:oak_stairs[facing=south,half=bottom,shape=straight]",
+        "confidence_kind": "partial_planes",
+        "similarity": 0.9448,
+        "margin": 0.9448,
+        "fractional_area": 1.503,
+        "equivalent_states": []
+      },
+      {
+        "voxel": [
+          72,
+          11,
+          248
+        ],
+        "from": "minecraft:oak_stairs[facing=east,half=top,shape=straight]",
+        "to": "minecraft:oak_stairs[facing=west,half=top,shape=straight]",
+        "confidence_kind": "partial_planes",
+        "similarity": 0.9251,
+        "margin": 0.9251,
+        "fractional_area": 1.498,
+        "equivalent_states": []
+      },
+      {
+        "voxel": [
+          136,
+          11,
+          248
+        ],
+        "from": "minecraft:oak_stairs[facing=east,half=top,shape=straight]",
+        "to": "minecraft:oak_stairs[facing=west,half=top,shape=straight]",
+        "confidence_kind": "partial_planes",
+        "similarity": 0.9251,
+        "margin": 0.9251,
+        "fractional_area": 1.495,
+        "equivalent_states": []
+      },
+      {
+        "voxel": [
+          71,
+          11,
+          250
+        ],
+        "from": "minecraft:oak_stairs[facing=north,half=bottom,shape=straight]",
+        "to": "minecraft:oak_stairs[facing=south,half=bottom,shape=straight]",
+        "confidence_kind": "partial_planes",
+        "similarity": 0.9449,
+        "margin": 0.9449,
+        "fractional_area": 1.496,
+        "equivalent_states": []
+      },
+      {
+        "voxel": [
+          72,
+          11,
+          253
+        ],
+        "from": "minecraft:oak_stairs[facing=east,half=top,shape=straight]",
+        "to": "minecraft:oak_stairs[facing=west,half=top,shape=straight]",
+        "confidence_kind": "partial_planes",
+        "similarity": 0.9251,
+        "margin": 0.9251,
+        "fractional_area": 1.503,
+        "equivalent_states": []
+      },
+      {
+        "voxel": [
+          81,
+          11,
+          256
+        ],
+        "from": "minecraft:oak_stairs[facing=east,half=top,shape=straight]",
+        "to": "minecraft:oak_stairs[facing=west,half=top,shape=straight]",
+        "confidence_kind": "partial_planes",
+        "similarity": 0.9251,
+        "margin": 0.9251,
+        "fractional_area": 1.501,
+        "equivalent_states": []
+      },
+      {
+        "voxel": [
+          138,
+          12,
+          33
+        ],
+        "from": "minecraft:oak_stairs[facing=north,half=bottom,shape=straight]",
+        "to": "minecraft:oak_stairs[facing=south,half=bottom,shape=straight]",
+        "confidence_kind": "partial_planes",
+        "similarity": 0.9251,
+        "margin": 0.9251,
+        "fractional_area": 1.496,
+        "equivalent_states": []
+      },
+      {
+        "voxel": [
+          173,
+          12,
+          38
+        ],
+        "from": "minecraft:oak_stairs[facing=east,half=top,shape=straight]",
+        "to": "minecraft:oak_stairs[facing=west,half=top,shape=straight]",
+        "confidence_kind": "partial_planes",
+        "similarity": 0.9576,
+        "margin": 0.9576,
+        "fractional_area": 1.498,
+        "equivalent_states": []
+      },
+      {
+        "voxel": [
+          173,
+          12,
+          39
+        ],
+        "from": "minecraft:oak_stairs[facing=east,half=top,shape=straight]",
+        "to": "minecraft:oak_stairs[facing=west,half=top,shape=straight]",
+        "confidence_kind": "partial_planes",
+        "similarity": 0.9581,
+        "margin": 0.9581,
+        "fractional_area": 1.503,
+        "equivalent_states": []
+      },
+      {
+        "voxel": [
+          173,
+          12,
+          40
+        ],
+        "from": "minecraft:oak_stairs[facing=east,half=top,shape=straight]",
+        "to": "minecraft:oak_stairs[facing=west,half=top,shape=straight]",
+        "confidence_kind": "partial_planes",
+        "similarity": 0.9661,
+        "margin": 0.9661,
+        "fractional_area": 1.498,
+        "equivalent_states": []
+      },
+      {
+        "voxel": [
+          141,
+          12,
+          97
+        ],
+        "from": "minecraft:oak_stairs[facing=north,half=bottom,shape=straight]",
+        "to": "minecraft:oak_stairs[facing=south,half=bottom,shape=straight]",
+        "confidence_kind": "partial_planes",
+        "similarity": 0.9902,
+        "margin": 0.9902,
+        "fractional_area": 1.496,
+        "equivalent_states": []
+      },
+      {
+        "voxel": [
+          147,
+          12,
+          97
+        ],
+        "from": "minecraft:oak_stairs[facing=north,half=bottom,shape=straight]",
+        "to": "minecraft:oak_stairs[facing=south,half=bottom,shape=straight]",
+        "confidence_kind": "partial_planes",
+        "similarity": 0.9902,
+        "margin": 0.9902,
+        "fractional_area": 1.5,
+        "equivalent_states": []
+      },
+      {
+        "voxel": [
+          157,
+          12,
+          105
+        ],
+        "from": "minecraft:oak_stairs[facing=north,half=bottom,shape=straight]",
+        "to": "minecraft:oak_stairs[facing=south,half=bottom,shape=straight]",
+        "confidence_kind": "partial_planes",
+        "similarity": 0.9902,
+        "margin": 0.9902,
+        "fractional_area": 1.503,
+        "equivalent_states": []
+      },
+      {
+        "voxel": [
+          13,
+          12,
+          189
+        ],
+        "from": "minecraft:oak_stairs[facing=north,half=bottom,shape=straight]",
+        "to": "minecraft:oak_stairs[facing=south,half=bottom,shape=straight]",
+        "confidence_kind": "partial_planes",
+        "similarity": 0.9251,
+        "margin": 0.9251,
+        "fractional_area": 1.496,
+        "equivalent_states": []
+      },
+      {
+        "voxel": [
+          54,
+          12,
+          219
+        ],
+        "from": "minecraft:oak_stairs[facing=north,half=bottom,shape=straight]",
+        "to": "minecraft:oak_stairs[facing=south,half=bottom,shape=straight]",
+        "confidence_kind": "partial_planes",
+        "similarity": 0.9251,
+        "margin": 0.9251,
+        "fractional_area": 1.499,
+        "equivalent_states": []
+      },
+      {
+        "voxel": [
+          140,
+          12,
+          244
+        ],
+        "from": "minecraft:oak_stairs[facing=north,half=bottom,shape=straight]",
+        "to": "minecraft:oak_stairs[facing=south,half=bottom,shape=straight]",
+        "confidence_kind": "partial_planes",
+        "similarity": 0.9251,
+        "margin": 0.9251,
+        "fractional_area": 1.503,
+        "equivalent_states": []
+      },
+      {
+        "voxel": [
+          76,
+          12,
+          249
+        ],
+        "from": "minecraft:oak_stairs[facing=north,half=bottom,shape=straight]",
+        "to": "minecraft:oak_stairs[facing=south,half=bottom,shape=straight]",
+        "confidence_kind": "partial_planes",
+        "similarity": 0.9251,
+        "margin": 0.9251,
+        "fractional_area": 1.499,
+        "equivalent_states": []
+      },
+      {
+        "voxel": [
+          35,
+          12,
+          291
+        ],
+        "from": "minecraft:oak_stairs[facing=north,half=bottom,shape=straight]",
+        "to": "minecraft:oak_stairs[facing=south,half=bottom,shape=straight]",
+        "confidence_kind": "partial_planes",
+        "similarity": 0.9902,
+        "margin": 0.9902,
+        "fractional_area": 1.496,
+        "equivalent_states": []
+      },
+      {
+        "voxel": [
+          41,
+          12,
+          291
+        ],
+        "from": "minecraft:oak_stairs[facing=north,half=bottom,shape=straight]",
+        "to": "minecraft:oak_stairs[facing=south,half=bottom,shape=straight]",
+        "confidence_kind": "partial_planes",
+        "similarity": 0.9902,
+        "margin": 0.9902,
+        "fractional_area": 1.5,
+        "equivalent_states": []
+      },
+      {
+        "voxel": [
+          136,
+          13,
+          32
+        ],
+        "from": "minecraft:oak_stairs[facing=east,half=top,shape=straight]",
+        "to": "minecraft:oak_stairs[facing=west,half=top,shape=straight]",
+        "confidence_kind": "partial_planes",
+        "similarity": 1.0,
+        "margin": 1.0,
+        "fractional_area": 1.501,
+        "equivalent_states": []
+      },
+      {
+        "voxel": [
+          136,
+          13,
+          37
+        ],
+        "from": "minecraft:oak_stairs[facing=east,half=top,shape=straight]",
+        "to": "minecraft:oak_stairs[facing=west,half=top,shape=straight]",
+        "confidence_kind": "partial_planes",
+        "similarity": 1.0,
+        "margin": 1.0,
+        "fractional_area": 1.501,
+        "equivalent_states": []
+      },
+      {
+        "voxel": [
+          174,
+          13,
+          38
+        ],
+        "from": "minecraft:oak_stairs[facing=east,half=top,shape=straight]",
+        "to": "minecraft:oak_stairs[facing=west,half=top,shape=straight]",
+        "confidence_kind": "partial_planes",
+        "similarity": 0.962,
+        "margin": 0.962,
+        "fractional_area": 1.498,
+        "equivalent_states": []
+      },
+      {
+        "voxel": [
+          174,
+          13,
+          39
+        ],
+        "from": "minecraft:oak_stairs[facing=east,half=top,shape=straight]",
+        "to": "minecraft:oak_stairs[facing=west,half=top,shape=straight]",
+        "confidence_kind": "partial_planes",
+        "similarity": 0.9581,
+        "margin": 0.9581,
+        "fractional_area": 1.503,
+        "equivalent_states": []
+      },
+      {
+        "voxel": [
+          174,
+          13,
+          40
+        ],
+        "from": "minecraft:oak_stairs[facing=east,half=top,shape=straight]",
+        "to": "minecraft:oak_stairs[facing=west,half=top,shape=straight]",
+        "confidence_kind": "partial_planes",
+        "similarity": 0.9696,
+        "margin": 0.9696,
+        "fractional_area": 1.498,
+        "equivalent_states": []
+      },
+      {
+        "voxel": [
+          124,
+          13,
+          45
+        ],
+        "from": "minecraft:oak_stairs[facing=east,half=top,shape=straight]",
+        "to": "minecraft:oak_stairs[facing=west,half=top,shape=straight]",
+        "confidence_kind": "partial_planes",
+        "similarity": 0.9449,
+        "margin": 0.9449,
+        "fractional_area": 1.495,
+        "equivalent_states": []
+      },
+      {
+        "voxel": [
+          122,
+          13,
+          46
+        ],
+        "from": "minecraft:oak_stairs[facing=north,half=bottom,shape=straight]",
+        "to": "minecraft:oak_stairs[facing=south,half=bottom,shape=straight]",
+        "confidence_kind": "partial_planes",
+        "similarity": 0.9251,
+        "margin": 0.9251,
+        "fractional_area": 1.499,
+        "equivalent_states": []
+      },
+      {
+        "voxel": [
+          128,
+          13,
+          46
+        ],
+        "from": "minecraft:oak_stairs[facing=north,half=bottom,shape=straight]",
+        "to": "minecraft:oak_stairs[facing=south,half=bottom,shape=straight]",
+        "confidence_kind": "partial_planes",
+        "similarity": 0.9251,
+        "margin": 0.9251,
+        "fractional_area": 1.503,
+        "equivalent_states": []
+      },
+      {
+        "voxel": [
+          142,
+          13,
+          99
+        ],
+        "from": "minecraft:oak_stairs[facing=east,half=top,shape=straight]",
+        "to": "minecraft:oak_stairs[facing=west,half=top,shape=straight]",
+        "confidence_kind": "partial_planes",
+        "similarity": 0.9251,
+        "margin": 0.9251,
+        "fractional_area": 1.498,
+        "equivalent_states": []
+      },
+      {
+        "voxel": [
+          153,
+          13,
+          102
+        ],
+        "from": "minecraft:oak_stairs[facing=east,half=top,shape=straight]",
+        "to": "minecraft:oak_stairs[facing=west,half=top,shape=straight]",
+        "confidence_kind": "partial_planes",
+        "similarity": 0.9251,
+        "margin": 0.9251,
+        "fractional_area": 1.495,
+        "equivalent_states": []
+      },
+      {
+        "voxel": [
+          152,
+          13,
+          104
+        ],
+        "from": "minecraft:oak_stairs[facing=north,half=bottom,shape=straight]",
+        "to": "minecraft:oak_stairs[facing=south,half=bottom,shape=straight]",
+        "confidence_kind": "partial_planes",
+        "similarity": 0.9449,
+        "margin": 0.9449,
+        "fractional_area": 1.5,
+        "equivalent_states": []
+      },
+      {
+        "voxel": [
+          153,
+          13,
+          107
+        ],
+        "from": "minecraft:oak_stairs[facing=east,half=top,shape=straight]",
+        "to": "minecraft:oak_stairs[facing=west,half=top,shape=straight]",
+        "confidence_kind": "partial_planes",
+        "similarity": 0.9251,
+        "margin": 0.9251,
+        "fractional_area": 1.501,
+        "equivalent_states": []
+      },
+      {
+        "voxel": [
+          69,
+          13,
+          180
+        ],
+        "from": "minecraft:oak_stairs[facing=north,half=bottom,shape=straight]",
+        "to": "minecraft:oak_stairs[facing=south,half=bottom,shape=straight]",
+        "confidence_kind": "partial_planes",
+        "similarity": 0.9902,
+        "margin": 0.9902,
+        "fractional_area": 1.499,
+        "equivalent_states": []
+      },
+      {
+        "voxel": [
+          11,
+          13,
+          188
+        ],
+        "from": "minecraft:oak_stairs[facing=east,half=top,shape=straight]",
+        "to": "minecraft:oak_stairs[facing=west,half=top,shape=straight]",
+        "confidence_kind": "partial_planes",
+        "similarity": 1.0,
+        "margin": 1.0,
+        "fractional_area": 1.501,
+        "equivalent_states": []
+      },
+      {
+        "voxel": [
+          11,
+          13,
+          193
+        ],
+        "from": "minecraft:oak_stairs[facing=east,half=top,shape=straight]",
+        "to": "minecraft:oak_stairs[facing=west,half=top,shape=straight]",
+        "confidence_kind": "partial_planes",
+        "similarity": 1.0,
+        "margin": 1.0,
+        "fractional_area": 1.495,
+        "equivalent_states": []
+      },
+      {
+        "voxel": [
+          52,
+          13,
+          218
+        ],
+        "from": "minecraft:oak_stairs[facing=east,half=top,shape=straight]",
+        "to": "minecraft:oak_stairs[facing=west,half=top,shape=straight]",
+        "confidence_kind": "partial_planes",
+        "similarity": 1.0,
+        "margin": 1.0,
+        "fractional_area": 1.495,
+        "equivalent_states": []
+      },
+      {
+        "voxel": [
+          52,
+          13,
+          223
+        ],
+        "from": "minecraft:oak_stairs[facing=east,half=top,shape=straight]",
+        "to": "minecraft:oak_stairs[facing=west,half=top,shape=straight]",
+        "confidence_kind": "partial_planes",
+        "similarity": 1.0,
+        "margin": 1.0,
+        "fractional_area": 1.495,
+        "equivalent_states": []
+      },
+      {
+        "voxel": [
+          59,
+          13,
+          225
+        ],
+        "from": "minecraft:oak_stairs[facing=east,half=top,shape=straight]",
+        "to": "minecraft:oak_stairs[facing=west,half=top,shape=straight]",
+        "confidence_kind": "partial_planes",
+        "similarity": 0.9449,
+        "margin": 0.9449,
+        "fractional_area": 1.495,
+        "equivalent_states": []
+      },
+      {
+        "voxel": [
+          57,
+          13,
+          226
+        ],
+        "from": "minecraft:oak_stairs[facing=north,half=bottom,shape=straight]",
+        "to": "minecraft:oak_stairs[facing=south,half=bottom,shape=straight]",
+        "confidence_kind": "partial_planes",
+        "similarity": 0.9251,
+        "margin": 0.9251,
+        "fractional_area": 1.503,
+        "equivalent_states": []
+      },
+      {
+        "voxel": [
+          63,
+          13,
+          226
+        ],
+        "from": "minecraft:oak_stairs[facing=north,half=bottom,shape=straight]",
+        "to": "minecraft:oak_stairs[facing=south,half=bottom,shape=straight]",
+        "confidence_kind": "partial_planes",
+        "similarity": 0.9251,
+        "margin": 0.9251,
+        "fractional_area": 1.503,
+        "equivalent_states": []
+      },
+      {
+        "voxel": [
+          138,
+          13,
+          243
+        ],
+        "from": "minecraft:oak_stairs[facing=east,half=top,shape=straight]",
+        "to": "minecraft:oak_stairs[facing=west,half=top,shape=straight]",
+        "confidence_kind": "partial_planes",
+        "similarity": 1.0,
+        "margin": 1.0,
+        "fractional_area": 1.495,
+        "equivalent_states": []
+      },
+      {
+        "voxel": [
+          74,
+          13,
+          248
+        ],
+        "from": "minecraft:oak_stairs[facing=east,half=top,shape=straight]",
+        "to": "minecraft:oak_stairs[facing=west,half=top,shape=straight]",
+        "confidence_kind": "partial_planes",
+        "similarity": 1.0,
+        "margin": 1.0,
+        "fractional_area": 1.498,
+        "equivalent_states": []
+      },
+      {
+        "voxel": [
+          138,
+          13,
+          248
+        ],
+        "from": "minecraft:oak_stairs[facing=east,half=top,shape=straight]",
+        "to": "minecraft:oak_stairs[facing=west,half=top,shape=straight]",
+        "confidence_kind": "partial_planes",
+        "similarity": 1.0,
+        "margin": 1.0,
+        "fractional_area": 1.495,
+        "equivalent_states": []
+      },
+      {
+        "voxel": [
+          82,
+          13,
+          250
+        ],
+        "from": "minecraft:oak_stairs[facing=east,half=top,shape=straight]",
+        "to": "minecraft:oak_stairs[facing=west,half=top,shape=straight]",
+        "confidence_kind": "partial_planes",
+        "similarity": 0.9448,
+        "margin": 0.9448,
+        "fractional_area": 1.498,
+        "equivalent_states": []
+      },
+      {
+        "voxel": [
+          80,
+          13,
+          251
+        ],
+        "from": "minecraft:oak_stairs[facing=north,half=bottom,shape=straight]",
+        "to": "minecraft:oak_stairs[facing=south,half=bottom,shape=straight]",
+        "confidence_kind": "partial_planes",
+        "similarity": 0.9251,
+        "margin": 0.9251,
+        "fractional_area": 1.503,
+        "equivalent_states": []
+      },
+      {
+        "voxel": [
+          86,
+          13,
+          251
+        ],
+        "from": "minecraft:oak_stairs[facing=north,half=bottom,shape=straight]",
+        "to": "minecraft:oak_stairs[facing=south,half=bottom,shape=straight]",
+        "confidence_kind": "partial_planes",
+        "similarity": 0.9251,
+        "margin": 0.9251,
+        "fractional_area": 1.503,
+        "equivalent_states": []
+      },
+      {
+        "voxel": [
+          74,
+          13,
+          253
+        ],
+        "from": "minecraft:oak_stairs[facing=east,half=top,shape=straight]",
+        "to": "minecraft:oak_stairs[facing=west,half=top,shape=straight]",
+        "confidence_kind": "partial_planes",
+        "similarity": 1.0,
+        "margin": 1.0,
+        "fractional_area": 1.503,
+        "equivalent_states": []
+      },
+      {
+        "voxel": [
+          36,
+          13,
+          293
+        ],
+        "from": "minecraft:oak_stairs[facing=east,half=top,shape=straight]",
+        "to": "minecraft:oak_stairs[facing=west,half=top,shape=straight]",
+        "confidence_kind": "partial_planes",
+        "similarity": 0.9251,
+        "margin": 0.9251,
+        "fractional_area": 1.503,
+        "equivalent_states": []
+      },
+      {
+        "voxel": [
+          175,
+          14,
+          38
+        ],
+        "from": "minecraft:oak_stairs[facing=east,half=top,shape=straight]",
+        "to": "minecraft:oak_stairs[facing=west,half=top,shape=straight]",
+        "confidence_kind": "partial_planes",
+        "similarity": 0.962,
+        "margin": 0.962,
+        "fractional_area": 1.495,
+        "equivalent_states": []
+      },
+      {
+        "voxel": [
+          175,
+          14,
+          39
+        ],
+        "from": "minecraft:oak_stairs[facing=east,half=top,shape=straight]",
+        "to": "minecraft:oak_stairs[facing=west,half=top,shape=straight]",
+        "confidence_kind": "partial_planes",
+        "similarity": 0.9581,
+        "margin": 0.9581,
+        "fractional_area": 1.501,
+        "equivalent_states": []
+      },
+      {
+        "voxel": [
+          175,
+          14,
+          40
+        ],
+        "from": "minecraft:oak_stairs[facing=east,half=top,shape=straight]",
+        "to": "minecraft:oak_stairs[facing=west,half=top,shape=straight]",
+        "confidence_kind": "partial_planes",
+        "similarity": 0.9696,
+        "margin": 0.9696,
+        "fractional_area": 1.495,
+        "equivalent_states": []
+      },
+      {
+        "voxel": [
+          126,
+          14,
+          51
+        ],
+        "from": "minecraft:oak_stairs[facing=east,half=top,shape=straight]",
+        "to": "minecraft:oak_stairs[facing=west,half=top,shape=straight]",
+        "confidence_kind": "partial_planes",
+        "similarity": 1.0,
+        "margin": 1.0,
+        "fractional_area": 1.495,
+        "equivalent_states": []
+      },
+      {
+        "voxel": [
+          157,
+          14,
+          103
+        ],
+        "from": "minecraft:oak_stairs[facing=north,half=bottom,shape=straight]",
+        "to": "minecraft:oak_stairs[facing=south,half=bottom,shape=straight]",
+        "confidence_kind": "partial_planes",
+        "similarity": 0.9251,
+        "margin": 0.9251,
+        "fractional_area": 1.503,
+        "equivalent_states": []
+      },
+      {
+        "voxel": [
+          65,
+          14,
+          177
+        ],
+        "from": "minecraft:oak_stairs[facing=east,half=top,shape=straight]",
+        "to": "minecraft:oak_stairs[facing=west,half=top,shape=straight]",
+        "confidence_kind": "partial_planes",
+        "similarity": 0.9251,
+        "margin": 0.9251,
+        "fractional_area": 1.498,
+        "equivalent_states": []
+      },
+      {
+        "voxel": [
+          64,
+          14,
+          179
+        ],
+        "from": "minecraft:oak_stairs[facing=north,half=bottom,shape=straight]",
+        "to": "minecraft:oak_stairs[facing=south,half=bottom,shape=straight]",
+        "confidence_kind": "partial_planes",
+        "similarity": 0.9449,
+        "margin": 0.9449,
+        "fractional_area": 1.496,
+        "equivalent_states": []
+      },
+      {
+        "voxel": [
+          65,
+          14,
+          182
+        ],
+        "from": "minecraft:oak_stairs[facing=east,half=top,shape=straight]",
+        "to": "minecraft:oak_stairs[facing=west,half=top,shape=straight]",
+        "confidence_kind": "partial_planes",
+        "similarity": 0.9251,
+        "margin": 0.9251,
+        "fractional_area": 1.498,
+        "equivalent_states": []
+      },
+      {
+        "voxel": [
+          61,
+          14,
+          231
+        ],
+        "from": "minecraft:oak_stairs[facing=east,half=top,shape=straight]",
+        "to": "minecraft:oak_stairs[facing=west,half=top,shape=straight]",
+        "confidence_kind": "partial_planes",
+        "similarity": 1.0,
+        "margin": 1.0,
+        "fractional_area": 1.501,
+        "equivalent_states": []
+      },
+      {
+        "voxel": [
+          84,
+          14,
+          256
+        ],
+        "from": "minecraft:oak_stairs[facing=east,half=top,shape=straight]",
+        "to": "minecraft:oak_stairs[facing=west,half=top,shape=straight]",
+        "confidence_kind": "partial_planes",
+        "similarity": 1.0,
+        "margin": 1.0,
+        "fractional_area": 1.503,
+        "equivalent_states": []
+      },
+      {
+        "voxel": [
+          176,
+          15,
+          38
+        ],
+        "from": "minecraft:oak_stairs[facing=east,half=top,shape=straight]",
+        "to": "minecraft:oak_stairs[facing=west,half=top,shape=straight]",
+        "confidence_kind": "partial_planes",
+        "similarity": 0.962,
+        "margin": 0.962,
+        "fractional_area": 1.498,
+        "equivalent_states": []
+      },
+      {
+        "voxel": [
+          176,
+          15,
+          39
+        ],
+        "from": "minecraft:oak_stairs[facing=east,half=top,shape=straight]",
+        "to": "minecraft:oak_stairs[facing=west,half=top,shape=straight]",
+        "confidence_kind": "partial_planes",
+        "similarity": 0.9581,
+        "margin": 0.9581,
+        "fractional_area": 1.503,
+        "equivalent_states": []
+      },
+      {
+        "voxel": [
+          252,
+          15,
+          39
+        ],
+        "from": "minecraft:oak_stairs[facing=east,half=top,shape=straight]",
+        "to": "minecraft:oak_stairs[facing=west,half=top,shape=straight]",
+        "confidence_kind": "partial_planes",
+        "similarity": 0.9649,
+        "margin": 0.9649,
+        "fractional_area": 1.501,
+        "equivalent_states": []
+      },
+      {
+        "voxel": [
+          176,
+          15,
+          40
+        ],
+        "from": "minecraft:oak_stairs[facing=east,half=top,shape=straight]",
+        "to": "minecraft:oak_stairs[facing=west,half=top,shape=straight]",
+        "confidence_kind": "partial_planes",
+        "similarity": 0.9696,
+        "margin": 0.9696,
+        "fractional_area": 1.498,
+        "equivalent_states": []
+      },
+      {
+        "voxel": [
+          252,
+          15,
+          47
+        ],
+        "from": "minecraft:oak_stairs[facing=east,half=top,shape=straight]",
+        "to": "minecraft:oak_stairs[facing=west,half=top,shape=straight]",
+        "confidence_kind": "partial_planes",
+        "similarity": 0.9649,
+        "margin": 0.9649,
+        "fractional_area": 1.495,
+        "equivalent_states": []
+      },
+      {
+        "voxel": [
+          143,
+          15,
+          93
+        ],
+        "from": "minecraft:oak_stairs[facing=east,half=top,shape=straight]",
+        "to": "minecraft:oak_stairs[facing=west,half=top,shape=straight]",
+        "confidence_kind": "partial_planes",
+        "similarity": 0.9449,
+        "margin": 0.9449,
+        "fractional_area": 1.495,
+        "equivalent_states": []
+      },
+      {
+        "voxel": [
+          141,
+          15,
+          94
+        ],
+        "from": "minecraft:oak_stairs[facing=north,half=bottom,shape=straight]",
+        "to": "minecraft:oak_stairs[facing=south,half=bottom,shape=straight]",
+        "confidence_kind": "partial_planes",
+        "similarity": 0.9251,
+        "margin": 0.9251,
+        "fractional_area": 1.499,
+        "equivalent_states": []
+      },
+      {
+        "voxel": [
+          147,
+          15,
+          94
+        ],
+        "from": "minecraft:oak_stairs[facing=north,half=bottom,shape=straight]",
+        "to": "minecraft:oak_stairs[facing=south,half=bottom,shape=straight]",
+        "confidence_kind": "partial_planes",
+        "similarity": 0.9251,
+        "margin": 0.9251,
+        "fractional_area": 1.503,
+        "equivalent_states": []
+      },
+      {
+        "voxel": [
+          155,
+          15,
+          102
+        ],
+        "from": "minecraft:oak_stairs[facing=east,half=top,shape=straight]",
+        "to": "minecraft:oak_stairs[facing=west,half=top,shape=straight]",
+        "confidence_kind": "partial_planes",
+        "similarity": 1.0,
+        "margin": 1.0,
+        "fractional_area": 1.495,
+        "equivalent_states": []
+      },
+      {
+        "voxel": [
+          155,
+          15,
+          107
+        ],
+        "from": "minecraft:oak_stairs[facing=east,half=top,shape=straight]",
+        "to": "minecraft:oak_stairs[facing=west,half=top,shape=straight]",
+        "confidence_kind": "partial_planes",
+        "similarity": 1.0,
+        "margin": 1.0,
+        "fractional_area": 1.501,
+        "equivalent_states": []
+      },
+      {
+        "voxel": [
+          69,
+          15,
+          178
+        ],
+        "from": "minecraft:oak_stairs[facing=north,half=bottom,shape=straight]",
+        "to": "minecraft:oak_stairs[facing=south,half=bottom,shape=straight]",
+        "confidence_kind": "partial_planes",
+        "similarity": 0.9251,
+        "margin": 0.9251,
+        "fractional_area": 1.499,
+        "equivalent_states": []
+      },
+      {
+        "voxel": [
+          37,
+          15,
+          287
+        ],
+        "from": "minecraft:oak_stairs[facing=east,half=top,shape=straight]",
+        "to": "minecraft:oak_stairs[facing=west,half=top,shape=straight]",
+        "confidence_kind": "partial_planes",
+        "similarity": 0.9449,
+        "margin": 0.9449,
+        "fractional_area": 1.495,
+        "equivalent_states": []
+      },
+      {
+        "voxel": [
+          35,
+          15,
+          288
+        ],
+        "from": "minecraft:oak_stairs[facing=north,half=bottom,shape=straight]",
+        "to": "minecraft:oak_stairs[facing=south,half=bottom,shape=straight]",
+        "confidence_kind": "partial_planes",
+        "similarity": 0.9251,
+        "margin": 0.9251,
+        "fractional_area": 1.499,
+        "equivalent_states": []
+      },
+      {
+        "voxel": [
+          41,
+          15,
+          288
+        ],
+        "from": "minecraft:oak_stairs[facing=north,half=bottom,shape=straight]",
+        "to": "minecraft:oak_stairs[facing=south,half=bottom,shape=straight]",
+        "confidence_kind": "partial_planes",
+        "similarity": 0.9251,
+        "margin": 0.9251,
+        "fractional_area": 1.503,
+        "equivalent_states": []
+      },
+      {
+        "voxel": [
+          178,
+          16,
+          37
+        ],
+        "from": "minecraft:oak_stairs[facing=east,half=top,shape=straight]",
+        "to": "minecraft:oak_stairs[facing=west,half=top,shape=straight]",
+        "confidence_kind": "partial_planes",
+        "similarity": 0.9789,
+        "margin": 0.9789,
+        "fractional_area": 1.503,
+        "equivalent_states": []
+      },
+      {
+        "voxel": [
+          178,
+          16,
+          41
+        ],
+        "from": "minecraft:oak_stairs[facing=east,half=top,shape=straight]",
+        "to": "minecraft:oak_stairs[facing=west,half=top,shape=straight]",
+        "confidence_kind": "partial_planes",
+        "similarity": 0.9235,
+        "margin": 0.9235,
+        "fractional_area": 1.503,
+        "equivalent_states": []
+      },
+      {
+        "voxel": [
+          258,
+          16,
+          46
+        ],
+        "from": "minecraft:oak_stairs[facing=north,half=bottom,shape=straight]",
+        "to": "minecraft:oak_stairs[facing=south,half=bottom,shape=straight]",
+        "confidence_kind": "partial_planes",
+        "similarity": 1.0,
+        "margin": 1.0,
+        "fractional_area": 1.503,
+        "equivalent_states": []
+      },
+      {
+        "voxel": [
+          252,
+          16,
+          47
+        ],
+        "from": "minecraft:oak_stairs[facing=north,half=bottom,shape=straight]",
+        "to": "minecraft:oak_stairs[facing=south,half=bottom,shape=straight]",
+        "confidence_kind": "partial_planes",
+        "similarity": 0.9273,
+        "margin": 0.9273,
+        "fractional_area": 1.496,
+        "equivalent_states": []
+      },
+      {
+        "voxel": [
+          256,
+          16,
+          47
+        ],
+        "from": "minecraft:oak_stairs[facing=north,half=bottom,shape=straight]",
+        "to": "minecraft:oak_stairs[facing=south,half=bottom,shape=straight]",
+        "confidence_kind": "partial_planes",
+        "similarity": 0.9273,
+        "margin": 0.9273,
+        "fractional_area": 1.5,
+        "equivalent_states": []
+      },
+      {
+        "voxel": [
+          158,
+          16,
+          89
+        ],
+        "from": "minecraft:oak_stairs[facing=east,half=top,shape=straight]",
+        "to": "minecraft:oak_stairs[facing=west,half=top,shape=straight]",
+        "confidence_kind": "partial_planes",
+        "similarity": 0.9234,
+        "margin": 0.9234,
+        "fractional_area": 1.501,
+        "equivalent_states": []
+      },
+      {
+        "voxel": [
+          158,
+          16,
+          93
+        ],
+        "from": "minecraft:oak_stairs[facing=east,half=top,shape=straight]",
+        "to": "minecraft:oak_stairs[facing=west,half=top,shape=straight]",
+        "confidence_kind": "partial_planes",
+        "similarity": 0.9897,
+        "margin": 0.9897,
+        "fractional_area": 1.495,
+        "equivalent_states": []
+      },
+      {
+        "voxel": [
+          145,
+          16,
+          99
+        ],
+        "from": "minecraft:oak_stairs[facing=east,half=top,shape=straight]",
+        "to": "minecraft:oak_stairs[facing=west,half=top,shape=straight]",
+        "confidence_kind": "partial_planes",
+        "similarity": 1.0,
+        "margin": 1.0,
+        "fractional_area": 1.498,
+        "equivalent_states": []
+      },
+      {
+        "voxel": [
+          67,
+          16,
+          177
+        ],
+        "from": "minecraft:oak_stairs[facing=east,half=top,shape=straight]",
+        "to": "minecraft:oak_stairs[facing=west,half=top,shape=straight]",
+        "confidence_kind": "partial_planes",
+        "similarity": 1.0,
+        "margin": 1.0,
+        "fractional_area": 1.498,
+        "equivalent_states": []
+      },
+      {
+        "voxel": [
+          67,
+          16,
+          182
+        ],
+        "from": "minecraft:oak_stairs[facing=east,half=top,shape=straight]",
+        "to": "minecraft:oak_stairs[facing=west,half=top,shape=straight]",
+        "confidence_kind": "partial_planes",
+        "similarity": 1.0,
+        "margin": 1.0,
+        "fractional_area": 1.498,
+        "equivalent_states": []
+      },
+      {
+        "voxel": [
+          39,
+          16,
+          293
+        ],
+        "from": "minecraft:oak_stairs[facing=east,half=top,shape=straight]",
+        "to": "minecraft:oak_stairs[facing=west,half=top,shape=straight]",
+        "confidence_kind": "partial_planes",
+        "similarity": 1.0,
+        "margin": 1.0,
+        "fractional_area": 1.503,
+        "equivalent_states": []
+      },
+      {
+        "voxel": [
+          163,
+          17,
+          86
+        ],
+        "from": "minecraft:oak_stairs[facing=east,half=top,shape=straight]",
+        "to": "minecraft:oak_stairs[facing=west,half=top,shape=straight]",
+        "confidence_kind": "partial_planes",
+        "similarity": 0.962,
+        "margin": 0.962,
+        "fractional_area": 1.495,
+        "equivalent_states": []
+      },
+      {
+        "voxel": [
+          163,
+          17,
+          87
+        ],
+        "from": "minecraft:oak_stairs[facing=east,half=top,shape=straight]",
+        "to": "minecraft:oak_stairs[facing=west,half=top,shape=straight]",
+        "confidence_kind": "partial_planes",
+        "similarity": 0.9581,
+        "margin": 0.9581,
+        "fractional_area": 1.501,
+        "equivalent_states": []
+      },
+      {
+        "voxel": [
+          163,
+          17,
+          88
+        ],
+        "from": "minecraft:oak_stairs[facing=east,half=top,shape=straight]",
+        "to": "minecraft:oak_stairs[facing=west,half=top,shape=straight]",
+        "confidence_kind": "partial_planes",
+        "similarity": 0.9696,
+        "margin": 0.9696,
+        "fractional_area": 1.495,
+        "equivalent_states": []
+      },
+      {
+        "voxel": [
+          12,
+          17,
+          162
+        ],
+        "from": "minecraft:oak_stairs[facing=east,half=top,shape=straight]",
+        "to": "minecraft:oak_stairs[facing=west,half=top,shape=straight]",
+        "confidence_kind": "partial_planes",
+        "similarity": 0.9649,
+        "margin": 0.9649,
+        "fractional_area": 1.503,
+        "equivalent_states": []
+      },
+      {
+        "voxel": [
+          12,
+          17,
+          168
+        ],
+        "from": "minecraft:oak_stairs[facing=east,half=top,shape=straight]",
+        "to": "minecraft:oak_stairs[facing=west,half=top,shape=straight]",
+        "confidence_kind": "partial_planes",
+        "similarity": 0.9649,
+        "margin": 0.9649,
+        "fractional_area": 1.498,
+        "equivalent_states": []
+      },
+      {
+        "voxel": [
+          278,
+          18,
+          24
+        ],
+        "from": "minecraft:oak_stairs[facing=east,half=top,shape=straight]",
+        "to": "minecraft:oak_stairs[facing=west,half=top,shape=straight]",
+        "confidence_kind": "partial_planes",
+        "similarity": 0.9649,
+        "margin": 0.9649,
+        "fractional_area": 1.495,
+        "equivalent_states": []
+      },
+      {
+        "voxel": [
+          278,
+          18,
+          30
+        ],
+        "from": "minecraft:oak_stairs[facing=east,half=top,shape=straight]",
+        "to": "minecraft:oak_stairs[facing=west,half=top,shape=straight]",
+        "confidence_kind": "partial_planes",
+        "similarity": 0.9649,
+        "margin": 0.9649,
+        "fractional_area": 1.501,
+        "equivalent_states": []
+      },
+      {
+        "voxel": [
+          79,
+          18,
+          41
+        ],
+        "from": "minecraft:oak_stairs[facing=east,half=top,shape=straight]",
+        "to": "minecraft:oak_stairs[facing=west,half=top,shape=straight]",
+        "confidence_kind": "partial_planes",
+        "similarity": 0.9649,
+        "margin": 0.9649,
+        "fractional_area": 1.503,
+        "equivalent_states": []
+      },
+      {
+        "voxel": [
+          79,
+          18,
+          47
+        ],
+        "from": "minecraft:oak_stairs[facing=east,half=top,shape=straight]",
+        "to": "minecraft:oak_stairs[facing=west,half=top,shape=straight]",
+        "confidence_kind": "partial_planes",
+        "similarity": 0.9649,
+        "margin": 0.9649,
+        "fractional_area": 1.498,
+        "equivalent_states": []
+      },
+      {
+        "voxel": [
+          293,
+          18,
+          67
+        ],
+        "from": "minecraft:oak_stairs[facing=east,half=top,shape=straight]",
+        "to": "minecraft:oak_stairs[facing=west,half=top,shape=straight]",
+        "confidence_kind": "partial_planes",
+        "similarity": 0.9549,
+        "margin": 0.9549,
+        "fractional_area": 1.495,
+        "equivalent_states": []
+      },
+      {
+        "voxel": [
+          287,
+          18,
+          72
+        ],
+        "from": "minecraft:oak_stairs[facing=east,half=top,shape=straight]",
+        "to": "minecraft:oak_stairs[facing=west,half=top,shape=straight]",
+        "confidence_kind": "partial_planes",
+        "similarity": 0.9649,
+        "margin": 0.9649,
+        "fractional_area": 1.498,
+        "equivalent_states": []
+      },
+      {
+        "voxel": [
+          287,
+          18,
+          79
+        ],
+        "from": "minecraft:oak_stairs[facing=east,half=top,shape=straight]",
+        "to": "minecraft:oak_stairs[facing=west,half=top,shape=straight]",
+        "confidence_kind": "partial_planes",
+        "similarity": 0.9649,
+        "margin": 0.9649,
+        "fractional_area": 1.498,
+        "equivalent_states": []
+      },
+      {
+        "voxel": [
+          293,
+          18,
+          84
+        ],
+        "from": "minecraft:oak_stairs[facing=east,half=top,shape=straight]",
+        "to": "minecraft:oak_stairs[facing=west,half=top,shape=straight]",
+        "confidence_kind": "partial_planes",
+        "similarity": 0.9549,
+        "margin": 0.9549,
+        "fractional_area": 1.501,
+        "equivalent_states": []
+      },
+      {
+        "voxel": [
+          164,
+          18,
+          86
+        ],
+        "from": "minecraft:oak_stairs[facing=east,half=top,shape=straight]",
+        "to": "minecraft:oak_stairs[facing=west,half=top,shape=straight]",
+        "confidence_kind": "partial_planes",
+        "similarity": 0.962,
+        "margin": 0.962,
+        "fractional_area": 1.498,
+        "equivalent_states": []
+      },
+      {
+        "voxel": [
+          164,
+          18,
+          87
+        ],
+        "from": "minecraft:oak_stairs[facing=east,half=top,shape=straight]",
+        "to": "minecraft:oak_stairs[facing=west,half=top,shape=straight]",
+        "confidence_kind": "partial_planes",
+        "similarity": 0.9581,
+        "margin": 0.9581,
+        "fractional_area": 1.503,
+        "equivalent_states": []
+      },
+      {
+        "voxel": [
+          164,
+          18,
+          88
+        ],
+        "from": "minecraft:oak_stairs[facing=east,half=top,shape=straight]",
+        "to": "minecraft:oak_stairs[facing=west,half=top,shape=straight]",
+        "confidence_kind": "partial_planes",
+        "similarity": 0.9696,
+        "margin": 0.9696,
+        "fractional_area": 1.498,
+        "equivalent_states": []
+      },
+      {
+        "voxel": [
+          282,
+          18,
+          141
+        ],
+        "from": "minecraft:oak_stairs[facing=east,half=top,shape=straight]",
+        "to": "minecraft:oak_stairs[facing=west,half=top,shape=straight]",
+        "confidence_kind": "partial_planes",
+        "similarity": 0.9549,
+        "margin": 0.9549,
+        "fractional_area": 1.498,
+        "equivalent_states": []
+      },
+      {
+        "voxel": [
+          276,
+          18,
+          146
+        ],
+        "from": "minecraft:oak_stairs[facing=east,half=top,shape=straight]",
+        "to": "minecraft:oak_stairs[facing=west,half=top,shape=straight]",
+        "confidence_kind": "partial_planes",
+        "similarity": 0.9649,
+        "margin": 0.9649,
+        "fractional_area": 1.501,
+        "equivalent_states": []
+      },
+      {
+        "voxel": [
+          276,
+          18,
+          153
+        ],
+        "from": "minecraft:oak_stairs[facing=east,half=top,shape=straight]",
+        "to": "minecraft:oak_stairs[facing=west,half=top,shape=straight]",
+        "confidence_kind": "partial_planes",
+        "similarity": 0.9649,
+        "margin": 0.9649,
+        "fractional_area": 1.501,
+        "equivalent_states": []
+      },
+      {
+        "voxel": [
+          282,
+          18,
+          158
+        ],
+        "from": "minecraft:oak_stairs[facing=east,half=top,shape=straight]",
+        "to": "minecraft:oak_stairs[facing=west,half=top,shape=straight]",
+        "confidence_kind": "partial_planes",
+        "similarity": 0.9549,
+        "margin": 0.9549,
+        "fractional_area": 1.503,
+        "equivalent_states": []
+      },
+      {
+        "voxel": [
+          12,
+          18,
+          168
+        ],
+        "from": "minecraft:oak_stairs[facing=north,half=bottom,shape=straight]",
+        "to": "minecraft:oak_stairs[facing=south,half=bottom,shape=straight]",
+        "confidence_kind": "partial_planes",
+        "similarity": 0.92,
+        "margin": 0.92,
+        "fractional_area": 1.5,
+        "equivalent_states": []
+      },
+      {
+        "voxel": [
+          22,
+          18,
+          168
+        ],
+        "from": "minecraft:oak_stairs[facing=north,half=bottom,shape=straight]",
+        "to": "minecraft:oak_stairs[facing=south,half=bottom,shape=straight]",
+        "confidence_kind": "partial_planes",
+        "similarity": 0.9304,
+        "margin": 0.9304,
+        "fractional_area": 1.5,
+        "equivalent_states": []
+      },
+      {
+        "voxel": [
+          75,
+          18,
+          231
+        ],
+        "from": "minecraft:oak_stairs[facing=east,half=top,shape=straight]",
+        "to": "minecraft:oak_stairs[facing=west,half=top,shape=straight]",
+        "confidence_kind": "partial_planes",
+        "similarity": 0.9649,
+        "margin": 0.9649,
+        "fractional_area": 1.503,
+        "equivalent_states": []
+      },
+      {
+        "voxel": [
+          75,
+          18,
+          237
+        ],
+        "from": "minecraft:oak_stairs[facing=east,half=top,shape=straight]",
+        "to": "minecraft:oak_stairs[facing=west,half=top,shape=straight]",
+        "confidence_kind": "partial_planes",
+        "similarity": 0.9649,
+        "margin": 0.9649,
+        "fractional_area": 1.503,
+        "equivalent_states": []
+      },
+      {
+        "voxel": [
+          278,
+          19,
+          30
+        ],
+        "from": "minecraft:oak_stairs[facing=north,half=bottom,shape=straight]",
+        "to": "minecraft:oak_stairs[facing=south,half=bottom,shape=straight]",
+        "confidence_kind": "partial_planes",
+        "similarity": 0.92,
+        "margin": 0.92,
+        "fractional_area": 1.499,
+        "equivalent_states": []
+      },
+      {
+        "voxel": [
+          288,
+          19,
+          30
+        ],
+        "from": "minecraft:oak_stairs[facing=north,half=bottom,shape=straight]",
+        "to": "minecraft:oak_stairs[facing=south,half=bottom,shape=straight]",
+        "confidence_kind": "partial_planes",
+        "similarity": 0.92,
+        "margin": 0.92,
+        "fractional_area": 1.499,
+        "equivalent_states": []
+      },
+      {
+        "voxel": [
+          170,
+          19,
+          41
+        ],
+        "from": "minecraft:oak_stairs[facing=east,half=top,shape=straight]",
+        "to": "minecraft:oak_stairs[facing=west,half=top,shape=straight]",
+        "confidence_kind": "partial_planes",
+        "similarity": 0.9789,
+        "margin": 0.9789,
+        "fractional_area": 1.501,
+        "equivalent_states": []
+      },
+      {
+        "voxel": [
+          170,
+          19,
+          45
+        ],
+        "from": "minecraft:oak_stairs[facing=east,half=top,shape=straight]",
+        "to": "minecraft:oak_stairs[facing=west,half=top,shape=straight]",
+        "confidence_kind": "partial_planes",
+        "similarity": 0.9235,
+        "margin": 0.9235,
+        "fractional_area": 1.495,
+        "equivalent_states": []
+      },
+      {
+        "voxel": [
+          79,
+          19,
+          47
+        ],
+        "from": "minecraft:oak_stairs[facing=north,half=bottom,shape=straight]",
+        "to": "minecraft:oak_stairs[facing=south,half=bottom,shape=straight]",
+        "confidence_kind": "partial_planes",
+        "similarity": 0.9304,
+        "margin": 0.9304,
+        "fractional_area": 1.5,
+        "equivalent_states": []
+      },
+      {
+        "voxel": [
+          83,
+          19,
+          47
+        ],
+        "from": "minecraft:oak_stairs[facing=north,half=bottom,shape=straight]",
+        "to": "minecraft:oak_stairs[facing=south,half=bottom,shape=straight]",
+        "confidence_kind": "partial_planes",
+        "similarity": 0.9245,
+        "margin": 0.9245,
+        "fractional_area": 1.496,
+        "equivalent_states": []
+      },
+      {
+        "voxel": [
+          287,
+          19,
+          79
+        ],
+        "from": "minecraft:oak_stairs[facing=north,half=bottom,shape=straight]",
+        "to": "minecraft:oak_stairs[facing=south,half=bottom,shape=straight]",
+        "confidence_kind": "partial_planes",
+        "similarity": 0.92,
+        "margin": 0.92,
+        "fractional_area": 1.5,
+        "equivalent_states": []
+      },
+      {
+        "voxel": [
+          293,
+          19,
+          84
+        ],
+        "from": "minecraft:oak_stairs[facing=north,half=bottom,shape=straight]",
+        "to": "minecraft:oak_stairs[facing=south,half=bottom,shape=straight]",
+        "confidence_kind": "partial_planes",
+        "similarity": 0.9304,
+        "margin": 0.9304,
+        "fractional_area": 1.499,
+        "equivalent_states": []
+      },
+      {
+        "voxel": [
+          297,
+          19,
+          84
+        ],
+        "from": "minecraft:oak_stairs[facing=north,half=bottom,shape=straight]",
+        "to": "minecraft:oak_stairs[facing=south,half=bottom,shape=straight]",
+        "confidence_kind": "partial_planes",
+        "similarity": 0.92,
+        "margin": 0.92,
+        "fractional_area": 1.499,
+        "equivalent_states": []
+      },
+      {
+        "voxel": [
+          166,
+          19,
+          85
+        ],
+        "from": "minecraft:oak_stairs[facing=east,half=top,shape=straight]",
+        "to": "minecraft:oak_stairs[facing=west,half=top,shape=straight]",
+        "confidence_kind": "partial_planes",
+        "similarity": 0.9235,
+        "margin": 0.9235,
+        "fractional_area": 1.503,
+        "equivalent_states": []
+      },
+      {
+        "voxel": [
+          166,
+          19,
+          89
+        ],
+        "from": "minecraft:oak_stairs[facing=east,half=top,shape=straight]",
+        "to": "minecraft:oak_stairs[facing=west,half=top,shape=straight]",
+        "confidence_kind": "partial_planes",
+        "similarity": 0.9897,
+        "margin": 0.9897,
+        "fractional_area": 1.503,
+        "equivalent_states": []
+      },
+      {
+        "voxel": [
+          276,
+          19,
+          153
+        ],
+        "from": "minecraft:oak_stairs[facing=north,half=bottom,shape=straight]",
+        "to": "minecraft:oak_stairs[facing=south,half=bottom,shape=straight]",
+        "confidence_kind": "partial_planes",
+        "similarity": 0.92,
+        "margin": 0.92,
+        "fractional_area": 1.499,
+        "equivalent_states": []
+      },
+      {
+        "voxel": [
+          282,
+          19,
+          158
+        ],
+        "from": "minecraft:oak_stairs[facing=north,half=bottom,shape=straight]",
+        "to": "minecraft:oak_stairs[facing=south,half=bottom,shape=straight]",
+        "confidence_kind": "partial_planes",
+        "similarity": 0.92,
+        "margin": 0.92,
+        "fractional_area": 1.503,
+        "equivalent_states": []
+      },
+      {
+        "voxel": [
+          286,
+          19,
+          158
+        ],
+        "from": "minecraft:oak_stairs[facing=north,half=bottom,shape=straight]",
+        "to": "minecraft:oak_stairs[facing=south,half=bottom,shape=straight]",
+        "confidence_kind": "partial_planes",
+        "similarity": 0.9304,
+        "margin": 0.9304,
+        "fractional_area": 1.499,
+        "equivalent_states": []
+      },
+      {
+        "voxel": [
+          75,
+          19,
+          237
+        ],
+        "from": "minecraft:oak_stairs[facing=north,half=bottom,shape=straight]",
+        "to": "minecraft:oak_stairs[facing=south,half=bottom,shape=straight]",
+        "confidence_kind": "partial_planes",
+        "similarity": 0.9304,
+        "margin": 0.9304,
+        "fractional_area": 1.503,
+        "equivalent_states": []
+      },
+      {
+        "voxel": [
+          79,
+          19,
+          237
+        ],
+        "from": "minecraft:oak_stairs[facing=north,half=bottom,shape=straight]",
+        "to": "minecraft:oak_stairs[facing=south,half=bottom,shape=straight]",
+        "confidence_kind": "partial_planes",
+        "similarity": 0.9244,
+        "margin": 0.9244,
+        "fractional_area": 1.503,
+        "equivalent_states": []
+      },
+      {
+        "voxel": [
+          252,
+          20,
+          39
+        ],
+        "from": "minecraft:oak_stairs[facing=east,half=top,shape=straight]",
+        "to": "minecraft:oak_stairs[facing=west,half=top,shape=straight]",
+        "confidence_kind": "partial_planes",
+        "similarity": 1.0,
+        "margin": 1.0,
+        "fractional_area": 1.5,
+        "equivalent_states": []
+      },
+      {
+        "voxel": [
+          252,
+          20,
+          47
+        ],
+        "from": "minecraft:oak_stairs[facing=east,half=top,shape=straight]",
+        "to": "minecraft:oak_stairs[facing=west,half=top,shape=straight]",
+        "confidence_kind": "partial_planes",
+        "similarity": 1.0,
+        "margin": 1.0,
+        "fractional_area": 1.495,
+        "equivalent_states": []
+      },
+      {
+        "voxel": [
+          250,
+          21,
+          45
+        ],
+        "from": "minecraft:oak_stairs[facing=north,half=bottom,shape=straight]",
+        "to": "minecraft:oak_stairs[facing=south,half=bottom,shape=straight]",
+        "confidence_kind": "partial_planes",
+        "similarity": 0.9915,
+        "margin": 0.9915,
+        "fractional_area": 1.5,
+        "equivalent_states": []
+      },
+      {
+        "voxel": [
+          258,
+          21,
+          45
+        ],
+        "from": "minecraft:oak_stairs[facing=north,half=bottom,shape=straight]",
+        "to": "minecraft:oak_stairs[facing=south,half=bottom,shape=straight]",
+        "confidence_kind": "partial_planes",
+        "similarity": 1.0,
+        "margin": 1.0,
+        "fractional_area": 1.5,
+        "equivalent_states": []
+      },
+      {
+        "voxel": [
+          264,
+          21,
+          179
+        ],
+        "from": "minecraft:oak_stairs[facing=east,half=top,shape=straight]",
+        "to": "minecraft:oak_stairs[facing=west,half=top,shape=straight]",
+        "confidence_kind": "partial_planes",
+        "similarity": 0.9649,
+        "margin": 0.9649,
+        "fractional_area": 1.495,
+        "equivalent_states": []
+      },
+      {
+        "voxel": [
+          264,
+          21,
+          185
+        ],
+        "from": "minecraft:oak_stairs[facing=east,half=top,shape=straight]",
+        "to": "minecraft:oak_stairs[facing=west,half=top,shape=straight]",
+        "confidence_kind": "partial_planes",
+        "similarity": 0.9649,
+        "margin": 0.9649,
+        "fractional_area": 1.501,
+        "equivalent_states": []
+      },
+      {
+        "voxel": [
+          264,
+          22,
+          185
+        ],
+        "from": "minecraft:oak_stairs[facing=north,half=bottom,shape=straight]",
+        "to": "minecraft:oak_stairs[facing=south,half=bottom,shape=straight]",
+        "confidence_kind": "partial_planes",
+        "similarity": 0.9304,
+        "margin": 0.9304,
+        "fractional_area": 1.499,
+        "equivalent_states": []
+      },
+      {
+        "voxel": [
+          268,
+          22,
+          185
+        ],
+        "from": "minecraft:oak_stairs[facing=north,half=bottom,shape=straight]",
+        "to": "minecraft:oak_stairs[facing=south,half=bottom,shape=straight]",
+        "confidence_kind": "partial_planes",
+        "similarity": 0.9244,
+        "margin": 0.9244,
+        "fractional_area": 1.503,
+        "equivalent_states": []
+      },
+      {
+        "voxel": [
+          12,
+          23,
+          161
+        ],
+        "from": "minecraft:oak_stairs[facing=east,half=top,shape=straight]",
+        "to": "minecraft:oak_stairs[facing=west,half=top,shape=straight]",
+        "confidence_kind": "partial_planes",
+        "similarity": 0.9649,
+        "margin": 0.9649,
+        "fractional_area": 1.498,
+        "equivalent_states": []
+      },
+      {
+        "voxel": [
+          12,
+          23,
+          169
+        ],
+        "from": "minecraft:oak_stairs[facing=east,half=top,shape=straight]",
+        "to": "minecraft:oak_stairs[facing=west,half=top,shape=straight]",
+        "confidence_kind": "partial_planes",
+        "similarity": 0.9649,
+        "margin": 0.9649,
+        "fractional_area": 1.503,
+        "equivalent_states": []
+      },
+      {
+        "voxel": [
+          278,
+          24,
+          23
+        ],
+        "from": "minecraft:oak_stairs[facing=east,half=top,shape=straight]",
+        "to": "minecraft:oak_stairs[facing=west,half=top,shape=straight]",
+        "confidence_kind": "partial_planes",
+        "similarity": 0.9649,
+        "margin": 0.9649,
+        "fractional_area": 1.501,
+        "equivalent_states": []
+      },
+      {
+        "voxel": [
+          278,
+          24,
+          31
+        ],
+        "from": "minecraft:oak_stairs[facing=east,half=top,shape=straight]",
+        "to": "minecraft:oak_stairs[facing=west,half=top,shape=straight]",
+        "confidence_kind": "partial_planes",
+        "similarity": 0.9649,
+        "margin": 0.9649,
+        "fractional_area": 1.495,
+        "equivalent_states": []
+      },
+      {
+        "voxel": [
+          293,
+          24,
+          66
+        ],
+        "from": "minecraft:oak_stairs[facing=east,half=top,shape=straight]",
+        "to": "minecraft:oak_stairs[facing=west,half=top,shape=straight]",
+        "confidence_kind": "partial_planes",
+        "similarity": 0.9549,
+        "margin": 0.9549,
+        "fractional_area": 1.501,
+        "equivalent_states": []
+      },
+      {
+        "voxel": [
+          293,
+          24,
+          85
+        ],
+        "from": "minecraft:oak_stairs[facing=east,half=top,shape=straight]",
+        "to": "minecraft:oak_stairs[facing=west,half=top,shape=straight]",
+        "confidence_kind": "partial_planes",
+        "similarity": 0.9549,
+        "margin": 0.9549,
+        "fractional_area": 1.501,
+        "equivalent_states": []
+      },
+      {
+        "voxel": [
+          60,
+          24,
+          128
+        ],
+        "from": "minecraft:oak_stairs[facing=east,half=top,shape=straight]",
+        "to": "minecraft:oak_stairs[facing=west,half=top,shape=straight]",
+        "confidence_kind": "partial_planes",
+        "similarity": 0.9549,
+        "margin": 0.9549,
+        "fractional_area": 1.503,
+        "equivalent_states": []
+      },
+      {
+        "voxel": [
+          60,
+          24,
+          140
+        ],
+        "from": "minecraft:oak_stairs[facing=east,half=top,shape=straight]",
+        "to": "minecraft:oak_stairs[facing=west,half=top,shape=straight]",
+        "confidence_kind": "partial_planes",
+        "similarity": 0.9549,
+        "margin": 0.9549,
+        "fractional_area": 1.503,
+        "equivalent_states": []
+      },
+      {
+        "voxel": [
+          282,
+          24,
+          140
+        ],
+        "from": "minecraft:oak_stairs[facing=east,half=top,shape=straight]",
+        "to": "minecraft:oak_stairs[facing=west,half=top,shape=straight]",
+        "confidence_kind": "partial_planes",
+        "similarity": 0.9549,
+        "margin": 0.9549,
+        "fractional_area": 1.503,
+        "equivalent_states": []
+      },
+      {
+        "voxel": [
+          282,
+          24,
+          159
+        ],
+        "from": "minecraft:oak_stairs[facing=east,half=top,shape=straight]",
+        "to": "minecraft:oak_stairs[facing=west,half=top,shape=straight]",
+        "confidence_kind": "partial_planes",
+        "similarity": 0.9549,
+        "margin": 0.9549,
+        "fractional_area": 1.498,
+        "equivalent_states": []
+      },
+      {
+        "voxel": [
+          12,
+          24,
+          169
+        ],
+        "from": "minecraft:oak_stairs[facing=north,half=bottom,shape=straight]",
+        "to": "minecraft:oak_stairs[facing=south,half=bottom,shape=straight]",
+        "confidence_kind": "partial_planes",
+        "similarity": 0.92,
+        "margin": 0.92,
+        "fractional_area": 1.503,
+        "equivalent_states": []
+      },
+      {
+        "voxel": [
+          22,
+          24,
+          169
+        ],
+        "from": "minecraft:oak_stairs[facing=north,half=bottom,shape=straight]",
+        "to": "minecraft:oak_stairs[facing=south,half=bottom,shape=straight]",
+        "confidence_kind": "partial_planes",
+        "similarity": 0.9304,
+        "margin": 0.9304,
+        "fractional_area": 1.503,
+        "equivalent_states": []
+      },
+      {
+        "voxel": [
+          278,
+          25,
+          31
+        ],
+        "from": "minecraft:oak_stairs[facing=north,half=bottom,shape=straight]",
+        "to": "minecraft:oak_stairs[facing=south,half=bottom,shape=straight]",
+        "confidence_kind": "partial_planes",
+        "similarity": 0.92,
+        "margin": 0.92,
+        "fractional_area": 1.496,
+        "equivalent_states": []
+      },
+      {
+        "voxel": [
+          288,
+          25,
+          31
+        ],
+        "from": "minecraft:oak_stairs[facing=north,half=bottom,shape=straight]",
+        "to": "minecraft:oak_stairs[facing=south,half=bottom,shape=straight]",
+        "confidence_kind": "partial_planes",
+        "similarity": 0.92,
+        "margin": 0.92,
+        "fractional_area": 1.496,
+        "equivalent_states": []
+      },
+      {
+        "voxel": [
+          293,
+          25,
+          85
+        ],
+        "from": "minecraft:oak_stairs[facing=north,half=bottom,shape=straight]",
+        "to": "minecraft:oak_stairs[facing=south,half=bottom,shape=straight]",
+        "confidence_kind": "partial_planes",
+        "similarity": 0.9304,
+        "margin": 0.9304,
+        "fractional_area": 1.499,
+        "equivalent_states": []
+      },
+      {
+        "voxel": [
+          297,
+          25,
+          85
+        ],
+        "from": "minecraft:oak_stairs[facing=north,half=bottom,shape=straight]",
+        "to": "minecraft:oak_stairs[facing=south,half=bottom,shape=straight]",
+        "confidence_kind": "partial_planes",
+        "similarity": 0.92,
+        "margin": 0.92,
+        "fractional_area": 1.499,
+        "equivalent_states": []
+      },
+      {
+        "voxel": [
+          60,
+          25,
+          140
+        ],
+        "from": "minecraft:oak_stairs[facing=north,half=bottom,shape=straight]",
+        "to": "minecraft:oak_stairs[facing=south,half=bottom,shape=straight]",
+        "confidence_kind": "partial_planes",
+        "similarity": 0.92,
+        "margin": 0.92,
+        "fractional_area": 1.503,
+        "equivalent_states": []
+      },
+      {
+        "voxel": [
+          64,
+          25,
+          140
+        ],
+        "from": "minecraft:oak_stairs[facing=north,half=bottom,shape=straight]",
+        "to": "minecraft:oak_stairs[facing=south,half=bottom,shape=straight]",
+        "confidence_kind": "partial_planes",
+        "similarity": 0.9304,
+        "margin": 0.9304,
+        "fractional_area": 1.499,
+        "equivalent_states": []
+      },
+      {
+        "voxel": [
+          282,
+          25,
+          159
+        ],
+        "from": "minecraft:oak_stairs[facing=north,half=bottom,shape=straight]",
+        "to": "minecraft:oak_stairs[facing=south,half=bottom,shape=straight]",
+        "confidence_kind": "partial_planes",
+        "similarity": 0.92,
+        "margin": 0.92,
+        "fractional_area": 1.5,
+        "equivalent_states": []
+      },
+      {
+        "voxel": [
+          286,
+          25,
+          159
+        ],
+        "from": "minecraft:oak_stairs[facing=north,half=bottom,shape=straight]",
+        "to": "minecraft:oak_stairs[facing=south,half=bottom,shape=straight]",
+        "confidence_kind": "partial_planes",
+        "similarity": 0.9305,
+        "margin": 0.9305,
+        "fractional_area": 1.496,
+        "equivalent_states": []
+      },
+      {
+        "voxel": [
+          154,
+          27,
+          62
+        ],
+        "from": "minecraft:oak_stairs[facing=east,half=top,shape=straight]",
+        "to": "minecraft:oak_stairs[facing=west,half=top,shape=straight]",
+        "confidence_kind": "partial_planes",
+        "similarity": 0.9649,
+        "margin": 0.9649,
+        "fractional_area": 1.503,
+        "equivalent_states": []
+      },
+      {
+        "voxel": [
+          154,
+          27,
+          68
+        ],
+        "from": "minecraft:oak_stairs[facing=east,half=top,shape=straight]",
+        "to": "minecraft:oak_stairs[facing=west,half=top,shape=straight]",
+        "confidence_kind": "partial_planes",
+        "similarity": 0.9649,
+        "margin": 0.9649,
+        "fractional_area": 1.503,
+        "equivalent_states": []
+      },
+      {
+        "voxel": [
+          159,
+          27,
+          74
+        ],
+        "from": "minecraft:oak_stairs[facing=east,half=top,shape=straight]",
+        "to": "minecraft:oak_stairs[facing=west,half=top,shape=straight]",
+        "confidence_kind": "partial_planes",
+        "similarity": 0.9549,
+        "margin": 0.9549,
+        "fractional_area": 1.498,
+        "equivalent_states": []
+      },
+      {
+        "voxel": [
+          154,
+          28,
+          68
+        ],
+        "from": "minecraft:oak_stairs[facing=north,half=bottom,shape=straight]",
+        "to": "minecraft:oak_stairs[facing=south,half=bottom,shape=straight]",
+        "confidence_kind": "partial_planes",
+        "similarity": 0.9304,
+        "margin": 0.9304,
+        "fractional_area": 1.503,
+        "equivalent_states": []
+      },
+      {
+        "voxel": [
+          169,
+          28,
+          68
+        ],
+        "from": "minecraft:oak_stairs[facing=north,half=bottom,shape=straight]",
+        "to": "minecraft:oak_stairs[facing=south,half=bottom,shape=straight]",
+        "confidence_kind": "partial_planes",
+        "similarity": 0.92,
+        "margin": 0.92,
+        "fractional_area": 1.503,
+        "equivalent_states": []
+      },
+      {
+        "voxel": [
+          159,
+          28,
+          74
+        ],
+        "from": "minecraft:oak_stairs[facing=north,half=bottom,shape=straight]",
+        "to": "minecraft:oak_stairs[facing=south,half=bottom,shape=straight]",
+        "confidence_kind": "partial_planes",
+        "similarity": 0.9304,
+        "margin": 0.9304,
+        "fractional_area": 1.5,
+        "equivalent_states": []
+      },
+      {
+        "voxel": [
+          164,
+          28,
+          74
+        ],
+        "from": "minecraft:oak_stairs[facing=north,half=bottom,shape=straight]",
+        "to": "minecraft:oak_stairs[facing=south,half=bottom,shape=straight]",
+        "confidence_kind": "partial_planes",
+        "similarity": 0.92,
+        "margin": 0.92,
+        "fractional_area": 1.5,
+        "equivalent_states": []
+      },
+      {
+        "voxel": [
+          252,
+          28,
+          95
+        ],
+        "from": "minecraft:oak_stairs[facing=east,half=top,shape=straight]",
+        "to": "minecraft:oak_stairs[facing=west,half=top,shape=straight]",
+        "confidence_kind": "partial_planes",
+        "similarity": 0.9549,
+        "margin": 0.9549,
+        "fractional_area": 1.495,
+        "equivalent_states": []
+      },
+      {
+        "voxel": [
+          252,
+          28,
+          107
+        ],
+        "from": "minecraft:oak_stairs[facing=east,half=top,shape=straight]",
+        "to": "minecraft:oak_stairs[facing=west,half=top,shape=straight]",
+        "confidence_kind": "partial_planes",
+        "similarity": 0.9504,
+        "margin": 0.9504,
+        "fractional_area": 1.5,
+        "equivalent_states": []
+      },
+      {
+        "voxel": [
+          252,
+          29,
+          107
+        ],
+        "from": "minecraft:oak_stairs[facing=north,half=bottom,shape=straight]",
+        "to": "minecraft:oak_stairs[facing=south,half=bottom,shape=straight]",
+        "confidence_kind": "partial_planes",
+        "similarity": 0.9304,
+        "margin": 0.9304,
+        "fractional_area": 1.499,
+        "equivalent_states": []
+      },
+      {
+        "voxel": [
+          256,
+          29,
+          107
+        ],
+        "from": "minecraft:oak_stairs[facing=north,half=bottom,shape=straight]",
+        "to": "minecraft:oak_stairs[facing=south,half=bottom,shape=straight]",
+        "confidence_kind": "partial_planes",
+        "similarity": 0.92,
+        "margin": 0.92,
+        "fractional_area": 1.504,
+        "equivalent_states": []
+      },
+      {
+        "voxel": [
+          60,
+          30,
+          127
+        ],
+        "from": "minecraft:oak_stairs[facing=east,half=top,shape=straight]",
+        "to": "minecraft:oak_stairs[facing=west,half=top,shape=straight]",
+        "confidence_kind": "partial_planes",
+        "similarity": 0.9549,
+        "margin": 0.9549,
+        "fractional_area": 1.498,
+        "equivalent_states": []
+      },
+      {
+        "voxel": [
+          60,
+          30,
+          141
+        ],
+        "from": "minecraft:oak_stairs[facing=east,half=top,shape=straight]",
+        "to": "minecraft:oak_stairs[facing=west,half=top,shape=straight]",
+        "confidence_kind": "partial_planes",
+        "similarity": 0.9549,
+        "margin": 0.9549,
+        "fractional_area": 1.498,
+        "equivalent_states": []
+      }
+    ],
+    "sampled_voxels": 35114,
+    "template_textures": 43,
+    "unsupported_templates": 0,
+    "counts": {
+      "aligned_local_faces": 1529490,
+      "fractional_geometry_voxels": 35114,
+      "no_fractional_shape_evidence": 316084,
+      "half_height_faces": 27402,
+      "half_vertical_faces": 14014,
+      "stair_like_internal_planes": 10099,
+      "slab_like_internal_planes": 17303,
+      "partial_material_families": {
+        "light_gray_concrete": 6133,
+        "spruce_stairs": 4748,
+        "brick_slab": 3829,
+        "oak_planks": 2772,
+        "smooth_stone_slab": 2541,
+        "oak_slab": 2126,
+        "dark_oak_slab": 1674,
+        "spruce_slab": 1568,
+        "stone_brick_stairs": 1498,
+        "spruce_planks": 1468,
+        "iron_bars": 1212,
+        "bricks": 1083,
+        "oak_stairs": 997,
+        "brick_stairs": 860,
+        "smooth_stone": 709,
+        "oak_trapdoor": 698,
+        "stone_brick_slab": 615,
+        "birch_stairs": 128,
+        "oak_fence_gate": 92,
+        "birch_slab": 67
+      },
+      "visibility_aware_voxels": 33680,
+      "ambiguous_or_low_confidence": 8046,
+      "visually_equivalent_states": 4696,
+      "inferred_stairs": 2070
+    },
+    "policy": "Geometry-aware; abstain when family or orientation is ambiguous"
+  },
+  "block_counts": {
+    "minecraft:polished_andesite": 111420,
+    "minecraft:spruce_log": 11353,
+    "minecraft:light_gray_concrete": 37537,
+    "minecraft:iron_block": 4,
+    "minecraft:stripped_spruce_log": 4297,
+    "minecraft:mushroom_stem": 4,
+    "minecraft:oak_planks": 14693,
+    "minecraft:iron_door": 2,
+    "minecraft:oak_fence[east=true,north=true,south=false,west=false]": 1,
+    "minecraft:iron_door[facing=east,half=lower,hinge=left,open=true]": 1,
+    "minecraft:oak_fence[east=false,north=false,south=true,west=true]": 8,
+    "minecraft:iron_door[facing=north,half=lower,hinge=right,open=true]": 1,
+    "minecraft:oak_leaves[persistent=true]": 1767,
+    "minecraft:dark_oak_leaves[persistent=true]": 13535,
+    "minecraft:oak_stairs[facing=east,half=top,shape=straight]": 152,
+    "minecraft:oak_stairs[facing=west,half=top,shape=straight]": 150,
+    "minecraft:sandstone": 1956,
+    "minecraft:oak_stairs[facing=south,half=top,shape=outer_right]": 120,
+    "minecraft:oak_stairs[facing=east,half=top,shape=outer_left]": 108,
+    "minecraft:light_gray_wool": 4583,
+    "minecraft:mycelium": 1664,
+    "minecraft:brown_concrete": 5444,
+    "minecraft:lime_terracotta": 20861,
+    "minecraft:brown_concrete_powder": 14682,
+    "minecraft:black_concrete": 157,
+    "minecraft:dark_oak_slab[type=bottom]": 1674,
+    "minecraft:brown_terracotta": 3270,
+    "minecraft:oak_slab[type=bottom]": 1075,
+    "minecraft:acacia_log": 2031,
+    "minecraft:smooth_stone_slab[type=bottom]": 905,
+    "minecraft:short_grass": 719,
+    "minecraft:jungle_slab[type=bottom]": 36,
+    "minecraft:jungle_planks": 114,
+    "minecraft:oak_slab[type=top]": 1051,
+    "minecraft:chiseled_stone_bricks": 84,
+    "minecraft:stone_bricks": 2135,
+    "minecraft:cyan_terracotta": 11445,
+    "minecraft:birch_stairs[facing=east,half=top,shape=straight]": 14,
+    "minecraft:birch_planks": 768,
+    "minecraft:birch_stairs[facing=west,half=top,shape=straight]": 14,
+    "minecraft:birch_stairs[facing=south,half=top,shape=outer_right]": 18,
+    "minecraft:polished_granite": 3535,
+    "minecraft:birch_slab[type=top]": 12,
+    "minecraft:birch_stairs[facing=east,half=top,shape=outer_left]": 18,
+    "minecraft:bone_block": 257,
+    "minecraft:birch_log": 1,
+    "minecraft:oak_stairs[facing=south,half=bottom,shape=outer_right]": 133,
+    "minecraft:terracotta": 2681,
+    "minecraft:pumpkin": 7,
+    "minecraft:stone_brick_stairs[facing=north,half=bottom,shape=straight]": 138,
+    "minecraft:stone_brick_slab[type=bottom]": 400,
+    "minecraft:stone_brick_stairs[facing=south,half=bottom,shape=outer_right]": 135,
+    "minecraft:stone_brick_stairs[facing=east,half=bottom,shape=outer_left]": 164,
+    "minecraft:stone_brick_stairs[facing=south,half=bottom,shape=straight]": 139,
+    "minecraft:spruce_planks": 7243,
+    "minecraft:green_terracotta": 2301,
+    "minecraft:dead_bush": 193,
+    "minecraft:melon": 29,
+    "minecraft:hay_block": 3012,
+    "minecraft:oak_stairs[facing=north,half=bottom,shape=straight]": 92,
+    "minecraft:cauldron": 9,
+    "minecraft:oak_stairs[facing=south,half=bottom,shape=straight]": 104,
+    "minecraft:oak_stairs[facing=east,half=bottom,shape=outer_left]": 138,
+    "minecraft:birch_stairs[facing=east,half=bottom,shape=outer_left]": 14,
+    "minecraft:birch_slab[type=bottom]": 55,
+    "minecraft:birch_stairs[facing=south,half=bottom,shape=outer_right]": 14,
+    "minecraft:birch_stairs[facing=south,half=bottom,shape=straight]": 18,
+    "minecraft:birch_stairs[facing=north,half=bottom,shape=straight]": 18,
+    "minecraft:red_tulip": 3,
+    "minecraft:vine": 28,
+    "minecraft:dandelion": 1,
+    "minecraft:oxeye_daisy": 7,
+    "minecraft:stone_brick_stairs[facing=south,half=bottom,shape=inner_right]": 38,
+    "minecraft:stone_brick_stairs[facing=east,half=bottom,shape=inner_left]": 74,
+    "minecraft:ladder": 24,
+    "minecraft:red_sand": 648,
+    "minecraft:red_terracotta": 659,
+    "minecraft:orange_terracotta": 88,
+    "minecraft:green_wool": 1226,
+    "minecraft:stone_brick_stairs[facing=west,half=top,shape=straight]": 196,
+    "minecraft:stone_brick_stairs[facing=east,half=top,shape=straight]": 209,
+    "minecraft:smooth_stone_slab[type=top]": 1636,
+    "minecraft:stone_brick_stairs[facing=east,half=top,shape=outer_left]": 202,
+    "minecraft:redstone_block": 476,
+    "minecraft:stone_brick_stairs[facing=south,half=top,shape=outer_right]": 203,
+    "minecraft:spruce_leaves[persistent=true]": 2769,
+    "minecraft:brown_mushroom_block": 18977,
+    "minecraft:yellow_terracotta": 8143,
+    "minecraft:spruce_stairs[facing=east,half=top,shape=outer_left]": 605,
+    "minecraft:spruce_stairs[facing=west,half=top,shape=straight]": 595,
+    "minecraft:spruce_stairs[facing=east,half=top,shape=straight]": 595,
+    "minecraft:stone_brick_slab[type=top]": 215,
+    "minecraft:white_stained_glass_pane[east=true,north=false,south=true,west=true]": 18,
+    "minecraft:redstone_lamp": 733,
+    "minecraft:white_stained_glass_pane[east=true,north=true,south=false,west=true]": 18,
+    "minecraft:oak_fence[east=false,north=false,south=false,west=false]": 5,
+    "minecraft:oak_fence[east=false,north=true,south=false,west=false]": 4,
+    "minecraft:anvil": 41,
+    "minecraft:black_wool": 426,
+    "minecraft:yellow_wool": 1297,
+    "minecraft:spruce_stairs[facing=south,half=top,shape=outer_right]": 605,
+    "minecraft:spruce_stairs[facing=south,half=bottom,shape=outer_right]": 478,
+    "minecraft:spruce_stairs[facing=east,half=bottom,shape=outer_left]": 676,
+    "minecraft:spruce_stairs[facing=north,half=bottom,shape=straight]": 585,
+    "minecraft:spruce_stairs[facing=south,half=bottom,shape=straight]": 585,
+    "minecraft:smooth_stone": 722,
+    "minecraft:lapis_block": 6,
+    "minecraft:oak_fence[east=false,north=false,south=true,west=false]": 15,
+    "minecraft:oak_fence[east=false,north=false,south=false,west=true]": 13,
+    "minecraft:oak_fence[east=true,north=false,south=false,west=false]": 4,
+    "minecraft:brick_stairs[facing=south,half=top,shape=outer_right]": 87,
+    "minecraft:brick_stairs[facing=east,half=top,shape=straight]": 89,
+    "minecraft:brick_stairs[facing=west,half=top,shape=straight]": 81,
+    "minecraft:brick_slab[type=top]": 1832,
+    "minecraft:brick_stairs[facing=east,half=top,shape=outer_left]": 91,
+    "minecraft:smooth_stone_slab": 68,
+    "minecraft:spruce_fence_gate[facing=north,in_wall=false,open=false]": 3,
+    "minecraft:iron_bars": 1120,
+    "minecraft:brick_stairs[facing=north,half=bottom,shape=straight]": 122,
+    "minecraft:cut_sandstone": 6,
+    "minecraft:brick_stairs[facing=south,half=bottom,shape=outer_right]": 133,
+    "minecraft:bricks": 4841,
+    "minecraft:brick_stairs[facing=east,half=bottom,shape=outer_left]": 135,
+    "minecraft:brick_stairs[facing=south,half=bottom,shape=straight]": 122,
+    "minecraft:spruce_slab[type=bottom]": 1050,
+    "minecraft:oak_trapdoor[facing=north,half=bottom,open=true]": 135,
+    "minecraft:oak_trapdoor[facing=east,half=bottom,open=true]": 140,
+    "minecraft:oak_trapdoor": 291,
+    "minecraft:spruce_slab[type=top]": 518,
+    "minecraft:oak_trapdoor[facing=east,half=top,open=false]": 132,
+    "minecraft:ochre_froglight": 6,
+    "minecraft:brick_slab[type=bottom]": 1997,
+    "minecraft:iron_bars[east=false,north=false,south=true,west=false]": 9,
+    "minecraft:iron_bars[east=false,north=false,south=true,west=true]": 16,
+    "minecraft:iron_bars[east=false,north=true,south=false,west=false]": 9,
+    "minecraft:iron_bars[east=false,north=true,south=false,west=true]": 16,
+    "minecraft:spruce_stairs[facing=south,half=top,shape=inner_right]": 12,
+    "minecraft:spruce_stairs[facing=east,half=top,shape=inner_left]": 12,
+    "minecraft:oak_log": 33,
+    "minecraft:oak_fence[east=true,north=false,south=false,west=true]": 2,
+    "minecraft:oak_fence[east=true,north=false,south=true,west=false]": 4,
+    "minecraft:spruce_fence[east=false,north=false,south=true,west=true]": 2,
+    "minecraft:oak_fence_gate[facing=south,in_wall=false,open=true]": 15,
+    "minecraft:oak_fence_gate[facing=west,in_wall=false,open=true]": 9,
+    "minecraft:oak_fence_gate[facing=east,in_wall=false,open=true]": 11,
+    "minecraft:oak_fence_gate[facing=north,in_wall=false,open=true]": 53,
+    "minecraft:spruce_fence[east=true,north=true,south=false,west=true]": 1,
+    "minecraft:iron_bars[east=true,north=false,south=true,west=false]": 15,
+    "minecraft:iron_bars[east=true,north=true,south=false,west=false]": 15,
+    "minecraft:dark_oak_planks": 426,
+    "minecraft:gray_wool": 466,
+    "minecraft:red_wool": 164,
+    "minecraft:oak_fence_gate[facing=north,in_wall=false,open=false]": 2,
+    "minecraft:oak_fence[east=false,north=true,south=true,west=false]": 2,
+    "minecraft:oak_fence[east=false,north=true,south=false,west=true]": 2,
+    "minecraft:spruce_fence_gate[facing=east,in_wall=false,open=true]": 1,
+    "minecraft:spruce_fence[east=false,north=true,south=true,west=false]": 1,
+    "minecraft:spruce_fence_gate[facing=west,in_wall=false,open=true]": 2,
+    "minecraft:oak_fence_gate[facing=east,in_wall=false,open=false]": 2,
+    "minecraft:orange_wool": 873,
+    "minecraft:yellow_stained_glass": 636,
+    "minecraft:orange_stained_glass": 576,
+    "minecraft:iron_bars[east=true,north=false,south=false,west=false]": 6,
+    "minecraft:iron_bars[east=false,north=false,south=false,west=true]": 6,
+    "minecraft:black_stained_glass": 144,
+    "minecraft:quartz_block": 59,
+    "minecraft:chain": 3,
+    "minecraft:cactus": 3,
+    "minecraft:quartz_pillar": 4,
+    "minecraft:sweet_berry_bush": 8,
+    "minecraft:fern": 6,
+    "minecraft:lilac": 8,
+    "minecraft:sunflower": 4
+  },
+  "stair_orientation_refinement": {
+    "proposed_changes": 36,
+    "stairs_examined": 8231,
+    "counts": {
+      "matched_internal_triangles": 33612,
+      "preserved_equivalent": 5955,
+      "ambiguous_orientation": 2104,
+      "equivalent_geometry": 36,
+      "insufficient_improvement": 136
+    },
+    "samples": [
+      {
+        "voxel": [
+          63,
+          10,
+          94
+        ],
+        "from": "minecraft:stone_brick_stairs[facing=south,half=bottom,shape=inner_right]",
+        "to": "minecraft:stone_brick_stairs[facing=east,half=bottom,shape=outer_left]",
+        "similarity": 0.8752,
+        "margin": 0.0485
+      },
+      {
+        "voxel": [
+          157,
+          10,
+          95
+        ],
+        "from": "minecraft:stone_brick_stairs[facing=south,half=bottom,shape=inner_right]",
+        "to": "minecraft:stone_brick_stairs[facing=east,half=bottom,shape=outer_left]",
+        "similarity": 0.8748,
+        "margin": 0.0484
+      },
+      {
+        "voxel": [
+          70,
+          10,
+          96
+        ],
+        "from": "minecraft:stone_brick_stairs[facing=south,half=bottom,shape=inner_right]",
+        "to": "minecraft:stone_brick_stairs[facing=east,half=bottom,shape=outer_left]",
+        "similarity": 0.8753,
+        "margin": 0.0483
+      },
+      {
+        "voxel": [
+          77,
+          10,
+          98
+        ],
+        "from": "minecraft:stone_brick_stairs[facing=south,half=bottom,shape=inner_right]",
+        "to": "minecraft:stone_brick_stairs[facing=east,half=bottom,shape=outer_left]",
+        "similarity": 0.8754,
+        "margin": 0.0487
+      },
+      {
+        "voxel": [
+          163,
+          10,
+          98
+        ],
+        "from": "minecraft:stone_brick_stairs[facing=south,half=bottom,shape=inner_right]",
+        "to": "minecraft:stone_brick_stairs[facing=east,half=bottom,shape=outer_left]",
+        "similarity": 0.8753,
+        "margin": 0.0486
+      },
+      {
+        "voxel": [
+          127,
+          10,
+          99
+        ],
+        "from": "minecraft:stone_brick_stairs[facing=south,half=bottom,shape=inner_right]",
+        "to": "minecraft:stone_brick_stairs[facing=east,half=bottom,shape=outer_left]",
+        "similarity": 0.8749,
+        "margin": 0.0488
+      },
+      {
+        "voxel": [
+          168,
+          10,
+          102
+        ],
+        "from": "minecraft:stone_brick_stairs[facing=south,half=bottom,shape=inner_right]",
+        "to": "minecraft:stone_brick_stairs[facing=east,half=bottom,shape=outer_left]",
+        "similarity": 0.8749,
+        "margin": 0.0488
+      },
+      {
+        "voxel": [
+          130,
+          10,
+          105
+        ],
+        "from": "minecraft:stone_brick_stairs[facing=south,half=bottom,shape=inner_right]",
+        "to": "minecraft:stone_brick_stairs[facing=east,half=bottom,shape=outer_left]",
+        "similarity": 0.8754,
+        "margin": 0.0487
+      },
+      {
+        "voxel": [
+          160,
+          10,
+          108
+        ],
+        "from": "minecraft:stone_brick_stairs[facing=south,half=bottom,shape=inner_right]",
+        "to": "minecraft:stone_brick_stairs[facing=east,half=bottom,shape=outer_left]",
+        "similarity": 0.8752,
+        "margin": 0.0488
+      },
+      {
+        "voxel": [
+          166,
+          10,
+          111
+        ],
+        "from": "minecraft:stone_brick_stairs[facing=south,half=bottom,shape=inner_right]",
+        "to": "minecraft:stone_brick_stairs[facing=east,half=bottom,shape=outer_left]",
+        "similarity": 0.8749,
+        "margin": 0.0488
+      },
+      {
+        "voxel": [
+          132,
+          10,
+          112
+        ],
+        "from": "minecraft:stone_brick_stairs[facing=south,half=bottom,shape=inner_right]",
+        "to": "minecraft:stone_brick_stairs[facing=east,half=bottom,shape=outer_left]",
+        "similarity": 0.8754,
+        "margin": 0.0487
+      },
+      {
+        "voxel": [
+          171,
+          10,
+          115
+        ],
+        "from": "minecraft:stone_brick_stairs[facing=south,half=bottom,shape=inner_right]",
+        "to": "minecraft:stone_brick_stairs[facing=east,half=bottom,shape=outer_left]",
+        "similarity": 0.8749,
+        "margin": 0.0488
+      },
+      {
+        "voxel": [
+          239,
+          10,
+          133
+        ],
+        "from": "minecraft:stone_brick_stairs[facing=south,half=bottom,shape=inner_right]",
+        "to": "minecraft:stone_brick_stairs[facing=east,half=bottom,shape=outer_left]",
+        "similarity": 0.8752,
+        "margin": 0.0485
+      },
+      {
+        "voxel": [
+          238,
+          10,
+          139
+        ],
+        "from": "minecraft:stone_brick_stairs[facing=south,half=bottom,shape=inner_right]",
+        "to": "minecraft:stone_brick_stairs[facing=east,half=bottom,shape=outer_left]",
+        "similarity": 0.8754,
+        "margin": 0.0487
+      },
+      {
+        "voxel": [
+          34,
+          10,
+          157
+        ],
+        "from": "minecraft:stone_brick_stairs[facing=south,half=bottom,shape=inner_right]",
+        "to": "minecraft:stone_brick_stairs[facing=east,half=bottom,shape=outer_left]",
+        "similarity": 0.8748,
+        "margin": 0.0484
+      },
+      {
+        "voxel": [
+          29,
+          10,
+          160
+        ],
+        "from": "minecraft:stone_brick_stairs[facing=south,half=bottom,shape=inner_right]",
+        "to": "minecraft:stone_brick_stairs[facing=east,half=bottom,shape=outer_left]",
+        "similarity": 0.8752,
+        "margin": 0.0485
+      },
+      {
+        "voxel": [
+          36,
+          10,
+          163
+        ],
+        "from": "minecraft:stone_brick_stairs[facing=south,half=bottom,shape=inner_right]",
+        "to": "minecraft:stone_brick_stairs[facing=east,half=bottom,shape=outer_left]",
+        "similarity": 0.8749,
+        "margin": 0.0488
+      },
+      {
+        "voxel": [
+          74,
+          10,
+          169
+        ],
+        "from": "minecraft:stone_brick_stairs[facing=south,half=bottom,shape=inner_right]",
+        "to": "minecraft:stone_brick_stairs[facing=east,half=bottom,shape=outer_left]",
+        "similarity": 0.8754,
+        "margin": 0.0486
+      },
+      {
+        "voxel": [
+          75,
+          10,
+          175
+        ],
+        "from": "minecraft:stone_brick_stairs[facing=south,half=bottom,shape=inner_right]",
+        "to": "minecraft:stone_brick_stairs[facing=east,half=bottom,shape=outer_left]",
+        "similarity": 0.8748,
+        "margin": 0.0484
+      },
+      {
+        "voxel": [
+          77,
+          10,
+          181
+        ],
+        "from": "minecraft:stone_brick_stairs[facing=south,half=bottom,shape=inner_right]",
+        "to": "minecraft:stone_brick_stairs[facing=east,half=bottom,shape=outer_left]",
+        "similarity": 0.8753,
+        "margin": 0.0489
+      },
+      {
+        "voxel": [
+          57,
+          10,
+          185
+        ],
+        "from": "minecraft:stone_brick_stairs[facing=south,half=bottom,shape=inner_right]",
+        "to": "minecraft:stone_brick_stairs[facing=east,half=bottom,shape=outer_left]",
+        "similarity": 0.8754,
+        "margin": 0.0487
+      },
+      {
+        "voxel": [
+          59,
+          10,
+          190
+        ],
+        "from": "minecraft:stone_brick_stairs[facing=south,half=bottom,shape=inner_right]",
+        "to": "minecraft:stone_brick_stairs[facing=east,half=bottom,shape=outer_left]",
+        "similarity": 0.8752,
+        "margin": 0.0488
+      },
+      {
+        "voxel": [
+          241,
+          10,
+          190
+        ],
+        "from": "minecraft:stone_brick_stairs[facing=south,half=bottom,shape=inner_right]",
+        "to": "minecraft:stone_brick_stairs[facing=east,half=bottom,shape=outer_left]",
+        "similarity": 0.8752,
+        "margin": 0.0485
+      },
+      {
+        "voxel": [
+          247,
+          10,
+          194
+        ],
+        "from": "minecraft:stone_brick_stairs[facing=south,half=bottom,shape=inner_right]",
+        "to": "minecraft:stone_brick_stairs[facing=east,half=bottom,shape=outer_left]",
+        "similarity": 0.8753,
+        "margin": 0.0486
+      },
+      {
+        "voxel": [
+          240,
+          10,
+          199
+        ],
+        "from": "minecraft:stone_brick_stairs[facing=south,half=bottom,shape=inner_right]",
+        "to": "minecraft:stone_brick_stairs[facing=east,half=bottom,shape=outer_left]",
+        "similarity": 0.8752,
+        "margin": 0.0488
+      },
+      {
+        "voxel": [
+          247,
+          10,
+          203
+        ],
+        "from": "minecraft:stone_brick_stairs[facing=south,half=bottom,shape=inner_right]",
+        "to": "minecraft:stone_brick_stairs[facing=east,half=bottom,shape=outer_left]",
+        "similarity": 0.8753,
+        "margin": 0.0486
+      },
+      {
+        "voxel": [
+          256,
+          10,
+          264
+        ],
+        "from": "minecraft:stone_brick_stairs[facing=south,half=bottom,shape=inner_right]",
+        "to": "minecraft:stone_brick_stairs[facing=east,half=bottom,shape=outer_left]",
+        "similarity": 0.8748,
+        "margin": 0.0484
+      },
+      {
+        "voxel": [
+          253,
+          10,
+          270
+        ],
+        "from": "minecraft:stone_brick_stairs[facing=south,half=bottom,shape=inner_right]",
+        "to": "minecraft:stone_brick_stairs[facing=east,half=bottom,shape=outer_left]",
+        "similarity": 0.8752,
+        "margin": 0.0485
+      },
+      {
+        "voxel": [
+          248,
+          10,
+          275
+        ],
+        "from": "minecraft:stone_brick_stairs[facing=south,half=bottom,shape=inner_right]",
+        "to": "minecraft:stone_brick_stairs[facing=east,half=bottom,shape=outer_left]",
+        "similarity": 0.8749,
+        "margin": 0.0488
+      },
+      {
+        "voxel": [
+          180,
+          24,
+          177
+        ],
+        "from": "minecraft:stone_brick_stairs[facing=south,half=bottom,shape=inner_right]",
+        "to": "minecraft:stone_brick_stairs[facing=east,half=bottom,shape=outer_left]",
+        "similarity": 0.8748,
+        "margin": 0.0487
+      },
+      {
+        "voxel": [
+          186,
+          24,
+          179
+        ],
+        "from": "minecraft:stone_brick_stairs[facing=south,half=bottom,shape=inner_right]",
+        "to": "minecraft:stone_brick_stairs[facing=east,half=bottom,shape=outer_left]",
+        "similarity": 0.8748,
+        "margin": 0.0484
+      },
+      {
+        "voxel": [
+          174,
+          24,
+          181
+        ],
+        "from": "minecraft:stone_brick_stairs[facing=south,half=bottom,shape=inner_right]",
+        "to": "minecraft:stone_brick_stairs[facing=east,half=bottom,shape=outer_left]",
+        "similarity": 0.8752,
+        "margin": 0.0485
+      },
+      {
+        "voxel": [
+          181,
+          24,
+          185
+        ],
+        "from": "minecraft:stone_brick_stairs[facing=south,half=bottom,shape=inner_right]",
+        "to": "minecraft:stone_brick_stairs[facing=east,half=bottom,shape=outer_left]",
+        "similarity": 0.8753,
+        "margin": 0.0483
+      },
+      {
+        "voxel": [
+          217,
+          26,
+          235
+        ],
+        "from": "minecraft:stone_brick_stairs[facing=south,half=bottom,shape=inner_right]",
+        "to": "minecraft:stone_brick_stairs[facing=east,half=bottom,shape=outer_left]",
+        "similarity": 0.8753,
+        "margin": 0.0483
+      },
+      {
+        "voxel": [
+          219,
+          26,
+          240
+        ],
+        "from": "minecraft:stone_brick_stairs[facing=south,half=bottom,shape=inner_right]",
+        "to": "minecraft:stone_brick_stairs[facing=east,half=bottom,shape=outer_left]",
+        "similarity": 0.8753,
+        "margin": 0.0489
+      },
+      {
+        "voxel": [
+          225,
+          26,
+          242
+        ],
+        "from": "minecraft:stone_brick_stairs[facing=south,half=bottom,shape=inner_right]",
+        "to": "minecraft:stone_brick_stairs[facing=east,half=bottom,shape=outer_left]",
+        "similarity": 0.8753,
+        "margin": 0.0486
+      }
+    ],
+    "local_winding": {
+      "global": 8231
+    },
+    "winding": {
+      "integer_positive_area": 145449.26,
+      "integer_negative_area": 147349.14,
+      "winding": "inward",
+      "winding_decisive": false,
+      "stair_raw_similarity": 0.8283,
+      "stair_flipped_similarity": 0.88,
+      "stair_surface_winding": "flipped"
+    },
+    "policy": "signed 8x8 tread/riser topology, globally calibrated winding; abstain on ties"
+  },
+  "fence_geometry_inference": {
+    "examined": 23308,
+    "fractional_faces": 89516,
+    "geometry_candidates": 2484,
+    "proposed_changes": 64,
+    "rejected": {
+      "weak_or_ambiguous_fence_geometry": 2420
+    },
+    "samples": [
+      {
+        "point": [
+          105,
+          2,
+          119
+        ],
+        "from": "minecraft:oak_planks",
+        "to": "minecraft:oak_fence[east=true,north=true,south=false,west=false]",
+        "similarity": 0.7283,
+        "margin": 0.0231
+      },
+      {
+        "point": [
+          105,
+          2,
+          136
+        ],
+        "from": "minecraft:oak_planks",
+        "to": "minecraft:oak_fence[east=false,north=false,south=true,west=true]",
+        "similarity": 0.7418,
+        "margin": 0.0215
+      },
+      {
+        "point": [
+          26,
+          12,
+          54
+        ],
+        "from": "minecraft:oak_planks",
+        "to": "minecraft:oak_fence[east=false,north=false,south=false,west=false]",
+        "similarity": 0.6762,
+        "margin": 0.059
+      },
+      {
+        "point": [
+          71,
+          12,
+          86
+        ],
+        "from": "minecraft:oak_planks",
+        "to": "minecraft:oak_fence[east=false,north=true,south=false,west=false]",
+        "similarity": 0.6733,
+        "margin": 0.027
+      },
+      {
+        "point": [
+          110,
+          12,
+          123
+        ],
+        "from": "minecraft:oak_planks",
+        "to": "minecraft:oak_fence[east=false,north=false,south=false,west=false]",
+        "similarity": 0.6565,
+        "margin": 0.0578
+      },
+      {
+        "point": [
+          281,
+          13,
+          166
+        ],
+        "from": "minecraft:oak_planks",
+        "to": "minecraft:oak_fence[east=false,north=false,south=true,west=false]",
+        "similarity": 0.7033,
+        "margin": 0.0601
+      },
+      {
+        "point": [
+          280,
+          13,
+          167
+        ],
+        "from": "minecraft:oak_planks",
+        "to": "minecraft:oak_fence[east=false,north=false,south=false,west=true]",
+        "similarity": 0.6946,
+        "margin": 0.0295
+      },
+      {
+        "point": [
+          282,
+          13,
+          167
+        ],
+        "from": "minecraft:oak_planks",
+        "to": "minecraft:oak_fence[east=true,north=false,south=false,west=false]",
+        "similarity": 0.6694,
+        "margin": 0.0221
+      },
+      {
+        "point": [
+          286,
+          13,
+          197
+        ],
+        "from": "minecraft:oak_planks",
+        "to": "minecraft:oak_fence[east=false,north=true,south=false,west=false]",
+        "similarity": 0.6763,
+        "margin": 0.0276
+      },
+      {
+        "point": [
+          268,
+          13,
+          213
+        ],
+        "from": "minecraft:oak_planks",
+        "to": "minecraft:oak_fence[east=false,north=true,south=false,west=false]",
+        "similarity": 0.7437,
+        "margin": 0.0328
+      },
+      {
+        "point": [
+          120,
+          17,
+          37
+        ],
+        "from": "minecraft:oak_planks",
+        "to": "minecraft:oak_fence[east=false,north=false,south=true,west=true]",
+        "similarity": 0.6575,
+        "margin": 0.0292
+      },
+      {
+        "point": [
+          225,
+          17,
+          39
+        ],
+        "from": "minecraft:oak_planks",
+        "to": "minecraft:oak_fence[east=false,north=false,south=true,west=true]",
+        "similarity": 0.6555,
+        "margin": 0.0288
+      },
+      {
+        "point": [
+          231,
+          17,
+          69
+        ],
+        "from": "minecraft:oak_planks",
+        "to": "minecraft:oak_fence[east=false,north=false,south=true,west=true]",
+        "similarity": 0.6692,
+        "margin": 0.0286
+      },
+      {
+        "point": [
+          275,
+          17,
+          149
+        ],
+        "from": "minecraft:oak_planks",
+        "to": "minecraft:oak_fence[east=false,north=false,south=true,west=true]",
+        "similarity": 0.6575,
+        "margin": 0.0292
+      },
+      {
+        "point": [
+          277,
+          18,
+          23
+        ],
+        "from": "minecraft:oak_planks",
+        "to": "minecraft:oak_fence[east=false,north=false,south=true,west=false]",
+        "similarity": 0.7104,
+        "margin": 0.0614
+      },
+      {
+        "point": [
+          276,
+          18,
+          24
+        ],
+        "from": "minecraft:oak_planks",
+        "to": "minecraft:oak_fence[east=false,north=false,south=false,west=true]",
+        "similarity": 0.6946,
+        "margin": 0.0295
+      },
+      {
+        "point": [
+          53,
+          18,
+          29
+        ],
+        "from": "minecraft:oak_planks",
+        "to": "minecraft:oak_fence[east=false,north=false,south=false,west=true]",
+        "similarity": 0.7051,
+        "margin": 0.0483
+      },
+      {
+        "point": [
+          27,
+          18,
+          55
+        ],
+        "from": "minecraft:oak_planks",
+        "to": "minecraft:oak_fence[east=false,north=false,south=true,west=false]",
+        "similarity": 0.7071,
+        "margin": 0.051
+      },
+      {
+        "point": [
+          130,
+          18,
+          71
+        ],
+        "from": "minecraft:oak_planks",
+        "to": "minecraft:oak_fence[east=false,north=false,south=true,west=false]",
+        "similarity": 0.7071,
+        "margin": 0.051
+      },
+      {
+        "point": [
+          286,
+          18,
+          71
+        ],
+        "from": "minecraft:oak_planks",
+        "to": "minecraft:oak_fence[east=false,north=false,south=true,west=false]",
+        "similarity": 0.7071,
+        "margin": 0.051
+      },
+      {
+        "point": [
+          285,
+          18,
+          72
+        ],
+        "from": "minecraft:oak_planks",
+        "to": "minecraft:oak_fence[east=false,north=false,south=false,west=true]",
+        "similarity": 0.7011,
+        "margin": 0.0279
+      },
+      {
+        "point": [
+          18,
+          18,
+          85
+        ],
+        "from": "minecraft:oak_planks",
+        "to": "minecraft:oak_fence[east=true,north=false,south=false,west=false]",
+        "similarity": 0.6609,
+        "margin": 0.0193
+      },
+      {
+        "point": [
+          105,
+          18,
+          86
+        ],
+        "from": "minecraft:oak_planks",
+        "to": "minecraft:oak_fence[east=false,north=false,south=false,west=true]",
+        "similarity": 0.7571,
+        "margin": 0.0439
+      },
+      {
+        "point": [
+          76,
+          18,
+          88
+        ],
+        "from": "minecraft:oak_planks",
+        "to": "minecraft:oak_fence[east=true,north=false,south=false,west=true]",
+        "similarity": 0.6935,
+        "margin": 0.026
+      },
+      {
+        "point": [
+          13,
+          18,
+          121
+        ],
+        "from": "minecraft:oak_planks",
+        "to": "minecraft:oak_fence[east=true,north=false,south=false,west=true]",
+        "similarity": 0.6537,
+        "margin": 0.0427
+      },
+      {
+        "point": [
+          168,
+          18,
+          124
+        ],
+        "from": "minecraft:oak_planks",
+        "to": "minecraft:oak_fence[east=true,north=false,south=true,west=false]",
+        "similarity": 0.7002,
+        "margin": 0.0207
+      },
+      {
+        "point": [
+          281,
+          18,
+          140
+        ],
+        "from": "minecraft:oak_planks",
+        "to": "minecraft:oak_fence[east=false,north=false,south=true,west=false]",
+        "similarity": 0.6519,
+        "margin": 0.0218
+      },
+      {
+        "point": [
+          185,
+          18,
+          157
+        ],
+        "from": "minecraft:spruce_planks",
+        "to": "minecraft:spruce_fence[east=false,north=false,south=true,west=true]",
+        "similarity": 0.7213,
+        "margin": 0.0229
+      },
+      {
+        "point": [
+          67,
+          18,
+          214
+        ],
+        "from": "minecraft:oak_planks",
+        "to": "minecraft:oak_fence[east=false,north=false,south=true,west=true]",
+        "similarity": 0.725,
+        "margin": 0.0184
+      },
+      {
+        "point": [
+          69,
+          18,
+          214
+        ],
+        "from": "minecraft:oak_planks",
+        "to": "minecraft:oak_fence[east=true,north=false,south=true,west=false]",
+        "similarity": 0.7087,
+        "margin": 0.0313
+      },
+      {
+        "point": [
+          115,
+          18,
+          219
+        ],
+        "from": "minecraft:oak_planks",
+        "to": "minecraft:oak_fence[east=true,north=false,south=true,west=false]",
+        "similarity": 0.7002,
+        "margin": 0.0207
+      },
+      {
+        "point": [
+          159,
+          18,
+          279
+        ],
+        "from": "minecraft:spruce_planks",
+        "to": "minecraft:spruce_fence[east=true,north=true,south=false,west=true]",
+        "similarity": 0.7065,
+        "margin": 0.0211
+      }
+    ],
+    "policy": "only wood plank families with characteristic post faces on both axes and a clear model winner"
+  },
+  "slab_half_refinement": {
+    "examined": 12524,
+    "proposed_changes": 7192,
+    "winding": {
+      "integer_positive_area": 145449.26,
+      "integer_negative_area": 147349.14,
+      "winding": "inward",
+      "winding_decisive": true,
+      "source": "calibrated from stair geometry"
+    },
+    "sample": [
+      {
+        "position": [
+          31,
+          9,
+          3
+        ],
+        "previous": "minecraft:dark_oak_slab[type=top]",
+        "new": "minecraft:dark_oak_slab[type=bottom]",
+        "top_face_area": 0.999,
+        "bottom_face_area": 0.0
+      },
+      {
+        "position": [
+          39,
+          9,
+          3
+        ],
+        "previous": "minecraft:dark_oak_slab[type=top]",
+        "new": "minecraft:dark_oak_slab[type=bottom]",
+        "top_face_area": 0.999,
+        "bottom_face_area": 0.0
+      },
+      {
+        "position": [
+          129,
+          9,
+          3
+        ],
+        "previous": "minecraft:dark_oak_slab[type=top]",
+        "new": "minecraft:dark_oak_slab[type=bottom]",
+        "top_face_area": 0.996,
+        "bottom_face_area": 0.0
+      },
+      {
+        "position": [
+          152,
+          9,
+          3
+        ],
+        "previous": "minecraft:dark_oak_slab[type=top]",
+        "new": "minecraft:dark_oak_slab[type=bottom]",
+        "top_face_area": 0.999,
+        "bottom_face_area": 0.0
+      },
+      {
+        "position": [
+          201,
+          9,
+          3
+        ],
+        "previous": "minecraft:dark_oak_slab[type=top]",
+        "new": "minecraft:dark_oak_slab[type=bottom]",
+        "top_face_area": 0.996,
+        "bottom_face_area": 0.0
+      },
+      {
+        "position": [
+          255,
+          9,
+          3
+        ],
+        "previous": "minecraft:dark_oak_slab[type=top]",
+        "new": "minecraft:dark_oak_slab[type=bottom]",
+        "top_face_area": 0.999,
+        "bottom_face_area": 0.0
+      },
+      {
+        "position": [
+          32,
+          9,
+          4
+        ],
+        "previous": "minecraft:dark_oak_slab[type=top]",
+        "new": "minecraft:dark_oak_slab[type=bottom]",
+        "top_face_area": 1.0,
+        "bottom_face_area": 0.0
+      },
+      {
+        "position": [
+          40,
+          9,
+          4
+        ],
+        "previous": "minecraft:dark_oak_slab[type=top]",
+        "new": "minecraft:dark_oak_slab[type=bottom]",
+        "top_face_area": 1.0,
+        "bottom_face_area": 0.0
+      },
+      {
+        "position": [
+          129,
+          9,
+          4
+        ],
+        "previous": "minecraft:dark_oak_slab[type=top]",
+        "new": "minecraft:dark_oak_slab[type=bottom]",
+        "top_face_area": 1.0,
+        "bottom_face_area": 0.0
+      },
+      {
+        "position": [
+          152,
+          9,
+          4
+        ],
+        "previous": "minecraft:dark_oak_slab[type=top]",
+        "new": "minecraft:dark_oak_slab[type=bottom]",
+        "top_face_area": 1.003,
+        "bottom_face_area": 0.0
+      },
+      {
+        "position": [
+          201,
+          9,
+          4
+        ],
+        "previous": "minecraft:dark_oak_slab[type=top]",
+        "new": "minecraft:dark_oak_slab[type=bottom]",
+        "top_face_area": 1.0,
+        "bottom_face_area": 0.0
+      },
+      {
+        "position": [
+          255,
+          9,
+          4
+        ],
+        "previous": "minecraft:dark_oak_slab[type=top]",
+        "new": "minecraft:dark_oak_slab[type=bottom]",
+        "top_face_area": 1.003,
+        "bottom_face_area": 0.0
+      },
+      {
+        "position": [
+          33,
+          9,
+          5
+        ],
+        "previous": "minecraft:dark_oak_slab[type=top]",
+        "new": "minecraft:dark_oak_slab[type=bottom]",
+        "top_face_area": 1.003,
+        "bottom_face_area": 0.0
+      },
+      {
+        "position": [
+          41,
+          9,
+          5
+        ],
+        "previous": "minecraft:dark_oak_slab[type=top]",
+        "new": "minecraft:dark_oak_slab[type=bottom]",
+        "top_face_area": 1.003,
+        "bottom_face_area": 0.0
+      },
+      {
+        "position": [
+          128,
+          9,
+          5
+        ],
+        "previous": "minecraft:dark_oak_slab[type=top]",
+        "new": "minecraft:dark_oak_slab[type=bottom]",
+        "top_face_area": 1.003,
+        "bottom_face_area": 0.0
+      },
+      {
+        "position": [
+          152,
+          9,
+          5
+        ],
+        "previous": "minecraft:dark_oak_slab[type=top]",
+        "new": "minecraft:dark_oak_slab[type=bottom]",
+        "top_face_area": 1.003,
+        "bottom_face_area": 0.0
+      },
+      {
+        "position": [
+          201,
+          9,
+          5
+        ],
+        "previous": "minecraft:dark_oak_slab[type=top]",
+        "new": "minecraft:dark_oak_slab[type=bottom]",
+        "top_face_area": 1.0,
+        "bottom_face_area": 0.0
+      },
+      {
+        "position": [
+          254,
+          9,
+          5
+        ],
+        "previous": "minecraft:dark_oak_slab[type=top]",
+        "new": "minecraft:dark_oak_slab[type=bottom]",
+        "top_face_area": 1.0,
+        "bottom_face_area": 0.0
+      },
+      {
+        "position": [
+          34,
+          9,
+          6
+        ],
+        "previous": "minecraft:dark_oak_slab[type=top]",
+        "new": "minecraft:dark_oak_slab[type=bottom]",
+        "top_face_area": 0.999,
+        "bottom_face_area": 0.0
+      },
+      {
+        "position": [
+          42,
+          9,
+          6
+        ],
+        "previous": "minecraft:dark_oak_slab[type=top]",
+        "new": "minecraft:dark_oak_slab[type=bottom]",
+        "top_face_area": 0.996,
+        "bottom_face_area": 0.0
+      },
+      {
+        "position": [
+          43,
+          9,
+          6
+        ],
+        "previous": "minecraft:dark_oak_slab[type=top]",
+        "new": "minecraft:dark_oak_slab[type=bottom]",
+        "top_face_area": 0.999,
+        "bottom_face_area": 0.0
+      },
+      {
+        "position": [
+          44,
+          9,
+          6
+        ],
+        "previous": "minecraft:dark_oak_slab[type=top]",
+        "new": "minecraft:dark_oak_slab[type=bottom]",
+        "top_face_area": 0.996,
+        "bottom_face_area": 0.0
+      },
+      {
+        "position": [
+          127,
+          9,
+          6
+        ],
+        "previous": "minecraft:dark_oak_slab[type=top]",
+        "new": "minecraft:dark_oak_slab[type=bottom]",
+        "top_face_area": 0.999,
+        "bottom_face_area": 0.0
+      },
+      {
+        "position": [
+          152,
+          9,
+          6
+        ],
+        "previous": "minecraft:dark_oak_slab[type=top]",
+        "new": "minecraft:dark_oak_slab[type=bottom]",
+        "top_face_area": 0.999,
+        "bottom_face_area": 0.0
+      },
+      {
+        "position": [
+          201,
+          9,
+          6
+        ],
+        "previous": "minecraft:dark_oak_slab[type=top]",
+        "new": "minecraft:dark_oak_slab[type=bottom]",
+        "top_face_area": 0.996,
+        "bottom_face_area": 0.0
+      },
+      {
+        "position": [
+          253,
+          9,
+          6
+        ],
+        "previous": "minecraft:dark_oak_slab[type=top]",
+        "new": "minecraft:dark_oak_slab[type=bottom]",
+        "top_face_area": 0.999,
+        "bottom_face_area": 0.0
+      },
+      {
+        "position": [
+          35,
+          9,
+          7
+        ],
+        "previous": "minecraft:dark_oak_slab[type=top]",
+        "new": "minecraft:dark_oak_slab[type=bottom]",
+        "top_face_area": 1.0,
+        "bottom_face_area": 0.0
+      },
+      {
+        "position": [
+          45,
+          9,
+          7
+        ],
+        "previous": "minecraft:dark_oak_slab[type=top]",
+        "new": "minecraft:dark_oak_slab[type=bottom]",
+        "top_face_area": 1.003,
+        "bottom_face_area": 0.0
+      },
+      {
+        "position": [
+          46,
+          9,
+          7
+        ],
+        "previous": "minecraft:dark_oak_slab[type=top]",
+        "new": "minecraft:dark_oak_slab[type=bottom]",
+        "top_face_area": 1.003,
+        "bottom_face_area": 0.0
+      },
+      {
+        "position": [
+          47,
+          9,
+          7
+        ],
+        "previous": "minecraft:dark_oak_slab[type=top]",
+        "new": "minecraft:dark_oak_slab[type=bottom]",
+        "top_face_area": 1.0,
+        "bottom_face_area": 0.0
+      },
+      {
+        "position": [
+          48,
+          9,
+          7
+        ],
+        "previous": "minecraft:dark_oak_slab[type=top]",
+        "new": "minecraft:dark_oak_slab[type=bottom]",
+        "top_face_area": 1.003,
+        "bottom_face_area": 0.0
+      },
+      {
+        "position": [
+          126,
+          9,
+          7
+        ],
+        "previous": "minecraft:dark_oak_slab[type=top]",
+        "new": "minecraft:dark_oak_slab[type=bottom]",
+        "top_face_area": 1.0,
+        "bottom_face_area": 0.0
+      }
+    ],
+    "policy": "only reassign slab half on a strong signed Y=0.5 surface; abstain otherwise"
+  },
+  "texture_uncertainty_policy": "Geometry-only: original texture guesses unchanged",
+  "schematic_dimensions": [
+    307,
+    142,
+    307
+  ],
+  "schematic_path": "/mnt/data/FFA-Precision-Shape-Experimental.schem",
+  "notes": [
+    "Mesh surfaces do not reveal hidden blocks or exact original block states.",
+    "Atlas override mappings include visually inferred block species and always require review.",
+    "Fractional surfaces are assigned to parent voxels, but block shapes/states require additional inference.",
+    "Bedrock 1.26.0 writer compatibility requires client verification."
+  ]
+}

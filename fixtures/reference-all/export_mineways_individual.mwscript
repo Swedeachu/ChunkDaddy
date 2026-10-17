@@ -1,0 +1,15 @@
+// Headless Mineways Sponge v3 reference export
+Minecraft world: /mnt/data/sketchrip_conformance/fixtures/reference-all/reference.schem
+Set render type: Wavefront OBJ absolute indices
+File type: Export all textures to three large images
+Center model: no
+Use biomes: no
+Make Z the up direction instead of Y: no
+Export lesser blocks: YES
+Simplify mesh: no
+Export separate types: YES
+Split by block type: YES
+Export individual blocks: YES
+Selection location: all
+Export for rendering: /mnt/data/sketchrip_conformance/fixtures/reference-all/mineways-reference-individual.obj
+Close

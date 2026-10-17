@@ -1,0 +1,1063 @@
+{
+  "source": {
+    "local_model": "/mnt/data/11baf8c705414ea8bf9f833a1b1866e4.glb"
+  },
+  "refinement_input": "/mnt/data/SketchRip_ShapeAware_Iteration2/FFA-Arena-Directional-Iteration2.schem",
+  "scale_model_units_per_block": 0.007042280237527157,
+  "counts": {
+    "input_blocks": 351198
+  },
+  "requires_review": true,
+  "stair_orientation_refinement": {
+    "proposed_changes": 2070,
+    "stairs_examined": 8231,
+    "counts": {
+      "matched_internal_triangles": 33612,
+      "preserved_equivalent": 1990,
+      "unique": 2070,
+      "weak_geometry": 4013,
+      "ambiguous_orientation": 158
+    },
+    "samples": [
+      {
+        "voxel": [
+          111,
+          5,
+          123
+        ],
+        "from": "minecraft:oak_stairs[facing=west,half=top,shape=straight]",
+        "to": "minecraft:oak_stairs[facing=east,half=top,shape=straight]",
+        "similarity": 1.0,
+        "margin": 0.0524
+      },
+      {
+        "voxel": [
+          103,
+          6,
+          129
+        ],
+        "from": "minecraft:oak_stairs[facing=west,half=top,shape=straight]",
+        "to": "minecraft:oak_stairs[facing=east,half=top,shape=straight]",
+        "similarity": 1.0,
+        "margin": 0.0524
+      },
+      {
+        "voxel": [
+          81,
+          9,
+          56
+        ],
+        "from": "minecraft:birch_stairs[facing=west,half=top,shape=straight]",
+        "to": "minecraft:birch_stairs[facing=east,half=top,shape=straight]",
+        "similarity": 1.0,
+        "margin": 0.0524
+      },
+      {
+        "voxel": [
+          119,
+          9,
+          59
+        ],
+        "from": "minecraft:birch_stairs[facing=west,half=top,shape=straight]",
+        "to": "minecraft:birch_stairs[facing=east,half=top,shape=straight]",
+        "similarity": 1.0,
+        "margin": 0.0524
+      },
+      {
+        "voxel": [
+          115,
+          9,
+          68
+        ],
+        "from": "minecraft:birch_stairs[facing=west,half=top,shape=straight]",
+        "to": "minecraft:birch_stairs[facing=east,half=top,shape=straight]",
+        "similarity": 1.0,
+        "margin": 0.0524
+      },
+      {
+        "voxel": [
+          81,
+          9,
+          70
+        ],
+        "from": "minecraft:birch_stairs[facing=west,half=top,shape=straight]",
+        "to": "minecraft:birch_stairs[facing=east,half=top,shape=straight]",
+        "similarity": 1.0,
+        "margin": 0.0524
+      },
+      {
+        "voxel": [
+          104,
+          9,
+          70
+        ],
+        "from": "minecraft:birch_stairs[facing=west,half=top,shape=straight]",
+        "to": "minecraft:birch_stairs[facing=east,half=top,shape=straight]",
+        "similarity": 1.0,
+        "margin": 0.0524
+      },
+      {
+        "voxel": [
+          104,
+          9,
+          80
+        ],
+        "from": "minecraft:birch_stairs[facing=west,half=top,shape=straight]",
+        "to": "minecraft:birch_stairs[facing=east,half=top,shape=straight]",
+        "similarity": 1.0,
+        "margin": 0.0524
+      },
+      {
+        "voxel": [
+          183,
+          9,
+          211
+        ],
+        "from": "minecraft:stone_brick_stairs[facing=south,half=bottom,shape=straight]",
+        "to": "minecraft:stone_brick_stairs[facing=north,half=bottom,shape=straight]",
+        "similarity": 1.0,
+        "margin": 0.0524
+      },
+      {
+        "voxel": [
+          138,
+          10,
+          35
+        ],
+        "from": "minecraft:oak_stairs[facing=south,half=bottom,shape=straight]",
+        "to": "minecraft:oak_stairs[facing=north,half=bottom,shape=straight]",
+        "similarity": 1.0,
+        "margin": 0.0524
+      },
+      {
+        "voxel": [
+          171,
+          10,
+          38
+        ],
+        "from": "minecraft:oak_stairs[facing=west,half=top,shape=straight]",
+        "to": "minecraft:oak_stairs[facing=east,half=top,shape=straight]",
+        "similarity": 1.0,
+        "margin": 0.0524
+      },
+      {
+        "voxel": [
+          171,
+          10,
+          39
+        ],
+        "from": "minecraft:oak_stairs[facing=west,half=top,shape=straight]",
+        "to": "minecraft:oak_stairs[facing=east,half=top,shape=straight]",
+        "similarity": 1.0,
+        "margin": 0.0524
+      },
+      {
+        "voxel": [
+          171,
+          10,
+          40
+        ],
+        "from": "minecraft:oak_stairs[facing=west,half=top,shape=straight]",
+        "to": "minecraft:oak_stairs[facing=east,half=top,shape=straight]",
+        "similarity": 1.0,
+        "margin": 0.0524
+      },
+      {
+        "voxel": [
+          77,
+          10,
+          41
+        ],
+        "from": "minecraft:stone_brick_stairs[facing=south,half=bottom,shape=straight]",
+        "to": "minecraft:stone_brick_stairs[facing=north,half=bottom,shape=straight]",
+        "similarity": 1.0,
+        "margin": 0.0524
+      },
+      {
+        "voxel": [
+          85,
+          10,
+          41
+        ],
+        "from": "minecraft:stone_brick_stairs[facing=south,half=bottom,shape=straight]",
+        "to": "minecraft:stone_brick_stairs[facing=north,half=bottom,shape=straight]",
+        "similarity": 1.0,
+        "margin": 0.0524
+      },
+      {
+        "voxel": [
+          122,
+          10,
+          49
+        ],
+        "from": "minecraft:oak_stairs[facing=south,half=bottom,shape=straight]",
+        "to": "minecraft:oak_stairs[facing=north,half=bottom,shape=straight]",
+        "similarity": 1.0,
+        "margin": 0.0524
+      },
+      {
+        "voxel": [
+          128,
+          10,
+          49
+        ],
+        "from": "minecraft:oak_stairs[facing=south,half=bottom,shape=straight]",
+        "to": "minecraft:oak_stairs[facing=north,half=bottom,shape=straight]",
+        "similarity": 1.0,
+        "margin": 0.0524
+      },
+      {
+        "voxel": [
+          76,
+          10,
+          57
+        ],
+        "from": "minecraft:birch_stairs[facing=south,half=bottom,shape=straight]",
+        "to": "minecraft:birch_stairs[facing=north,half=bottom,shape=straight]",
+        "similarity": 1.0,
+        "margin": 0.0524
+      },
+      {
+        "voxel": [
+          82,
+          10,
+          57
+        ],
+        "from": "minecraft:birch_stairs[facing=south,half=bottom,shape=straight]",
+        "to": "minecraft:birch_stairs[facing=north,half=bottom,shape=straight]",
+        "similarity": 1.0,
+        "margin": 0.0524
+      },
+      {
+        "voxel": [
+          75,
+          10,
+          58
+        ],
+        "from": "minecraft:birch_stairs[facing=south,half=bottom,shape=straight]",
+        "to": "minecraft:birch_stairs[facing=north,half=bottom,shape=straight]",
+        "similarity": 1.0,
+        "margin": 0.0524
+      },
+      {
+        "voxel": [
+          83,
+          10,
+          58
+        ],
+        "from": "minecraft:birch_stairs[facing=south,half=bottom,shape=straight]",
+        "to": "minecraft:birch_stairs[facing=north,half=bottom,shape=straight]",
+        "similarity": 1.0,
+        "margin": 0.0524
+      },
+      {
+        "voxel": [
+          74,
+          10,
+          61
+        ],
+        "from": "minecraft:birch_stairs[facing=south,half=bottom,shape=straight]",
+        "to": "minecraft:birch_stairs[facing=north,half=bottom,shape=straight]",
+        "similarity": 1.0,
+        "margin": 0.0524
+      },
+      {
+        "voxel": [
+          84,
+          10,
+          61
+        ],
+        "from": "minecraft:birch_stairs[facing=south,half=bottom,shape=straight]",
+        "to": "minecraft:birch_stairs[facing=north,half=bottom,shape=straight]",
+        "similarity": 1.0,
+        "margin": 0.0524
+      },
+      {
+        "voxel": [
+          121,
+          10,
+          61
+        ],
+        "from": "minecraft:birch_stairs[facing=south,half=bottom,shape=straight]",
+        "to": "minecraft:birch_stairs[facing=north,half=bottom,shape=straight]",
+        "similarity": 1.0,
+        "margin": 0.0524
+      },
+      {
+        "voxel": [
+          112,
+          10,
+          65
+        ],
+        "from": "minecraft:birch_stairs[facing=south,half=bottom,shape=straight]",
+        "to": "minecraft:birch_stairs[facing=north,half=bottom,shape=straight]",
+        "similarity": 1.0,
+        "margin": 0.0524
+      },
+      {
+        "voxel": [
+          99,
+          10,
+          72
+        ],
+        "from": "minecraft:birch_stairs[facing=south,half=bottom,shape=straight]",
+        "to": "minecraft:birch_stairs[facing=north,half=bottom,shape=straight]",
+        "similarity": 1.0,
+        "margin": 0.0524
+      },
+      {
+        "voxel": [
+          105,
+          10,
+          72
+        ],
+        "from": "minecraft:birch_stairs[facing=south,half=bottom,shape=straight]",
+        "to": "minecraft:birch_stairs[facing=north,half=bottom,shape=straight]",
+        "similarity": 1.0,
+        "margin": 0.0524
+      },
+      {
+        "voxel": [
+          64,
+          10,
+          94
+        ],
+        "from": "minecraft:stone_brick_stairs[facing=south,half=bottom,shape=straight]",
+        "to": "minecraft:stone_brick_stairs[facing=north,half=bottom,shape=straight]",
+        "similarity": 1.0,
+        "margin": 0.0524
+      },
+      {
+        "voxel": [
+          65,
+          10,
+          94
+        ],
+        "from": "minecraft:stone_brick_stairs[facing=south,half=bottom,shape=straight]",
+        "to": "minecraft:stone_brick_stairs[facing=north,half=bottom,shape=straight]",
+        "similarity": 1.0,
+        "margin": 0.0524
+      },
+      {
+        "voxel": [
+          158,
+          10,
+          95
+        ],
+        "from": "minecraft:stone_brick_stairs[facing=south,half=bottom,shape=straight]",
+        "to": "minecraft:stone_brick_stairs[facing=north,half=bottom,shape=straight]",
+        "similarity": 1.0,
+        "margin": 0.0524
+      },
+      {
+        "voxel": [
+          159,
+          10,
+          95
+        ],
+        "from": "minecraft:stone_brick_stairs[facing=south,half=bottom,shape=straight]",
+        "to": "minecraft:stone_brick_stairs[facing=north,half=bottom,shape=straight]",
+        "similarity": 1.0,
+        "margin": 0.0524
+      },
+      {
+        "voxel": [
+          71,
+          10,
+          96
+        ],
+        "from": "minecraft:stone_brick_stairs[facing=south,half=bottom,shape=straight]",
+        "to": "minecraft:stone_brick_stairs[facing=north,half=bottom,shape=straight]",
+        "similarity": 1.0,
+        "margin": 0.0524
+      },
+      {
+        "voxel": [
+          72,
+          10,
+          96
+        ],
+        "from": "minecraft:stone_brick_stairs[facing=south,half=bottom,shape=straight]",
+        "to": "minecraft:stone_brick_stairs[facing=north,half=bottom,shape=straight]",
+        "similarity": 1.0,
+        "margin": 0.0524
+      },
+      {
+        "voxel": [
+          78,
+          10,
+          98
+        ],
+        "from": "minecraft:stone_brick_stairs[facing=south,half=bottom,shape=straight]",
+        "to": "minecraft:stone_brick_stairs[facing=north,half=bottom,shape=straight]",
+        "similarity": 1.0,
+        "margin": 0.0524
+      },
+      {
+        "voxel": [
+          79,
+          10,
+          98
+        ],
+        "from": "minecraft:stone_brick_stairs[facing=south,half=bottom,shape=straight]",
+        "to": "minecraft:stone_brick_stairs[facing=north,half=bottom,shape=straight]",
+        "similarity": 1.0,
+        "margin": 0.0524
+      },
+      {
+        "voxel": [
+          164,
+          10,
+          98
+        ],
+        "from": "minecraft:stone_brick_stairs[facing=south,half=bottom,shape=straight]",
+        "to": "minecraft:stone_brick_stairs[facing=north,half=bottom,shape=straight]",
+        "similarity": 1.0,
+        "margin": 0.0524
+      },
+      {
+        "voxel": [
+          165,
+          10,
+          98
+        ],
+        "from": "minecraft:stone_brick_stairs[facing=south,half=bottom,shape=straight]",
+        "to": "minecraft:stone_brick_stairs[facing=north,half=bottom,shape=straight]",
+        "similarity": 1.0,
+        "margin": 0.0524
+      },
+      {
+        "voxel": [
+          128,
+          10,
+          99
+        ],
+        "from": "minecraft:stone_brick_stairs[facing=south,half=bottom,shape=straight]",
+        "to": "minecraft:stone_brick_stairs[facing=north,half=bottom,shape=straight]",
+        "similarity": 1.0,
+        "margin": 0.0524
+      },
+      {
+        "voxel": [
+          129,
+          10,
+          99
+        ],
+        "from": "minecraft:stone_brick_stairs[facing=south,half=bottom,shape=straight]",
+        "to": "minecraft:stone_brick_stairs[facing=north,half=bottom,shape=straight]",
+        "similarity": 1.0,
+        "margin": 0.0524
+      },
+      {
+        "voxel": [
+          169,
+          10,
+          102
+        ],
+        "from": "minecraft:stone_brick_stairs[facing=south,half=bottom,shape=straight]",
+        "to": "minecraft:stone_brick_stairs[facing=north,half=bottom,shape=straight]",
+        "similarity": 1.0,
+        "margin": 0.0524
+      },
+      {
+        "voxel": [
+          170,
+          10,
+          102
+        ],
+        "from": "minecraft:stone_brick_stairs[facing=south,half=bottom,shape=straight]",
+        "to": "minecraft:stone_brick_stairs[facing=north,half=bottom,shape=straight]",
+        "similarity": 1.0,
+        "margin": 0.0524
+      },
+      {
+        "voxel": [
+          131,
+          10,
+          105
+        ],
+        "from": "minecraft:stone_brick_stairs[facing=south,half=bottom,shape=straight]",
+        "to": "minecraft:stone_brick_stairs[facing=north,half=bottom,shape=straight]",
+        "similarity": 1.0,
+        "margin": 0.0524
+      },
+      {
+        "voxel": [
+          132,
+          10,
+          105
+        ],
+        "from": "minecraft:stone_brick_stairs[facing=south,half=bottom,shape=straight]",
+        "to": "minecraft:stone_brick_stairs[facing=north,half=bottom,shape=straight]",
+        "similarity": 1.0,
+        "margin": 0.0524
+      },
+      {
+        "voxel": [
+          161,
+          10,
+          108
+        ],
+        "from": "minecraft:stone_brick_stairs[facing=south,half=bottom,shape=straight]",
+        "to": "minecraft:stone_brick_stairs[facing=north,half=bottom,shape=straight]",
+        "similarity": 1.0,
+        "margin": 0.0524
+      },
+      {
+        "voxel": [
+          162,
+          10,
+          108
+        ],
+        "from": "minecraft:stone_brick_stairs[facing=south,half=bottom,shape=straight]",
+        "to": "minecraft:stone_brick_stairs[facing=north,half=bottom,shape=straight]",
+        "similarity": 1.0,
+        "margin": 0.0524
+      },
+      {
+        "voxel": [
+          167,
+          10,
+          111
+        ],
+        "from": "minecraft:stone_brick_stairs[facing=south,half=bottom,shape=straight]",
+        "to": "minecraft:stone_brick_stairs[facing=north,half=bottom,shape=straight]",
+        "similarity": 1.0,
+        "margin": 0.0524
+      },
+      {
+        "voxel": [
+          168,
+          10,
+          111
+        ],
+        "from": "minecraft:stone_brick_stairs[facing=south,half=bottom,shape=straight]",
+        "to": "minecraft:stone_brick_stairs[facing=north,half=bottom,shape=straight]",
+        "similarity": 1.0,
+        "margin": 0.0524
+      },
+      {
+        "voxel": [
+          133,
+          10,
+          112
+        ],
+        "from": "minecraft:stone_brick_stairs[facing=south,half=bottom,shape=straight]",
+        "to": "minecraft:stone_brick_stairs[facing=north,half=bottom,shape=straight]",
+        "similarity": 1.0,
+        "margin": 0.0524
+      },
+      {
+        "voxel": [
+          134,
+          10,
+          112
+        ],
+        "from": "minecraft:stone_brick_stairs[facing=south,half=bottom,shape=straight]",
+        "to": "minecraft:stone_brick_stairs[facing=north,half=bottom,shape=straight]",
+        "similarity": 1.0,
+        "margin": 0.0524
+      },
+      {
+        "voxel": [
+          172,
+          10,
+          115
+        ],
+        "from": "minecraft:stone_brick_stairs[facing=south,half=bottom,shape=straight]",
+        "to": "minecraft:stone_brick_stairs[facing=north,half=bottom,shape=straight]",
+        "similarity": 1.0,
+        "margin": 0.0524
+      },
+      {
+        "voxel": [
+          173,
+          10,
+          115
+        ],
+        "from": "minecraft:stone_brick_stairs[facing=south,half=bottom,shape=straight]",
+        "to": "minecraft:stone_brick_stairs[facing=north,half=bottom,shape=straight]",
+        "similarity": 1.0,
+        "margin": 0.0524
+      },
+      {
+        "voxel": [
+          240,
+          10,
+          133
+        ],
+        "from": "minecraft:stone_brick_stairs[facing=south,half=bottom,shape=straight]",
+        "to": "minecraft:stone_brick_stairs[facing=north,half=bottom,shape=straight]",
+        "similarity": 1.0,
+        "margin": 0.0524
+      },
+      {
+        "voxel": [
+          241,
+          10,
+          133
+        ],
+        "from": "minecraft:stone_brick_stairs[facing=south,half=bottom,shape=straight]",
+        "to": "minecraft:stone_brick_stairs[facing=north,half=bottom,shape=straight]",
+        "similarity": 1.0,
+        "margin": 0.0524
+      },
+      {
+        "voxel": [
+          239,
+          10,
+          139
+        ],
+        "from": "minecraft:stone_brick_stairs[facing=south,half=bottom,shape=straight]",
+        "to": "minecraft:stone_brick_stairs[facing=north,half=bottom,shape=straight]",
+        "similarity": 1.0,
+        "margin": 0.0524
+      },
+      {
+        "voxel": [
+          240,
+          10,
+          139
+        ],
+        "from": "minecraft:stone_brick_stairs[facing=south,half=bottom,shape=straight]",
+        "to": "minecraft:stone_brick_stairs[facing=north,half=bottom,shape=straight]",
+        "similarity": 1.0,
+        "margin": 0.0524
+      },
+      {
+        "voxel": [
+          35,
+          10,
+          157
+        ],
+        "from": "minecraft:stone_brick_stairs[facing=south,half=bottom,shape=straight]",
+        "to": "minecraft:stone_brick_stairs[facing=north,half=bottom,shape=straight]",
+        "similarity": 1.0,
+        "margin": 0.0524
+      },
+      {
+        "voxel": [
+          36,
+          10,
+          157
+        ],
+        "from": "minecraft:stone_brick_stairs[facing=south,half=bottom,shape=straight]",
+        "to": "minecraft:stone_brick_stairs[facing=north,half=bottom,shape=straight]",
+        "similarity": 1.0,
+        "margin": 0.0524
+      },
+      {
+        "voxel": [
+          30,
+          10,
+          160
+        ],
+        "from": "minecraft:stone_brick_stairs[facing=south,half=bottom,shape=straight]",
+        "to": "minecraft:stone_brick_stairs[facing=north,half=bottom,shape=straight]",
+        "similarity": 1.0,
+        "margin": 0.0524
+      },
+      {
+        "voxel": [
+          31,
+          10,
+          160
+        ],
+        "from": "minecraft:stone_brick_stairs[facing=south,half=bottom,shape=straight]",
+        "to": "minecraft:stone_brick_stairs[facing=north,half=bottom,shape=straight]",
+        "similarity": 1.0,
+        "margin": 0.0524
+      },
+      {
+        "voxel": [
+          37,
+          10,
+          163
+        ],
+        "from": "minecraft:stone_brick_stairs[facing=south,half=bottom,shape=straight]",
+        "to": "minecraft:stone_brick_stairs[facing=north,half=bottom,shape=straight]",
+        "similarity": 1.0,
+        "margin": 0.0524
+      },
+      {
+        "voxel": [
+          38,
+          10,
+          163
+        ],
+        "from": "minecraft:stone_brick_stairs[facing=south,half=bottom,shape=straight]",
+        "to": "minecraft:stone_brick_stairs[facing=north,half=bottom,shape=straight]",
+        "similarity": 1.0,
+        "margin": 0.0524
+      },
+      {
+        "voxel": [
+          75,
+          10,
+          169
+        ],
+        "from": "minecraft:stone_brick_stairs[facing=south,half=bottom,shape=straight]",
+        "to": "minecraft:stone_brick_stairs[facing=north,half=bottom,shape=straight]",
+        "similarity": 1.0,
+        "margin": 0.0524
+      },
+      {
+        "voxel": [
+          76,
+          10,
+          169
+        ],
+        "from": "minecraft:stone_brick_stairs[facing=south,half=bottom,shape=straight]",
+        "to": "minecraft:stone_brick_stairs[facing=north,half=bottom,shape=straight]",
+        "similarity": 1.0,
+        "margin": 0.0524
+      },
+      {
+        "voxel": [
+          76,
+          10,
+          175
+        ],
+        "from": "minecraft:stone_brick_stairs[facing=south,half=bottom,shape=straight]",
+        "to": "minecraft:stone_brick_stairs[facing=north,half=bottom,shape=straight]",
+        "similarity": 1.0,
+        "margin": 0.0524
+      },
+      {
+        "voxel": [
+          77,
+          10,
+          175
+        ],
+        "from": "minecraft:stone_brick_stairs[facing=south,half=bottom,shape=straight]",
+        "to": "minecraft:stone_brick_stairs[facing=north,half=bottom,shape=straight]",
+        "similarity": 1.0,
+        "margin": 0.0524
+      },
+      {
+        "voxel": [
+          78,
+          10,
+          181
+        ],
+        "from": "minecraft:stone_brick_stairs[facing=south,half=bottom,shape=straight]",
+        "to": "minecraft:stone_brick_stairs[facing=north,half=bottom,shape=straight]",
+        "similarity": 1.0,
+        "margin": 0.0524
+      },
+      {
+        "voxel": [
+          79,
+          10,
+          181
+        ],
+        "from": "minecraft:stone_brick_stairs[facing=south,half=bottom,shape=straight]",
+        "to": "minecraft:stone_brick_stairs[facing=north,half=bottom,shape=straight]",
+        "similarity": 1.0,
+        "margin": 0.0524
+      },
+      {
+        "voxel": [
+          58,
+          10,
+          185
+        ],
+        "from": "minecraft:stone_brick_stairs[facing=south,half=bottom,shape=straight]",
+        "to": "minecraft:stone_brick_stairs[facing=north,half=bottom,shape=straight]",
+        "similarity": 1.0,
+        "margin": 0.0524
+      },
+      {
+        "voxel": [
+          59,
+          10,
+          185
+        ],
+        "from": "minecraft:stone_brick_stairs[facing=south,half=bottom,shape=straight]",
+        "to": "minecraft:stone_brick_stairs[facing=north,half=bottom,shape=straight]",
+        "similarity": 1.0,
+        "margin": 0.0524
+      },
+      {
+        "voxel": [
+          60,
+          10,
+          190
+        ],
+        "from": "minecraft:stone_brick_stairs[facing=south,half=bottom,shape=straight]",
+        "to": "minecraft:stone_brick_stairs[facing=north,half=bottom,shape=straight]",
+        "similarity": 1.0,
+        "margin": 0.0524
+      },
+      {
+        "voxel": [
+          61,
+          10,
+          190
+        ],
+        "from": "minecraft:stone_brick_stairs[facing=south,half=bottom,shape=straight]",
+        "to": "minecraft:stone_brick_stairs[facing=north,half=bottom,shape=straight]",
+        "similarity": 1.0,
+        "margin": 0.0524
+      },
+      {
+        "voxel": [
+          242,
+          10,
+          190
+        ],
+        "from": "minecraft:stone_brick_stairs[facing=south,half=bottom,shape=straight]",
+        "to": "minecraft:stone_brick_stairs[facing=north,half=bottom,shape=straight]",
+        "similarity": 1.0,
+        "margin": 0.0524
+      },
+      {
+        "voxel": [
+          243,
+          10,
+          190
+        ],
+        "from": "minecraft:stone_brick_stairs[facing=south,half=bottom,shape=straight]",
+        "to": "minecraft:stone_brick_stairs[facing=north,half=bottom,shape=straight]",
+        "similarity": 1.0,
+        "margin": 0.0524
+      },
+      {
+        "voxel": [
+          13,
+          10,
+          191
+        ],
+        "from": "minecraft:oak_stairs[facing=south,half=bottom,shape=straight]",
+        "to": "minecraft:oak_stairs[facing=north,half=bottom,shape=straight]",
+        "similarity": 1.0,
+        "margin": 0.0524
+      },
+      {
+        "voxel": [
+          248,
+          10,
+          194
+        ],
+        "from": "minecraft:stone_brick_stairs[facing=south,half=bottom,shape=straight]",
+        "to": "minecraft:stone_brick_stairs[facing=north,half=bottom,shape=straight]",
+        "similarity": 1.0,
+        "margin": 0.0524
+      },
+      {
+        "voxel": [
+          249,
+          10,
+          194
+        ],
+        "from": "minecraft:stone_brick_stairs[facing=south,half=bottom,shape=straight]",
+        "to": "minecraft:stone_brick_stairs[facing=north,half=bottom,shape=straight]",
+        "similarity": 1.0,
+        "margin": 0.0524
+      },
+      {
+        "voxel": [
+          241,
+          10,
+          199
+        ],
+        "from": "minecraft:stone_brick_stairs[facing=south,half=bottom,shape=straight]",
+        "to": "minecraft:stone_brick_stairs[facing=north,half=bottom,shape=straight]",
+        "similarity": 1.0,
+        "margin": 0.0524
+      },
+      {
+        "voxel": [
+          242,
+          10,
+          199
+        ],
+        "from": "minecraft:stone_brick_stairs[facing=south,half=bottom,shape=straight]",
+        "to": "minecraft:stone_brick_stairs[facing=north,half=bottom,shape=straight]",
+        "similarity": 1.0,
+        "margin": 0.0524
+      },
+      {
+        "voxel": [
+          248,
+          10,
+          203
+        ],
+        "from": "minecraft:stone_brick_stairs[facing=south,half=bottom,shape=straight]",
+        "to": "minecraft:stone_brick_stairs[facing=north,half=bottom,shape=straight]",
+        "similarity": 1.0,
+        "margin": 0.0524
+      },
+      {
+        "voxel": [
+          249,
+          10,
+          203
+        ],
+        "from": "minecraft:stone_brick_stairs[facing=south,half=bottom,shape=straight]",
+        "to": "minecraft:stone_brick_stairs[facing=north,half=bottom,shape=straight]",
+        "similarity": 1.0,
+        "margin": 0.0524
+      }
+    ],
+    "policy": "visible internal tread/riser footprint, conservatively abstain on orientation ties"
+  },
+  "block_counts": {
+    "minecraft:polished_andesite": 111420,
+    "minecraft:spruce_log": 11353,
+    "minecraft:light_gray_concrete": 37537,
+    "minecraft:iron_block": 4,
+    "minecraft:stripped_spruce_log": 4297,
+    "minecraft:mushroom_stem": 4,
+    "minecraft:oak_planks": 14753,
+    "minecraft:iron_door": 2,
+    "minecraft:iron_door[facing=east,half=lower,hinge=left,open=true]": 1,
+    "minecraft:iron_door[facing=north,half=lower,hinge=right,open=true]": 1,
+    "minecraft:oak_leaves[persistent=true]": 1767,
+    "minecraft:dark_oak_leaves[persistent=true]": 13535,
+    "minecraft:oak_stairs[facing=east,half=top,shape=straight]": 302,
+    "minecraft:sandstone": 1956,
+    "minecraft:oak_stairs[facing=south,half=top,shape=outer_right]": 120,
+    "minecraft:oak_stairs[facing=east,half=top,shape=outer_left]": 108,
+    "minecraft:light_gray_wool": 4583,
+    "minecraft:mycelium": 1664,
+    "minecraft:brown_concrete": 5444,
+    "minecraft:lime_terracotta": 20861,
+    "minecraft:brown_concrete_powder": 14682,
+    "minecraft:black_concrete": 157,
+    "minecraft:dark_oak_slab[type=top]": 1674,
+    "minecraft:brown_terracotta": 3270,
+    "minecraft:oak_slab[type=top]": 2126,
+    "minecraft:acacia_log": 2031,
+    "minecraft:smooth_stone_slab[type=top]": 2533,
+    "minecraft:short_grass": 719,
+    "minecraft:jungle_slab[type=top]": 36,
+    "minecraft:jungle_planks": 114,
+    "minecraft:chiseled_stone_bricks": 84,
+    "minecraft:stone_bricks": 2135,
+    "minecraft:cyan_terracotta": 11445,
+    "minecraft:birch_stairs[facing=east,half=top,shape=straight]": 28,
+    "minecraft:birch_planks": 768,
+    "minecraft:birch_stairs[facing=south,half=top,shape=outer_right]": 18,
+    "minecraft:polished_granite": 3535,
+    "minecraft:birch_slab[type=top]": 67,
+    "minecraft:birch_stairs[facing=east,half=top,shape=outer_left]": 18,
+    "minecraft:bone_block": 257,
+    "minecraft:birch_log": 1,
+    "minecraft:oak_stairs[facing=south,half=bottom,shape=outer_right]": 133,
+    "minecraft:terracotta": 2681,
+    "minecraft:pumpkin": 7,
+    "minecraft:stone_brick_stairs[facing=north,half=bottom,shape=straight]": 277,
+    "minecraft:stone_brick_slab[type=top]": 615,
+    "minecraft:stone_brick_stairs[facing=south,half=bottom,shape=outer_right]": 135,
+    "minecraft:stone_brick_stairs[facing=east,half=bottom,shape=outer_left]": 128,
+    "minecraft:spruce_planks": 7247,
+    "minecraft:green_terracotta": 2301,
+    "minecraft:dead_bush": 193,
+    "minecraft:melon": 29,
+    "minecraft:hay_block": 3012,
+    "minecraft:oak_stairs[facing=north,half=bottom,shape=straight]": 196,
+    "minecraft:cauldron": 9,
+    "minecraft:oak_stairs[facing=east,half=bottom,shape=outer_left]": 138,
+    "minecraft:birch_stairs[facing=east,half=bottom,shape=outer_left]": 14,
+    "minecraft:birch_stairs[facing=south,half=bottom,shape=outer_right]": 14,
+    "minecraft:birch_stairs[facing=north,half=bottom,shape=straight]": 36,
+    "minecraft:red_tulip": 3,
+    "minecraft:vine": 28,
+    "minecraft:dandelion": 1,
+    "minecraft:oxeye_daisy": 7,
+    "minecraft:stone_brick_stairs[facing=south,half=bottom,shape=inner_right]": 74,
+    "minecraft:stone_brick_stairs[facing=east,half=bottom,shape=inner_left]": 74,
+    "minecraft:ladder": 24,
+    "minecraft:red_sand": 648,
+    "minecraft:red_terracotta": 659,
+    "minecraft:orange_terracotta": 88,
+    "minecraft:green_wool": 1226,
+    "minecraft:stone_brick_stairs[facing=east,half=top,shape=straight]": 405,
+    "minecraft:stone_brick_stairs[facing=east,half=top,shape=outer_left]": 202,
+    "minecraft:redstone_block": 476,
+    "minecraft:stone_brick_stairs[facing=south,half=top,shape=outer_right]": 203,
+    "minecraft:spruce_leaves[persistent=true]": 2769,
+    "minecraft:brown_mushroom_block": 18977,
+    "minecraft:yellow_terracotta": 8143,
+    "minecraft:spruce_stairs[facing=east,half=top,shape=outer_left]": 638,
+    "minecraft:spruce_stairs[facing=east,half=top,shape=straight]": 1190,
+    "minecraft:white_stained_glass_pane[east=true,north=false,south=true,west=true]": 18,
+    "minecraft:redstone_lamp": 733,
+    "minecraft:white_stained_glass_pane[east=true,north=true,south=false,west=true]": 18,
+    "minecraft:anvil": 41,
+    "minecraft:black_wool": 426,
+    "minecraft:yellow_wool": 1297,
+    "minecraft:spruce_stairs[facing=south,half=top,shape=outer_right]": 572,
+    "minecraft:spruce_stairs[facing=east,half=bottom,shape=outer_left]": 709,
+    "minecraft:spruce_stairs[facing=north,half=bottom,shape=straight]": 1170,
+    "minecraft:smooth_stone": 722,
+    "minecraft:lapis_block": 6,
+    "minecraft:spruce_stairs[facing=south,half=bottom,shape=outer_right]": 445,
+    "minecraft:brick_stairs[facing=south,half=top,shape=outer_right]": 87,
+    "minecraft:brick_stairs[facing=east,half=top,shape=straight]": 170,
+    "minecraft:brick_slab[type=top]": 3829,
+    "minecraft:brick_stairs[facing=east,half=top,shape=outer_left]": 91,
+    "minecraft:smooth_stone_slab": 76,
+    "minecraft:spruce_fence_gate[facing=north,in_wall=false,open=false]": 3,
+    "minecraft:iron_bars": 1120,
+    "minecraft:brick_stairs[facing=north,half=bottom,shape=straight]": 244,
+    "minecraft:cut_sandstone": 6,
+    "minecraft:brick_stairs[facing=south,half=bottom,shape=outer_right]": 133,
+    "minecraft:bricks": 4841,
+    "minecraft:brick_stairs[facing=east,half=bottom,shape=outer_left]": 135,
+    "minecraft:spruce_slab[type=top]": 1568,
+    "minecraft:oak_trapdoor[facing=north,half=bottom,open=true]": 135,
+    "minecraft:oak_trapdoor[facing=east,half=bottom,open=true]": 140,
+    "minecraft:oak_trapdoor": 291,
+    "minecraft:oak_trapdoor[facing=east,half=top,open=false]": 132,
+    "minecraft:ochre_froglight": 6,
+    "minecraft:iron_bars[east=false,north=false,south=true,west=false]": 9,
+    "minecraft:iron_bars[east=false,north=false,south=true,west=true]": 16,
+    "minecraft:iron_bars[east=false,north=true,south=false,west=false]": 9,
+    "minecraft:iron_bars[east=false,north=true,south=false,west=true]": 16,
+    "minecraft:spruce_stairs[facing=south,half=top,shape=inner_right]": 12,
+    "minecraft:spruce_stairs[facing=east,half=top,shape=inner_left]": 12,
+    "minecraft:oak_log": 33,
+    "minecraft:oak_fence_gate[facing=south,in_wall=false,open=true]": 15,
+    "minecraft:oak_fence_gate[facing=west,in_wall=false,open=true]": 9,
+    "minecraft:oak_fence_gate[facing=east,in_wall=false,open=true]": 11,
+    "minecraft:oak_fence_gate[facing=north,in_wall=false,open=true]": 53,
+    "minecraft:iron_bars[east=true,north=false,south=true,west=false]": 15,
+    "minecraft:iron_bars[east=true,north=true,south=false,west=false]": 15,
+    "minecraft:dark_oak_planks": 426,
+    "minecraft:gray_wool": 466,
+    "minecraft:red_wool": 164,
+    "minecraft:oak_fence_gate[facing=north,in_wall=false,open=false]": 2,
+    "minecraft:spruce_fence_gate[facing=east,in_wall=false,open=true]": 1,
+    "minecraft:spruce_fence_gate[facing=west,in_wall=false,open=true]": 2,
+    "minecraft:oak_fence_gate[facing=east,in_wall=false,open=false]": 2,
+    "minecraft:orange_wool": 873,
+    "minecraft:yellow_stained_glass": 636,
+    "minecraft:orange_stained_glass": 576,
+    "minecraft:iron_bars[east=true,north=false,south=false,west=false]": 6,
+    "minecraft:iron_bars[east=false,north=false,south=false,west=true]": 6,
+    "minecraft:black_stained_glass": 144,
+    "minecraft:quartz_block": 59,
+    "minecraft:chain": 3,
+    "minecraft:cactus": 3,
+    "minecraft:quartz_pillar": 4,
+    "minecraft:sweet_berry_bush": 8,
+    "minecraft:fern": 6,
+    "minecraft:lilac": 8,
+    "minecraft:sunflower": 4
+  },
+  "texture_uncertainty_policy": "Geometry-only: original texture guesses unchanged",
+  "schematic_dimensions": [
+    307,
+    142,
+    307
+  ],
+  "schematic_path": "/mnt/data/SketchRip-StairOrientation-Final.schem",
+  "notes": [
+    "Mesh surfaces do not reveal hidden blocks or exact original block states.",
+    "Atlas override mappings include visually inferred block species and always require review.",
+    "Fractional surfaces are assigned to parent voxels, but block shapes/states require additional inference.",
+    "Bedrock 1.26.0 writer compatibility requires client verification."
+  ]
+}

@@ -1,0 +1,674 @@
+{
+  "version": 1,
+  "seed": 20261015,
+  "samples_per_mode": 2000,
+  "texture_pack_sha256": "46faabd24fbe0cb8ffc492788ca068b929b8e4f31f70f80f1a723242d29da1ef",
+  "index_entries": 1254,
+  "distinct_sprite_fingerprints": 1242,
+  "distinguishable_texture_identities": 1231,
+  "visually_duplicate_texture_groups": [
+    [
+      "sculk",
+      "sculk_sensor_bottom",
+      "sculk_shrieker_bottom"
+    ],
+    [
+      "bamboo_fence_gate_particle",
+      "bamboo_fence_particle"
+    ],
+    [
+      "cauldron_inner",
+      "hopper_inside"
+    ],
+    [
+      "crying_obsidian",
+      "respawn_anchor_bottom"
+    ],
+    [
+      "enchanting_table_bottom",
+      "obsidian"
+    ],
+    [
+      "jukebox_side",
+      "note_block"
+    ],
+    [
+      "pale_moss_block",
+      "pale_moss_carpet"
+    ],
+    [
+      "pink_petals_stem",
+      "wildflowers_stem"
+    ],
+    [
+      "quartz_block_side",
+      "quartz_block_top"
+    ],
+    [
+      "vault_bottom",
+      "vault_bottom_ominous"
+    ],
+    [
+      "vault_side_off",
+      "vault_side_off_ominous"
+    ]
+  ],
+  "opaque_distinguishable_sprites": 674,
+  "metrics": {
+    "exact": {
+      "total": 2000,
+      "correct": 2000,
+      "accepted": 2000,
+      "accepted_correct": 2000,
+      "confident_wrong": 0,
+      "ambiguous": 0,
+      "accuracy": 1.0,
+      "accepted_precision": 1.0,
+      "accepted_coverage": 1.0
+    },
+    "atlas": {
+      "total": 2000,
+      "correct": 2000,
+      "accepted": 2000,
+      "accepted_correct": 2000,
+      "confident_wrong": 0,
+      "ambiguous": 0,
+      "accuracy": 1.0,
+      "accepted_precision": 1.0,
+      "accepted_coverage": 1.0
+    },
+    "rotate": {
+      "total": 2000,
+      "correct": 2000,
+      "accepted": 1999,
+      "accepted_correct": 1999,
+      "confident_wrong": 0,
+      "ambiguous": 1,
+      "accuracy": 1.0,
+      "accepted_precision": 1.0,
+      "accepted_coverage": 0.9995
+    },
+    "jpeg90": {
+      "total": 2000,
+      "correct": 1995,
+      "accepted": 1989,
+      "accepted_correct": 1984,
+      "confident_wrong": 5,
+      "ambiguous": 11,
+      "accuracy": 0.9975,
+      "accepted_precision": 0.997486,
+      "accepted_coverage": 0.9945
+    },
+    "jpeg70": {
+      "total": 2000,
+      "correct": 1974,
+      "accepted": 1949,
+      "accepted_correct": 1942,
+      "confident_wrong": 7,
+      "ambiguous": 51,
+      "accuracy": 0.987,
+      "accepted_precision": 0.996408,
+      "accepted_coverage": 0.9745
+    },
+    "brightness": {
+      "total": 2000,
+      "correct": 1957,
+      "accepted": 1977,
+      "accepted_correct": 1941,
+      "confident_wrong": 36,
+      "ambiguous": 23,
+      "accuracy": 0.9785,
+      "accepted_precision": 0.981791,
+      "accepted_coverage": 0.9885
+    },
+    "tint": {
+      "total": 2000,
+      "correct": 1985,
+      "accepted": 1989,
+      "accepted_correct": 1976,
+      "confident_wrong": 13,
+      "ambiguous": 11,
+      "accuracy": 0.9925,
+      "accepted_precision": 0.993464,
+      "accepted_coverage": 0.9945
+    }
+  },
+  "confusions": [
+    [
+      [
+        "jpeg90",
+        "powder_snow",
+        "snow"
+      ],
+      5
+    ],
+    [
+      [
+        "jpeg70",
+        "red_sand",
+        "yellow_terracotta"
+      ],
+      5
+    ],
+    [
+      [
+        "jpeg70",
+        "green_concrete_powder",
+        "lime_terracotta"
+      ],
+      4
+    ],
+    [
+      [
+        "jpeg70",
+        "dried_ghast_hydration_1_east",
+        "dried_ghast_hydration_2_east"
+      ],
+      4
+    ],
+    [
+      [
+        "brightness",
+        "light_blue_stained_glass_pane_top",
+        "cyan_stained_glass_pane_top"
+      ],
+      4
+    ],
+    [
+      [
+        "jpeg70",
+        "powder_snow",
+        "lightning_rod_on"
+      ],
+      3
+    ],
+    [
+      [
+        "jpeg70",
+        "dragon_egg",
+        "black_concrete"
+      ],
+      3
+    ],
+    [
+      [
+        "brightness",
+        "magenta_stained_glass",
+        "purple_stained_glass"
+      ],
+      3
+    ],
+    [
+      [
+        "brightness",
+        "powder_snow",
+        "lightning_rod_on"
+      ],
+      3
+    ],
+    [
+      [
+        "jpeg70",
+        "white_concrete_powder",
+        "white_concrete"
+      ],
+      2
+    ],
+    [
+      [
+        "jpeg70",
+        "snow",
+        "lightning_rod_on"
+      ],
+      2
+    ],
+    [
+      [
+        "brightness",
+        "dried_ghast_hydration_3_top",
+        "lightning_rod_on"
+      ],
+      2
+    ],
+    [
+      [
+        "brightness",
+        "pale_oak_shelf",
+        "lightning_rod_on"
+      ],
+      2
+    ],
+    [
+      [
+        "brightness",
+        "white_concrete",
+        "lightning_rod_on"
+      ],
+      2
+    ],
+    [
+      [
+        "brightness",
+        "dried_ghast_hydration_3_west",
+        "lightning_rod_on"
+      ],
+      2
+    ],
+    [
+      [
+        "brightness",
+        "dried_ghast_hydration_1_bottom",
+        "dried_ghast_hydration_0_bottom"
+      ],
+      2
+    ],
+    [
+      [
+        "brightness",
+        "white_stained_glass_pane_top",
+        "light_gray_stained_glass_pane_top"
+      ],
+      2
+    ],
+    [
+      [
+        "jpeg70",
+        "purple_concrete_powder",
+        "magenta_concrete"
+      ],
+      1
+    ],
+    [
+      [
+        "jpeg70",
+        "red_concrete_powder",
+        "red_terracotta"
+      ],
+      1
+    ],
+    [
+      [
+        "jpeg70",
+        "dried_ghast_hydration_0_west",
+        "dried_ghast_hydration_1_west"
+      ],
+      1
+    ],
+    [
+      [
+        "brightness",
+        "quartz_pillar_top",
+        "lightning_rod_on"
+      ],
+      1
+    ],
+    [
+      [
+        "brightness",
+        "pearlescent_froglight_side",
+        "pearlescent_froglight_top"
+      ],
+      1
+    ],
+    [
+      [
+        "brightness",
+        "blue_concrete_powder",
+        "blue_concrete"
+      ],
+      1
+    ],
+    [
+      [
+        "brightness",
+        "stripped_bamboo_block",
+        "bamboo_planks"
+      ],
+      1
+    ],
+    [
+      [
+        "brightness",
+        "light_gray_stained_glass_pane_top",
+        "white_stained_glass_pane_top"
+      ],
+      1
+    ],
+    [
+      [
+        "brightness",
+        "gray_terracotta",
+        "brown_terracotta"
+      ],
+      1
+    ],
+    [
+      [
+        "brightness",
+        "mushroom_block_inside",
+        "light_gray_terracotta"
+      ],
+      1
+    ],
+    [
+      [
+        "brightness",
+        "gray_candle_lit",
+        "light_gray_candle_lit"
+      ],
+      1
+    ],
+    [
+      [
+        "brightness",
+        "purple_concrete_powder",
+        "purple_concrete"
+      ],
+      1
+    ],
+    [
+      [
+        "brightness",
+        "stripped_pale_oak_log_top",
+        "lightning_rod_on"
+      ],
+      1
+    ],
+    [
+      [
+        "brightness",
+        "dried_ghast_hydration_1_tentacles",
+        "dried_ghast_hydration_2_tentacles"
+      ],
+      1
+    ],
+    [
+      [
+        "brightness",
+        "purple_concrete",
+        "magenta_concrete"
+      ],
+      1
+    ],
+    [
+      [
+        "brightness",
+        "calcite",
+        "lightning_rod_on"
+      ],
+      1
+    ],
+    [
+      [
+        "brightness",
+        "verdant_froglight_top",
+        "quartz_pillar_top"
+      ],
+      1
+    ],
+    [
+      [
+        "brightness",
+        "green_concrete",
+        "lime_terracotta"
+      ],
+      1
+    ],
+    [
+      [
+        "brightness",
+        "purple_terracotta",
+        "magenta_terracotta"
+      ],
+      1
+    ],
+    [
+      [
+        "brightness",
+        "brown_terracotta",
+        "gray_terracotta"
+      ],
+      1
+    ],
+    [
+      [
+        "brightness",
+        "white_bed_foot_up",
+        "white_terracotta"
+      ],
+      1
+    ],
+    [
+      [
+        "brightness",
+        "blue_terracotta",
+        "gray_concrete"
+      ],
+      1
+    ],
+    [
+      [
+        "brightness",
+        "dried_ghast_hydration_3_tentacles",
+        "lightning_rod_on"
+      ],
+      1
+    ],
+    [
+      [
+        "brightness",
+        "dried_ghast_hydration_3_south",
+        "lightning_rod_on"
+      ],
+      1
+    ],
+    [
+      [
+        "tint",
+        "white_concrete",
+        "lightning_rod_on"
+      ],
+      1
+    ],
+    [
+      [
+        "tint",
+        "white_bed_foot_up",
+        "white_concrete"
+      ],
+      1
+    ],
+    [
+      [
+        "tint",
+        "stripped_bamboo_block",
+        "bamboo_planks"
+      ],
+      1
+    ],
+    [
+      [
+        "tint",
+        "white_concrete_powder",
+        "lightning_rod_on"
+      ],
+      1
+    ],
+    [
+      [
+        "tint",
+        "copper_door_bottom",
+        "exposed_copper_door_bottom"
+      ],
+      1
+    ],
+    [
+      [
+        "tint",
+        "dried_ghast_hydration_3_east",
+        "lightning_rod_on"
+      ],
+      1
+    ],
+    [
+      [
+        "tint",
+        "stripped_pale_oak_log",
+        "lightning_rod_on"
+      ],
+      1
+    ],
+    [
+      [
+        "tint",
+        "dried_ghast_hydration_2_top",
+        "dried_ghast_hydration_1_top"
+      ],
+      1
+    ],
+    [
+      [
+        "tint",
+        "snow",
+        "quartz_block_bottom"
+      ],
+      1
+    ],
+    [
+      [
+        "tint",
+        "pearlescent_froglight_side",
+        "pearlescent_froglight_top"
+      ],
+      1
+    ],
+    [
+      [
+        "tint",
+        "stripped_pale_oak_log",
+        "white_concrete"
+      ],
+      1
+    ],
+    [
+      [
+        "tint",
+        "bone_block_side",
+        "white_terracotta"
+      ],
+      1
+    ],
+    [
+      [
+        "tint",
+        "grass_block_top",
+        "light_gray_concrete"
+      ],
+      1
+    ],
+    [
+      [
+        "tint",
+        "white_wool",
+        "lightning_rod_on"
+      ],
+      1
+    ],
+    [
+      [
+        "tint",
+        "pink_terracotta",
+        "purple_terracotta"
+      ],
+      1
+    ]
+  ],
+  "cinnabar": {
+    "source": "Cinnabar Bedrock v1.26.50 vocabulary",
+    "bedrock_blocks": 1463,
+    "bedrock_terrain_keys": 1367,
+    "java_default_blocks_in_bedrock_vocabulary": 665,
+    "java_default_blocks_not_in_bedrock_vocabulary": [
+      "minecraft:acacia_sign",
+      "minecraft:attached_melon_stem",
+      "minecraft:attached_pumpkin_stem",
+      "minecraft:bamboo_sign",
+      "minecraft:beetroots",
+      "minecraft:big_dripleaf_stem",
+      "minecraft:birch_sign",
+      "minecraft:black_bed",
+      "minecraft:blue_bed",
+      "minecraft:bricks",
+      "minecraft:brown_bed",
+      "minecraft:cave_vines_plant",
+      "minecraft:cherry_sign",
+      "minecraft:cobweb",
+      "minecraft:comparator",
+      "minecraft:crimson_sign",
+      "minecraft:cyan_bed",
+      "minecraft:dark_oak_sign",
+      "minecraft:dead_bush",
+      "minecraft:dirt_path",
+      "minecraft:end_stone_bricks",
+      "minecraft:flowering_azalea_leaves",
+      "minecraft:frogspawn",
+      "minecraft:glow_item_frame",
+      "minecraft:gray_bed",
+      "minecraft:green_bed",
+      "minecraft:item_frame",
+      "minecraft:jack_o_lantern",
+      "minecraft:jungle_sign",
+      "minecraft:kelp_plant",
+      "minecraft:light_blue_bed",
+      "minecraft:light_gray_bed",
+      "minecraft:light_gray_glazed_terracotta",
+      "minecraft:lily_pad",
+      "minecraft:lime_bed",
+      "minecraft:magenta_bed",
+      "minecraft:magma_block",
+      "minecraft:mangrove_sign",
+      "minecraft:melon",
+      "minecraft:nether_bricks",
+      "minecraft:nether_portal",
+      "minecraft:nether_quartz_ore",
+      "minecraft:note_block",
+      "minecraft:oak_door",
+      "minecraft:oak_sign",
+      "minecraft:oak_trapdoor",
+      "minecraft:orange_bed",
+      "minecraft:pale_oak_sign",
+      "minecraft:pink_bed",
+      "minecraft:potted_azalea_bush",
+      "minecraft:potted_bamboo",
+      "minecraft:potted_crimson_roots",
+      "minecraft:potted_flowering_azalea_bush",
+      "minecraft:potted_open_eyeblossom",
+      "minecraft:potted_warped_roots",
+      "minecraft:powered_rail",
+      "minecraft:purple_bed",
+      "minecraft:red_bed",
+      "minecraft:red_nether_bricks",
+      "minecraft:repeater",
+      "minecraft:rooted_dirt",
+      "minecraft:shulker_box",
+      "minecraft:slime_block",
+      "minecraft:small_dripleaf",
+      "minecraft:spawner",
+      "minecraft:spruce_sign",
+      "minecraft:stonecutter",
+      "minecraft:sugar_cane",
+      "minecraft:tall_seagrass",
+      "minecraft:terracotta",
+      "minecraft:test_block",
+      "minecraft:test_instance_block",
+      "minecraft:tripwire",
+      "minecraft:twisting_vines_plant",
+      "minecraft:warped_sign",
+      "minecraft:weeping_vines_plant",
+      "minecraft:white_bed",
+      "minecraft:yellow_bed"
+    ]
+  },
+  "elapsed_seconds": 20.648,
+  "interpretation": "Synthetic, independent random sprite-image tests from the supplied vanilla pack. A correct texture identity is NOT proof of a correct block ID/state in GLB meshes. JPEG modes are limited to opaque sources because JPEG discards alpha. Visually identical sprites are removed from strict unique-identity accuracy and listed separately. Tint and brightness are synthetic stressors, not calibrated estimates of actual Mineways texture transformations."
+}

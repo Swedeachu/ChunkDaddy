@@ -1,0 +1,27 @@
+{
+  "scale_model_units_per_block": 1.0,
+  "counts": {
+    "non_grid_faces": 0,
+    "mapped_faces": 48
+  },
+  "voxel_count": 4,
+  "unique_atlas_tiles": 4,
+  "block_counts": {
+    "minecraft:cobblestone": 1,
+    "minecraft:oak_planks": 1,
+    "minecraft:dirt": 1,
+    "minecraft:stone": 1
+  },
+  "uncertain": [],
+  "face_coverage": 1.0,
+  "requires_review": false,
+  "source": {
+    "local_model": "/mnt/data/sketchrip-work/four-blocks.glb"
+  },
+  "schematic_dimensions": [
+    4,
+    1,
+    1
+  ],
+  "schematic_path": "/mnt/data/sketchrip-work/four-blocks.schem"
+}
