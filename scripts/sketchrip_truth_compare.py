@@ -34,6 +34,12 @@ def material_of(name: str) -> str:
 
 
 def shape_of(name: str) -> str:
+    """Identify physical block families; double slabs occupy full cubes."""
+    base = name.split('[', 1)[0].removeprefix('minecraft:')
+    if base.startswith('double_') and 'slab' in base:
+        return 'double_slab'
+    if base.endswith('_slab') and props(name).get('type') == 'double':
+        return 'double_slab'
     base = name.split("[", 1)[0]
     if base.endswith("_stairs"):
         return "stairs"
@@ -88,6 +94,8 @@ def compare(world: Path, schematic: Path, translation=None):
     orientation = collections.Counter()
     overlap = 0
     correct = 0
+    slab_halves = collections.Counter()
+    doubles = collections.Counter()
     for (x,y,z),predicted in original.items():
         actual = source.get((x+translation[0],y+translation[1],z+translation[2]))
         if actual is None:
@@ -105,6 +113,16 @@ def compare(world: Path, schematic: Path, translation=None):
         shapes[(predicted_shape,"predicted")] += 1
         if expected_shape == predicted_shape:
             shapes[(expected_shape,"correct")] += 1
+        if expected_shape == 'slab':
+            slab_halves['compared'] += 1
+            expected_top = int(props(actual).get('top_slot_bit', -1))
+            predicted_top = (props(predicted).get('type') == 'top')
+            if expected_top in (0, 1) and expected_shape == predicted_shape:
+                slab_halves['correct'] += int(predicted_top == bool(expected_top))
+        if expected_shape == 'double_slab':
+            doubles['compared'] += 1
+            doubles['full_height_geometry'] += int(predicted_shape in ('other', 'double_slab'))
+            doubles['exact_double_family'] += int(predicted_shape == 'double_slab')
         if expected_shape == "stairs" and predicted_shape == "stairs":
             facing = {"east":0,"west":1,"south":2,"north":3}.get(props(predicted).get("facing"),-1)
             true = props(actual)
@@ -126,6 +144,13 @@ def compare(world: Path, schematic: Path, translation=None):
                          "predicted":shapes[(cat,"predicted")],
                          "correct_family":shapes[(cat,"correct")]}
                   for cat in categories},
+        "slab_halves":{"compared":slab_halves['compared'],
+                       "correct":slab_halves['correct'],
+                       "accuracy":round(slab_halves['correct']/max(slab_halves['compared'],1),6)},
+        "double_slabs":{"compared":doubles['compared'],
+                         "full_height_geometry":doubles['full_height_geometry'],
+                         "exact_double_family":doubles['exact_double_family'],
+                         "note":"Full cubes can be visually identical to double slabs"},
         "stairs_facing":{"compared":orientation["compared"],
                          "correct":orientation["facing_correct"],
                          "accuracy":round(orientation["facing_correct"]/max(orientation["compared"],1),6),

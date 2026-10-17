@@ -52,6 +52,7 @@ def scan(meshes: list, blocks: dict, unit: float, up_axis: str):
     signed = np.zeros((len(pts), 3, 2), dtype=np.float32)
     half = np.zeros((len(pts), 2), dtype=np.float32)
     triangles_seen = np.zeros(len(pts), dtype=np.int32)
+    full_height_side = np.zeros(len(pts), dtype=np.float32)
     for mesh in meshes:
         vertices = np.asarray(mesh.vertices, dtype=np.float64)
         faces = np.asarray(mesh.faces, dtype=np.int64)
@@ -88,6 +89,13 @@ def scan(meshes: list, blocks: dict, unit: float, up_axis: str):
                                                      (tri, normal, magnitude, axis, cells))
             ids = order[locations[present]]
             row = np.arange(len(ids))
+            # Physical full-height side evidence separates double slabs
+            # from texture-only, property-less half-slab guesses.
+            vertical = (axis != 1) & ((tri[:, :, 1].max(axis=1) -
+                                        tri[:, :, 1].min(axis=1)) >= .90)
+            if np.any(vertical):
+                np.add.at(full_height_side, ids[vertical],
+                          (magnitude[vertical] * .5).astype(np.float32))
             fraction = tri[row, 0, axis] - cells[row, axis]
             mid = (fraction > .025) & (fraction < .975)
             if np.any(mid):
@@ -108,7 +116,8 @@ def scan(meshes: list, blocks: dict, unit: float, up_axis: str):
                           (magnitude[yhalf] * .5).astype(np.float32))
             np.add.at(triangles_seen, ids, 1)
     return pts, {'quarter': quarter, 'internal': internal,
-                 'signed': signed, 'half': half, 'faces': triangles_seen}, {'unit': unit}
+                 'signed': signed, 'half': half, 'faces': triangles_seen,
+                 'full_height_side': full_height_side}, {'unit': unit}
 
 
 def _winding(points, blocks, half):
@@ -138,6 +147,15 @@ def infer(meshes: list, blocks: dict, pack, unit: float, up_axis: str,
     for i, point in enumerate(points):
         state = blocks[tuple(point)]
         base = state.split('[', 1)[0]
+        if base.endswith('_slab') and '[' not in state:
+            # A bare slab identifier may originate from the texture atlas.
+            # Do not invent a half-state. Promote only with explicit, full-
+            # height side geometry and no exposed half-height tread.
+            if (geo['full_height_side'][i] >= .20 and
+                    geo['quarter'][i, 1, 2] < .05):
+                changes[tuple(map(int, point))] = base + '[type=double]'
+                reasons['double_slab'] += 1
+            continue
         if '[' in state or base.endswith(('_stairs', '_slab', '_fence', '_wall')):
             continue
         h = float(geo['quarter'][i, 1, 2])
