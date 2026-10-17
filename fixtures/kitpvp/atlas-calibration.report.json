@@ -1,0 +1,547 @@
+{
+  "reference_world": "/mnt/data/build73vbedrock.mcworld",
+  "source_glb": "/mnt/data/kitpvp_work/original-glb/KIT_PVP_MAP_SPAWN_4_THEMES.glb",
+  "baseline_schematic": "/mnt/data/kitpvp_work/kitpvp-baseline.schem",
+  "truth_nonair_blocks": 729739,
+  "baseline_surface_positions": 290718,
+  "aligned_surface_positions": 290710,
+  "translation": [
+    -167,
+    51,
+    -167
+  ],
+  "atlas_fingerprints": 99,
+  "accepted_fingerprints": 63,
+  "heldout_samples": 76715,
+  "heldout_covered": 72269,
+  "heldout_correct": 71740,
+  "heldout_accuracy_on_covered": 0.99268,
+  "heldout_coverage": 0.942045,
+  "heldout_mistakes": 529,
+  "top_confusions": [
+    {
+      "expected": "minecraft:snow_layer",
+      "predicted": "minecraft:snow_block",
+      "count": 296
+    },
+    {
+      "expected": "minecraft:red_stained_glass_pane",
+      "predicted": "minecraft:red_stained_glass",
+      "count": 142
+    },
+    {
+      "expected": "minecraft:oak_log",
+      "predicted": "minecraft:oak_wood",
+      "count": 33
+    },
+    {
+      "expected": "minecraft:spruce_log",
+      "predicted": "minecraft:spruce_wood",
+      "count": 15
+    },
+    {
+      "expected": "minecraft:crimson_planks",
+      "predicted": "minecraft:spruce_planks",
+      "count": 14
+    },
+    {
+      "expected": "minecraft:stone_button",
+      "predicted": "minecraft:tuff",
+      "count": 12
+    },
+    {
+      "expected": "minecraft:carpet",
+      "predicted": "minecraft:gray_wool",
+      "count": 6
+    },
+    {
+      "expected": "minecraft:acacia_log",
+      "predicted": "minecraft:acacia_wood",
+      "count": 4
+    },
+    {
+      "expected": "minecraft:wall_sign",
+      "predicted": "minecraft:spruce_planks",
+      "count": 4
+    },
+    {
+      "expected": "minecraft:carpet",
+      "predicted": "minecraft:black_wool",
+      "count": 1
+    },
+    {
+      "expected": "minecraft:yellow_stained_glass",
+      "predicted": "minecraft:yellow_stained_glass_pane",
+      "count": 1
+    },
+    {
+      "expected": "minecraft:white_stained_glass_pane",
+      "predicted": "minecraft:white_stained_glass",
+      "count": 1
+    }
+  ],
+  "rejected_tiles": [
+    {
+      "fingerprint": "1cc3999464024e25636dac563c0c7b7afc271debbb3ccc2828652d11c6500290",
+      "reason": "insufficient_evidence",
+      "train": 1,
+      "purity": 1.0,
+      "choices": [
+        [
+          "minecraft:beacon",
+          1
+        ]
+      ]
+    },
+    {
+      "fingerprint": "47a1f82dd78217b11a7c8d48d107604b4e83f9b0a9fcee33c54d4673e5b0e579",
+      "reason": "insufficient_evidence",
+      "train": 1,
+      "purity": 1.0,
+      "choices": [
+        [
+          "minecraft:bone_block",
+          1
+        ]
+      ]
+    },
+    {
+      "fingerprint": "1467900cee0ad5b2c497f59bbd07bb30711f43cd988974e2ae290ff5d8443d52",
+      "reason": "insufficient_evidence",
+      "train": 13,
+      "purity": 1.0,
+      "choices": [
+        [
+          "minecraft:bookshelf",
+          13
+        ]
+      ]
+    },
+    {
+      "fingerprint": "73d8c5354f0a89c8872691238fe70f0ae8b25977cc3528d85df007fdfd0b30ec",
+      "reason": "insufficient_evidence",
+      "train": 1,
+      "purity": 1.0,
+      "choices": [
+        [
+          "minecraft:white_wool",
+          1
+        ]
+      ]
+    },
+    {
+      "fingerprint": "2b9dbf9e2b096c5f7d668f7bf64c84af6148181fc3390af217aafaff9f00b362",
+      "reason": "insufficient_evidence",
+      "train": 17,
+      "purity": 1.0,
+      "choices": [
+        [
+          "minecraft:carpet",
+          17
+        ]
+      ]
+    },
+    {
+      "fingerprint": "be77c6c097d0da786c7222dfcf785f96d26c6cf980cd471f3d87a06292cd6584",
+      "reason": "insufficient_evidence",
+      "train": 1248,
+      "purity": 0.5833333333333334,
+      "choices": [
+        [
+          "minecraft:stone",
+          728
+        ],
+        [
+          "minecraft:smooth_stone",
+          520
+        ]
+      ]
+    },
+    {
+      "fingerprint": "333a84c0fefb3c76dbddf9dcf42774169b09362ae79ca4eb18fad43ad09d00e6",
+      "reason": "insufficient_evidence",
+      "train": 16,
+      "purity": 1.0,
+      "choices": [
+        [
+          "minecraft:stone",
+          16
+        ]
+      ]
+    },
+    {
+      "fingerprint": "b43d24923ba4a965dc689263f8a163e88c028f3cabf35f1ee375379cb4aaafc3",
+      "reason": "insufficient_evidence",
+      "train": 6,
+      "purity": 1.0,
+      "choices": [
+        [
+          "minecraft:carpet",
+          6
+        ]
+      ]
+    },
+    {
+      "fingerprint": "ce2a906a71d66ffc72731a12574d4a4cbe56393e84ca62677eb4494f786a0ced",
+      "reason": "insufficient_evidence",
+      "train": 152,
+      "purity": 0.8355263157894737,
+      "choices": [
+        [
+          "minecraft:light_gray_wool",
+          127
+        ],
+        [
+          "minecraft:carpet",
+          25
+        ]
+      ]
+    },
+    {
+      "fingerprint": "f84ad3bce87b6d7dd4e3e3ddfb3137d5b03e493a17f6ceb09c30958b758fd25e",
+      "reason": "insufficient_evidence",
+      "train": 3,
+      "purity": 1.0,
+      "choices": [
+        [
+          "minecraft:hopper",
+          3
+        ]
+      ]
+    },
+    {
+      "fingerprint": "bc48f9b769e1c43e3c34d8c4d124acc8f445a15b09ab2edbeda1a7ac51146554",
+      "reason": "insufficient_evidence",
+      "train": 189,
+      "purity": 0.43915343915343913,
+      "choices": [
+        [
+          "minecraft:carpet",
+          83
+        ],
+        [
+          "minecraft:green_wool",
+          44
+        ],
+        [
+          "minecraft:grass_block",
+          34
+        ],
+        [
+          "minecraft:green_concrete_powder",
+          28
+        ]
+      ]
+    },
+    {
+      "fingerprint": "f6880d337a92a90b6054576229cc4ebe46fb677996e71e013d9dd8420d8c2bcc",
+      "reason": "insufficient_evidence",
+      "train": 4792,
+      "purity": 0.5025041736227045,
+      "choices": [
+        [
+          "minecraft:grass_block",
+          2408
+        ],
+        [
+          "minecraft:green_concrete_powder",
+          2384
+        ]
+      ]
+    },
+    {
+      "fingerprint": "2d3fe3933b4209854cb4f5976ffef96729cad68318fc511ca9b6da9610f2618b",
+      "reason": "insufficient_evidence",
+      "train": 401,
+      "purity": 0.516209476309227,
+      "choices": [
+        [
+          "minecraft:green_concrete_powder",
+          207
+        ],
+        [
+          "minecraft:grass_block",
+          194
+        ]
+      ]
+    },
+    {
+      "fingerprint": "e13ebcd17401d0f0af5563e73993b88b35681311e8bc53c6832fb15a0a46fcf0",
+      "reason": "insufficient_evidence",
+      "train": 1,
+      "purity": 1.0,
+      "choices": [
+        [
+          "minecraft:polished_granite",
+          1
+        ]
+      ]
+    },
+    {
+      "fingerprint": "fa6752188431685ba1d7cfcb2eaffc690b487d06b2e97ede60745a2dff3f2154",
+      "reason": "insufficient_evidence",
+      "train": 1106,
+      "purity": 0.5795660036166366,
+      "choices": [
+        [
+          "minecraft:cobblestone",
+          641
+        ],
+        [
+          "minecraft:cobblestone_wall",
+          465
+        ]
+      ]
+    },
+    {
+      "fingerprint": "59c475b691722c263e036cf459c64e68a8d670b4d998649406858d26a4efdee7",
+      "reason": "insufficient_evidence",
+      "train": 16,
+      "purity": 1.0,
+      "choices": [
+        [
+          "minecraft:yellow_concrete",
+          16
+        ]
+      ]
+    },
+    {
+      "fingerprint": "b89c8a8864c718eaa1e0bb4d51e6f1cdff6718dd9245ef288c76ad254202b031",
+      "reason": "insufficient_evidence",
+      "train": 3,
+      "purity": 1.0,
+      "choices": [
+        [
+          "minecraft:dispenser",
+          3
+        ]
+      ]
+    },
+    {
+      "fingerprint": "2f4e3f4b1d3f79e8a35b3a479318faa6cafa971ee7a425740a1af3169f9d6332",
+      "reason": "missing_train"
+    },
+    {
+      "fingerprint": "44fdfb737e9c4f812bd3f22d2c1eda3a0d114d322308021c2853aba3d55eac6c",
+      "reason": "missing_train"
+    },
+    {
+      "fingerprint": "c0eef304c099bc6ee4e10a3abae1db39db2cecb49e89bd4f2f7432942a973c5c",
+      "reason": "insufficient_evidence",
+      "train": 3,
+      "purity": 0.6666666666666666,
+      "choices": [
+        [
+          "minecraft:grass_block",
+          2
+        ],
+        [
+          "minecraft:green_concrete_powder",
+          1
+        ]
+      ]
+    },
+    {
+      "fingerprint": "7be06cef190f89c0cb24ce6276bc1b9d292ab4434ba228d7c1fb46b2c28f3491",
+      "reason": "insufficient_evidence",
+      "train": 10,
+      "purity": 1.0,
+      "choices": [
+        [
+          "minecraft:nether_bricks",
+          10
+        ]
+      ]
+    },
+    {
+      "fingerprint": "550bc5ffbc5930e84912e9a8855e70afa608cbb7a1a7692deb444e99bda39709",
+      "reason": "insufficient_evidence",
+      "train": 14,
+      "purity": 1.0,
+      "choices": [
+        [
+          "minecraft:ladder",
+          14
+        ]
+      ]
+    },
+    {
+      "fingerprint": "8294907f330b2f91aaa4c4d8b77a680563097292b4c8b5df41506b588429ffa3",
+      "reason": "insufficient_evidence",
+      "train": 11,
+      "purity": 1.0,
+      "choices": [
+        [
+          "minecraft:stone",
+          11
+        ]
+      ]
+    },
+    {
+      "fingerprint": "9917921e2e7f13c8af2af5949d90271fe24041444a2fcee5fd9bcbc7174f233a",
+      "reason": "insufficient_evidence",
+      "train": 423,
+      "purity": 0.6359338061465721,
+      "choices": [
+        [
+          "minecraft:lily_pad",
+          269
+        ],
+        [
+          "minecraft:water",
+          154
+        ]
+      ]
+    },
+    {
+      "fingerprint": "7de28884446c9a42ef3d26f172a86c8e1e670668ab9dc1b56cb5a6d464334319",
+      "reason": "insufficient_evidence",
+      "train": 22,
+      "purity": 1.0,
+      "choices": [
+        [
+          "minecraft:oak_log",
+          22
+        ]
+      ]
+    },
+    {
+      "fingerprint": "39894973d68889be8d7566dc2be5d37f77683e0bb4fc35ca495d8b658a27e18e",
+      "reason": "insufficient_evidence",
+      "train": 13,
+      "purity": 1.0,
+      "choices": [
+        [
+          "minecraft:acacia_planks",
+          13
+        ]
+      ]
+    },
+    {
+      "fingerprint": "0a32bd73a33095b78c070918fd88a76b4650e87dde086b28a4be4b2822ac5b02",
+      "reason": "insufficient_evidence",
+      "train": 14,
+      "purity": 1.0,
+      "choices": [
+        [
+          "minecraft:obsidian",
+          14
+        ]
+      ]
+    },
+    {
+      "fingerprint": "c8f466b34eb810eb241eed45fe863ed57870ab93455299bdd8ed7d1977a9726c",
+      "reason": "insufficient_evidence",
+      "train": 3,
+      "purity": 1.0,
+      "choices": [
+        [
+          "minecraft:redstone_torch",
+          3
+        ]
+      ]
+    },
+    {
+      "fingerprint": "3798a53feb03632c1bf3d28a76180f110c5764cf4d2ff0c8f27fa6f4d5b725e0",
+      "reason": "insufficient_evidence",
+      "train": 1,
+      "purity": 1.0,
+      "choices": [
+        [
+          "minecraft:black_stained_glass",
+          1
+        ]
+      ]
+    },
+    {
+      "fingerprint": "267577de9cdbcd9788ced1cfbba7697c8d79e44f7500b0d680c007959d8bfdea",
+      "reason": "insufficient_evidence",
+      "train": 408,
+      "purity": 0.553921568627451,
+      "choices": [
+        [
+          "minecraft:light_blue_stained_glass",
+          226
+        ],
+        [
+          "minecraft:light_blue_stained_glass_pane",
+          182
+        ]
+      ]
+    },
+    {
+      "fingerprint": "dec0a4c95c74beb82b1336b87e44b5a83d1a56d841af503df1836a938047aa61",
+      "reason": "insufficient_evidence",
+      "train": 1179,
+      "purity": 0.7820186598812553,
+      "choices": [
+        [
+          "minecraft:orange_stained_glass",
+          922
+        ],
+        [
+          "minecraft:orange_stained_glass_pane",
+          257
+        ]
+      ]
+    },
+    {
+      "fingerprint": "df8cd13d745f6730a7b6aaa998d608b2ff176ee15839b6bc0c9dac47df42a93d",
+      "reason": "insufficient_evidence",
+      "train": 763,
+      "purity": 0.8427260812581914,
+      "choices": [
+        [
+          "minecraft:cyan_stained_glass",
+          643
+        ],
+        [
+          "minecraft:cyan_stained_glass_pane",
+          120
+        ]
+      ]
+    },
+    {
+      "fingerprint": "dcc67651bbd719956c749d0f9923880fdc32a451e042ec480833d31ee5218e7f",
+      "reason": "insufficient_evidence",
+      "train": 6,
+      "purity": 1.0,
+      "choices": [
+        [
+          "minecraft:magenta_stained_glass_pane",
+          6
+        ]
+      ]
+    },
+    {
+      "fingerprint": "25302fdf71cc184f23bc7f5d3a4cd5b912657a47fdda03c6c929b44e3cc7c5de",
+      "reason": "insufficient_evidence",
+      "train": 2,
+      "purity": 1.0,
+      "choices": [
+        [
+          "minecraft:lava",
+          2
+        ]
+      ]
+    },
+    {
+      "fingerprint": "c3784edbe22c23683a15defc0cf82e50bdc358d76e43e34a95ff1d378725b518",
+      "reason": "insufficient_evidence",
+      "train": 6,
+      "purity": 1.0,
+      "choices": [
+        [
+          "minecraft:water",
+          6
+        ]
+      ]
+    },
+    {
+      "fingerprint": "3ed09c4c82829d726b28e4e6e541dd76f84bfcab2c280539892d7b1822d46986",
+      "reason": "missing_train"
+    }
+  ],
+  "training_samples": 288682,
+  "warning": "This atlas calibration learns from the reference world and is valid only for identical source atlas pixels. Hidden geometry and block states remain unrecoverable from a GLB."
+}

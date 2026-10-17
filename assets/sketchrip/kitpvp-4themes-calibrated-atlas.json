@@ -1,0 +1,384 @@
+{
+  "source": "SketchRip supervised atlas calibration",
+  "notes": "This atlas calibration learns from the reference world and is valid only for identical source atlas pixels. Hidden geometry and block states remain unrecoverable from a GLB.",
+  "entries": {
+    "764de79b62671376ae1881f4e591b7f2ea8dc3bdba468aea67f129e30490d89f": {
+      "block": "minecraft:acacia_wood",
+      "note": "Ground-truth calibrated; train=684; purity=0.9854",
+      "train_support": 684,
+      "train_purity": 0.9854
+    },
+    "87f31eba54e5d790555f377c39a54c09391d2a1548658293437d20d51ab51c3d": {
+      "block": "minecraft:anvil",
+      "note": "Ground-truth calibrated; train=299; purity=1.0000",
+      "train_support": 299,
+      "train_purity": 1.0
+    },
+    "633008872c099cc2e63e9120e4052d8693614a6250c4d014ddf38ecc1d924acb": {
+      "block": "minecraft:blackstone",
+      "note": "Ground-truth calibrated; train=61469; purity=1.0000",
+      "train_support": 61469,
+      "train_purity": 1.0
+    },
+    "cfcc04acab57865edbf1fed8e3bcc703da8a4dcefecf69373da2bf234f53da85": {
+      "block": "minecraft:birch_planks",
+      "note": "Ground-truth calibrated; train=9838; purity=1.0000",
+      "train_support": 9838,
+      "train_purity": 1.0
+    },
+    "b6efa855db234f1b831c10c118f610874693d007b905b7c86be8fceab88439a8": {
+      "block": "minecraft:coal_block",
+      "note": "Ground-truth calibrated; train=266; purity=1.0000",
+      "train_support": 266,
+      "train_purity": 1.0
+    },
+    "07fd148688ec652970e42da17519984d16d37d924ec4c12df0135f4873e07396": {
+      "block": "minecraft:iron_block",
+      "note": "Ground-truth calibrated; train=546; purity=1.0000",
+      "train_support": 546,
+      "train_purity": 1.0
+    },
+    "4ef505d6284932e04b89cd5192a39dcb03722f9f0263b5bdc4d74bcf608e26e3": {
+      "block": "minecraft:quartz_block",
+      "note": "Ground-truth calibrated; train=332; purity=1.0000",
+      "train_support": 332,
+      "train_purity": 1.0
+    },
+    "439adf1b37a9ee98e493bf15938e50a5ae0a050767158abfc2deb577f4cb9af1": {
+      "block": "minecraft:bone_block",
+      "note": "Ground-truth calibrated; train=26; purity=1.0000",
+      "train_support": 26,
+      "train_purity": 1.0
+    },
+    "4189e5d4b6de8f1b254b82dbd88d7d15b85d873cc15fec3e59e7688d4bce3b01": {
+      "block": "minecraft:spruce_planks",
+      "note": "Ground-truth calibrated; train=4611; purity=0.9484",
+      "train_support": 4611,
+      "train_purity": 0.9484
+    },
+    "cdce77a97362904069dfcc4c23038c1864049ead9adb497671c0e508e9f9bec1": {
+      "block": "minecraft:sea_lantern",
+      "note": "Ground-truth calibrated; train=90; purity=1.0000",
+      "train_support": 90,
+      "train_purity": 1.0
+    },
+    "53fbd2f7faa9ee55ade76c616ffddd7b817cf3cd37838f7fb19d63a93db01305": {
+      "block": "minecraft:tuff",
+      "note": "Ground-truth calibrated; train=4900; purity=0.9986",
+      "train_support": 4900,
+      "train_purity": 0.9986
+    },
+    "5800e76fccdab5675697b29125bffd53949d79b65e36d43bb3f35f1acf90bf8e": {
+      "block": "minecraft:cyan_terracotta",
+      "note": "Ground-truth calibrated; train=4728; purity=1.0000",
+      "train_support": 4728,
+      "train_purity": 1.0
+    },
+    "a37c75ccdb109d0fa09615bd35152532f61c2ca5599e48a5d5969daf3b09a740": {
+      "block": "minecraft:gray_wool",
+      "note": "Ground-truth calibrated; train=4450; purity=0.9969",
+      "train_support": 4450,
+      "train_purity": 0.9969
+    },
+    "847e41647c1bbd5ac438d134dd204f0b202d92f11e86030953c3c749f5cf89f1": {
+      "block": "minecraft:dispenser",
+      "note": "Ground-truth calibrated; train=176; purity=1.0000",
+      "train_support": 176,
+      "train_purity": 1.0
+    },
+    "3b4a85cb22d9d220b926ab1b4f52d7ba571a9520046c20e82b0a7455d427ebbc": {
+      "block": "minecraft:black_wool",
+      "note": "Ground-truth calibrated; train=35; purity=1.0000",
+      "train_support": 35,
+      "train_purity": 1.0
+    },
+    "02cec592680ec1feeb8e670c7bcfab9fb420cc34ce8c3a13e1dfc67979124596": {
+      "block": "minecraft:cauldron",
+      "note": "Ground-truth calibrated; train=111; purity=1.0000",
+      "train_support": 111,
+      "train_purity": 1.0
+    },
+    "d7cc19c8718a8c43a30441a7d86477d26d3d8208a4e08fd7d65a1b2f53084b4f": {
+      "block": "minecraft:clay",
+      "note": "Ground-truth calibrated; train=184; purity=1.0000",
+      "train_support": 184,
+      "train_purity": 1.0
+    },
+    "4d90a5504c854840412d88b2c0d472c766f0820406640e40cbb4a19ca566ea36": {
+      "block": "minecraft:nether_wart_block",
+      "note": "Ground-truth calibrated; train=1570; purity=1.0000",
+      "train_support": 1570,
+      "train_purity": 1.0
+    },
+    "34768b1f964e130fafabb9cdc51e6b4a2b52c5fafa76874808d8e56e0f0ac395": {
+      "block": "minecraft:green_concrete",
+      "note": "Ground-truth calibrated; train=6304; purity=1.0000",
+      "train_support": 6304,
+      "train_purity": 1.0
+    },
+    "c4a6aa72f7bed0ccd36801e080cb87d3b8c8bb035587d203922d3614bcea188f": {
+      "block": "minecraft:gray_terracotta",
+      "note": "Ground-truth calibrated; train=1455; purity=1.0000",
+      "train_support": 1455,
+      "train_purity": 1.0
+    },
+    "a61f4ab345ab354298159a1ff2cc736224a0ef9380c3c65f5bfc5ea3e1c707a5": {
+      "block": "minecraft:lime_terracotta",
+      "note": "Ground-truth calibrated; train=2380; purity=1.0000",
+      "train_support": 2380,
+      "train_purity": 1.0
+    },
+    "4a9e9972dbab315aea6b898d7ef3dd2cce64dbd2277bdc2c90d13849f03d0e90": {
+      "block": "minecraft:magenta_terracotta",
+      "note": "Ground-truth calibrated; train=358; purity=1.0000",
+      "train_support": 358,
+      "train_purity": 1.0
+    },
+    "6ec7ddbcc24f984f5f21c47f29b4c083a06a074cc70d0435e18c75dc4914f74b": {
+      "block": "minecraft:purple_terracotta",
+      "note": "Ground-truth calibrated; train=112; purity=1.0000",
+      "train_support": 112,
+      "train_purity": 1.0
+    },
+    "a0e189d98fd8acda80768eefd8202e29918f88ac633a1e72928a57b4cf0610d0": {
+      "block": "minecraft:white_concrete",
+      "note": "Ground-truth calibrated; train=95; purity=1.0000",
+      "train_support": 95,
+      "train_purity": 1.0
+    },
+    "8b4d875a5feda50920db30efc1fefe76c1a249f721e27ae1610764e1305699fe": {
+      "block": "minecraft:white_concrete_powder",
+      "note": "Ground-truth calibrated; train=151; purity=1.0000",
+      "train_support": 151,
+      "train_purity": 1.0
+    },
+    "f55779226e347744ca1641513dbe604f04823c9c089c45bfb39c6bf7dbb70f1d": {
+      "block": "minecraft:grass_path",
+      "note": "Ground-truth calibrated; train=40; purity=1.0000",
+      "train_support": 40,
+      "train_purity": 1.0
+    },
+    "e3eb5653f24adf7d6169580aa32c3aca076e5c75f8b09e0772aa4052a98563a0": {
+      "block": "minecraft:smooth_sandstone",
+      "note": "Ground-truth calibrated; train=3644; purity=1.0000",
+      "train_support": 3644,
+      "train_purity": 1.0
+    },
+    "514d30f210b4335d73fbcb2ddcf86e8bd4b449e439c3e0b972fe9ebb508e0e59": {
+      "block": "minecraft:smooth_sandstone",
+      "note": "Ground-truth calibrated; train=5530; purity=1.0000",
+      "train_support": 5530,
+      "train_purity": 1.0
+    },
+    "f28468e95ece8672c75907801ee42a5322ecbcd543cee41e48a168814b531f91": {
+      "block": "minecraft:polished_andesite",
+      "note": "Ground-truth calibrated; train=4936; purity=1.0000",
+      "train_support": 4936,
+      "train_purity": 1.0
+    },
+    "0d44dd2c55366d85448bcc411c82e1d0758354af8bee0b82aa5799856b4e1aa2": {
+      "block": "minecraft:end_stone",
+      "note": "Ground-truth calibrated; train=8019; purity=1.0000",
+      "train_support": 8019,
+      "train_purity": 1.0
+    },
+    "3494d5a89607ce48045f2729dfda4c272db7304664870f816eaaa541bc346fc6": {
+      "block": "minecraft:glowstone",
+      "note": "Ground-truth calibrated; train=128; purity=1.0000",
+      "train_support": 128,
+      "train_purity": 1.0
+    },
+    "1a61bdc2b5756e8de5a23d1a98b7c4dd23cb3b879596568b749becbf2f23aef6": {
+      "block": "minecraft:gravel",
+      "note": "Ground-truth calibrated; train=28; purity=1.0000",
+      "train_support": 28,
+      "train_purity": 1.0
+    },
+    "ed0db7a40db8a7cb484145e39620071cd43c80ca7e3728fd09896a41daa85008": {
+      "block": "minecraft:iron_bars",
+      "note": "Ground-truth calibrated; train=35; purity=1.0000",
+      "train_support": 35,
+      "train_purity": 1.0
+    },
+    "c3af3f32e0e8fc3a79c52102c9b413945b0898b35ad0be5802372aa7bc284a2d": {
+      "block": "minecraft:iron_trapdoor",
+      "note": "Ground-truth calibrated; train=123; purity=1.0000",
+      "train_support": 123,
+      "train_purity": 1.0
+    },
+    "45062e6b27c9bc5c7474d2f1aea3b529551649e89252e0d00aa7d283b300412e": {
+      "block": "minecraft:polished_andesite",
+      "note": "Ground-truth calibrated; train=2116; purity=1.0000",
+      "train_support": 2116,
+      "train_purity": 1.0
+    },
+    "111e1e7b28b4f47bcb13096c6cb3cac9e05e4bbfa9aa7c67ae474667083bb333": {
+      "block": "minecraft:water",
+      "note": "Ground-truth calibrated; train=2007; purity=1.0000",
+      "train_support": 2007,
+      "train_purity": 1.0
+    },
+    "7fb4c2ae57b60ea874319483503b4ecfb873292e0b632f672190637d0e023036": {
+      "block": "minecraft:mossy_cobblestone",
+      "note": "Ground-truth calibrated; train=899; purity=1.0000",
+      "train_support": 899,
+      "train_purity": 1.0
+    },
+    "9c0b42829d81aea4b01b89e5e36caafe2386c31639e8151bce5a8d45e99ebe8e": {
+      "block": "minecraft:netherrack",
+      "note": "Ground-truth calibrated; train=6341; purity=1.0000",
+      "train_support": 6341,
+      "train_purity": 1.0
+    },
+    "14e9235fae6118aa42f512d91feca65d30bb324bc124d08de0a81c5c26841e64": {
+      "block": "minecraft:jungle_leaves",
+      "note": "Ground-truth calibrated; train=858; purity=1.0000",
+      "train_support": 858,
+      "train_purity": 1.0
+    },
+    "ad537fc009b685e41682ac07a0098adf87504333873468ef75f05bfab490f1d9": {
+      "block": "minecraft:birch_leaves",
+      "note": "Ground-truth calibrated; train=240; purity=1.0000",
+      "train_support": 240,
+      "train_purity": 1.0
+    },
+    "7cdd4088fc4e7ed620e1ddeaa31e8c51445df758bd2ebc9e324efefb340b036c": {
+      "block": "minecraft:mangrove_leaves",
+      "note": "Ground-truth calibrated; train=2933; purity=1.0000",
+      "train_support": 2933,
+      "train_purity": 1.0
+    },
+    "9190d20736a50865cb3508b6c10ff863d5d044c7c635643e3423d5b9d04f414c": {
+      "block": "minecraft:mangrove_leaves",
+      "note": "Ground-truth calibrated; train=8550; purity=1.0000",
+      "train_support": 8550,
+      "train_purity": 1.0
+    },
+    "9b921b708f9d5d8596d0843abaad52bc5100bcbd09fa0e01c2336de100d6a6ed": {
+      "block": "minecraft:spruce_wood",
+      "note": "Ground-truth calibrated; train=6050; purity=0.9962",
+      "train_support": 6050,
+      "train_purity": 0.9962
+    },
+    "bd4d0fa4ca9d150299e9f0835f00ffb3df6b2024b57b48c16f6b999c51b42cc6": {
+      "block": "minecraft:oak_wood",
+      "note": "Ground-truth calibrated; train=1431; purity=0.9364",
+      "train_support": 1431,
+      "train_purity": 0.9364
+    },
+    "48a0934622cd87e7305df872fa404a38cb6029addf35346b83ecbebbe81a47d0": {
+      "block": "minecraft:jungle_planks",
+      "note": "Ground-truth calibrated; train=4147; purity=1.0000",
+      "train_support": 4147,
+      "train_purity": 1.0
+    },
+    "670d54620aa0d0bbc7fbf94360c319760b887e038c9a05109388f4c9ac203b11": {
+      "block": "minecraft:mud_bricks",
+      "note": "Ground-truth calibrated; train=4248; purity=1.0000",
+      "train_support": 4248,
+      "train_purity": 1.0
+    },
+    "0eee2e1cbb4b94eb19e598bd7ab266929fc40c5f374c3af9460cbf8f8e857567": {
+      "block": "minecraft:packed_ice",
+      "note": "Ground-truth calibrated; train=2327; purity=1.0000",
+      "train_support": 2327,
+      "train_purity": 1.0
+    },
+    "728f6c1540094ab04217396a1042daf40ed197bae575d262f65cf674d060acd1": {
+      "block": "minecraft:warped_planks",
+      "note": "Ground-truth calibrated; train=93; purity=1.0000",
+      "train_support": 93,
+      "train_purity": 1.0
+    },
+    "efec976aeeae776baa9c6787cce65db2d8a26f11c1f9992a914f03c7d97ec6f9": {
+      "block": "minecraft:warped_planks",
+      "note": "Ground-truth calibrated; train=58; purity=1.0000",
+      "train_support": 58,
+      "train_purity": 1.0
+    },
+    "a3f0e1f8ce39ddf5f5234c198a541d79560bc4a581a188ed1df0f55dc9d2c735": {
+      "block": "minecraft:smooth_sandstone",
+      "note": "Ground-truth calibrated; train=284; purity=1.0000",
+      "train_support": 284,
+      "train_purity": 1.0
+    },
+    "c8ec036f957f4deed8a47ca4db4e962f0fe630be22ae5f4b484586e587e3c39e": {
+      "block": "minecraft:snow_block",
+      "note": "Ground-truth calibrated; train=16900; purity=0.8790",
+      "train_support": 16900,
+      "train_purity": 0.879
+    },
+    "f1ca75fe724dce807b68378c2fa9c139a4c1f6004472877b91f22646da106b60": {
+      "block": "minecraft:soul_soil",
+      "note": "Ground-truth calibrated; train=5185; purity=1.0000",
+      "train_support": 5185,
+      "train_purity": 1.0
+    },
+    "6557899d485980af5ef533deb4826a01a8e8dda36fa0b30891fe3e16adb5912d": {
+      "block": "minecraft:red_stained_glass",
+      "note": "Ground-truth calibrated; train=4830; purity=0.9505",
+      "train_support": 4830,
+      "train_purity": 0.9505
+    },
+    "0f02edc4d1015e6df138097ddb333ded729db9d7ba8424fd4cff77eefcee1135": {
+      "block": "minecraft:gray_stained_glass",
+      "note": "Ground-truth calibrated; train=759; purity=1.0000",
+      "train_support": 759,
+      "train_purity": 1.0
+    },
+    "de0f2731430f656cb07c86da6c52daf7d84720af3d18cda2663e4b3e6baa988e": {
+      "block": "minecraft:yellow_stained_glass_pane",
+      "note": "Ground-truth calibrated; train=205; purity=0.9854",
+      "train_support": 205,
+      "train_purity": 0.9854
+    },
+    "45f0a4460bed47b43f16c7d82c76fa280a280d02f375ef036d75ae5d8d200254": {
+      "block": "minecraft:white_stained_glass",
+      "note": "Ground-truth calibrated; train=192; purity=0.9844",
+      "train_support": 192,
+      "train_purity": 0.9844
+    },
+    "32aee3389b2d4ea3ac8d1daeb559207cc1a15894e9d610b9547da594e0c9091f": {
+      "block": "minecraft:light_gray_stained_glass_pane",
+      "note": "Ground-truth calibrated; train=134; purity=1.0000",
+      "train_support": 134,
+      "train_purity": 1.0
+    },
+    "819827e3efe8eed97d5025fd5b128ed993230a8175b5ce03bdb924ac175da403": {
+      "block": "minecraft:lava",
+      "note": "Ground-truth calibrated; train=189; purity=1.0000",
+      "train_support": 189,
+      "train_purity": 1.0
+    },
+    "917cf245a9ef10ecac1720715e6407cdd7f016af91a5122ff1ac20a434b4f3ea": {
+      "block": "minecraft:tuff",
+      "note": "Ground-truth calibrated; train=1277; purity=1.0000",
+      "train_support": 1277,
+      "train_purity": 1.0
+    },
+    "53ba2ad253085ba329b5b82049277acf05d31434a18ad2091373a4767894d0d4": {
+      "block": "minecraft:chiseled_stone_bricks",
+      "note": "Ground-truth calibrated; train=828; purity=1.0000",
+      "train_support": 828,
+      "train_purity": 1.0
+    },
+    "18c93602541dbacb9f24f962ad8f64c211e4a5426ce8163361f73b18da4ecc7b": {
+      "block": "minecraft:orange_wool",
+      "note": "Ground-truth calibrated; train=88; purity=1.0000",
+      "train_support": 88,
+      "train_purity": 1.0
+    },
+    "301c501f0bb9acbf9fa00368462bde46b5f34ee66d5cba3e2aca809576534bd5": {
+      "block": "minecraft:lime_wool",
+      "note": "Ground-truth calibrated; train=62; purity=1.0000",
+      "train_support": 62,
+      "train_purity": 1.0
+    },
+    "f98be1a54d99462c78b50e084adb8f8bb1cf74a8664f655603fb0d49969ff349": {
+      "block": "minecraft:red_wool",
+      "note": "Ground-truth calibrated; train=239; purity=1.0000",
+      "train_support": 239,
+      "train_purity": 1.0
+    }
+  }
+}

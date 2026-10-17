@@ -95,17 +95,17 @@ class TextureIndex:
         self.fast_approx = match_mode == "fast"
         pack = pack.expanduser().resolve()
         manual_atlas_map = atlas_map is not None
-        if atlas_map is None:
-            atlas_map = (Path(__file__).resolve().parent.parent / "assets" / "sketchrip"
-                         / "ffa-arena-atlas-overrides.json")
+        # Atlas pixel overrides belong to one known export. The old implicit
+        # FFA-specific override file polluted unrelated Mineways scenes because
+        # identical sprite hashes can refer to different source materials.
+        # Only apply explicitly selected, user-audited atlas maps.
         self.atlas_overrides = {}
         self.manual_atlas_map = manual_atlas_map
-        if atlas_map.is_file():
+        if atlas_map is not None:
+            if not atlas_map.is_file():
+                raise FileNotFoundError(f"Atlas override map not found: {atlas_map}")
             payload = json.loads(atlas_map.read_text(encoding="utf-8"))
             self.atlas_overrides = payload.get("entries", {})
-        elif atlas_map != (Path(__file__).resolve().parent.parent / "assets" / "sketchrip"
-                           / "ffa-arena-atlas-overrides.json"):
-            raise FileNotFoundError(f"Atlas override map not found: {atlas_map}")
         if not pack.is_file():
             raise FileNotFoundError(f"Vanilla texture ZIP not found: {pack}")
         fingerprint = hashlib.sha256(pack.read_bytes()).hexdigest()[:20]
@@ -696,6 +696,17 @@ def reconstruct(meshes: list, textures: TextureIndex, scale: float | None = None
         if old is None or alpha_weight > old[0]:
             canonical_images[rgb_key] = (alpha_weight, image)
     counts["canonical_texture_atlases"] = len(canonical_images)
+
+    # Backwards-compatible FFA-specific atlas patches, but ONLY when the
+    # complete source atlas RGB fingerprint matches the audited FFA source.
+    # The old implicit overrides applied to every Sketchfab world and poisoned
+    # unrelated atlases sharing superficially similar 16x16 sprites.
+    if not textures.manual_atlas_map and bytes.fromhex("5f069e3434e26e01e8a9caf393ac7b0d") in canonical_images:
+        old_map = (Path(__file__).resolve().parent.parent / "assets" / "sketchrip"
+                   / "ffa-arena-atlas-overrides.json")
+        if old_map.is_file():
+            textures.atlas_overrides = json.loads(old_map.read_text(encoding="utf-8")).get("entries", {})
+            counts["ffa_atlas_overrides_verified_source"] = len(textures.atlas_overrides)
 
     for mesh_index, mesh in enumerate(meshes):
         image = material_image(mesh)
