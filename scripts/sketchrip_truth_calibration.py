@@ -298,6 +298,8 @@ def bedrock_base_material(state: str) -> str:
         name = "grass_block"
     elif name == "snow":
         name = "snow_block"
+    elif name == "carpet" and color:
+        name = ("light_gray" if color == "silver" else color) + "_carpet"
     elif name == "tallgrass":
         name = "fern" if data.get("tall_grass_type") == "fern" else "short_grass"
     elif name == "deadbush":

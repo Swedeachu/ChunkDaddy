@@ -21,6 +21,10 @@ from sketchrip_truth_calibration import bedrock_base_material, read_bedrock_worl
 
 def material_of(name: str) -> str:
     base = name.split("[", 1)[0].removeprefix("minecraft:")
+    # Java names a snow layer `snow[layers=N]`, while Bedrock uses
+    # `snow_layer[height=N-1]`. These are the same material/family.
+    if base == "snow" and "layers=" in name:
+        return "minecraft:snow_layer"
     if base.endswith("_stairs"):
         base = {"polished_andesite_stairs": "polished_andesite",
                 "smooth_sandstone_stairs": "smooth_sandstone"}.get(base,base[:-7]+"_planks")

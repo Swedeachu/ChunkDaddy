@@ -53,6 +53,8 @@ def scan(meshes: list, blocks: dict, unit: float, up_axis: str):
     half = np.zeros((len(pts), 2), dtype=np.float32)
     triangles_seen = np.zeros(len(pts), dtype=np.int32)
     full_height_side = np.zeros(len(pts), dtype=np.float32)
+    # Sub-block horizontal roof planes at 1/16-block resolution.
+    thin_roof = np.zeros((len(pts), 17), dtype=np.float32)
     for mesh in meshes:
         vertices = np.asarray(mesh.vertices, dtype=np.float64)
         faces = np.asarray(mesh.faces, dtype=np.int64)
@@ -109,6 +111,14 @@ def scan(meshes: list, blocks: dict, unit: float, up_axis: str):
             if np.any(matched):
                 np.add.at(quarter, (ids[matched], axis[matched], bin_index[matched]),
                           (magnitude[matched] * .5).astype(np.float32))
+            # Thin layers (snow/carpet) cannot be distinguished from cubes by
+            # atlas colors alone. Record *observed* fractional roof elevations.
+            level = np.rint(fraction * 16).astype(np.int32)
+            thin_valid = ((axis == 1) & (level >= 1) & (level <= 15) &
+                          (np.abs(fraction * 16 - level) < .18))
+            if np.any(thin_valid):
+                np.add.at(thin_roof, (ids[thin_valid], level[thin_valid]),
+                          (magnitude[thin_valid] * .5).astype(np.float32))
             yhalf = (axis == 1) & (np.abs(fraction - .5) < .035)
             if np.any(yhalf):
                 direction = (normal[yhalf, 1] > 0).astype(np.int32)
@@ -117,7 +127,7 @@ def scan(meshes: list, blocks: dict, unit: float, up_axis: str):
             np.add.at(triangles_seen, ids, 1)
     return pts, {'quarter': quarter, 'internal': internal,
                  'signed': signed, 'half': half, 'faces': triangles_seen,
-                 'full_height_side': full_height_side}, {'unit': unit}
+                 'full_height_side': full_height_side, 'thin_roof': thin_roof}, {'unit': unit}
 
 
 def _winding(points, blocks, half):
@@ -257,6 +267,48 @@ def refine_facing(meshes: list, blocks: dict, unit: float, up_axis: str,
                      'winding': 'positive outward' if positive_up else 'negative outward',
                      'policy': 'signed riser normals with decisive area margin'}
 
+
+def refine_thin_layers(meshes: list, blocks: dict, unit: float, up_axis: str,
+                       min_roof_area: float = .70):
+    """Identify real snow layers and carpets from 1/16-height roofs.
+
+    Do not infer thin blocks by their atlas texture: snow_block and snow
+    layers share a material; carpets share their color's wool texture.
+    Roof planes must be internal to the voxel and span most of a full block.
+    The source atlas does not encode snow-layer count, but the top plane does.
+    """
+    points, geo, _ = scan(meshes, blocks, unit, up_axis)
+    changes = {}
+    counts = collections.Counter()
+    for index, point in enumerate(points):
+        original = blocks[tuple(point)]
+        name = original.split('[', 1)[0]
+        if name != 'minecraft:snow_block' and not name.endswith('_wool'):
+            continue
+        counts['examined'] += 1
+        levels = geo['thin_roof'][index]
+        level = int(np.argmax(levels))
+        area = float(levels[level])
+        if not (1 <= level <= 15 and area >= min_roof_area):
+            continue
+        # The source may also expose the roof of an adjacent full block on
+        # the integer boundary. That does not contradict a 1/16-height roof
+        # genuinely contained *inside* this voxel. Requiring no Y+1 roof
+        # falsely rejected snow layers adjacent to tall blocks.
+        result = None
+        if name == 'minecraft:snow_block' and level % 2 == 0:
+            layers = level // 2
+            if 1 <= layers <= 7:
+                result = f'minecraft:snow[layers={layers}]'
+                counts['snow_layer'] += 1
+        elif name.endswith('_wool') and level == 1:
+            result = name.removesuffix('_wool') + '_carpet'
+            counts['carpet'] += 1
+        if result:
+            changes[tuple(map(int, point))] = result
+    return changes, {'examined': counts['examined'],
+                     'proposed_changes': len(changes), 'families': dict(counts),
+                     'policy': 'source fractional roofs only; no atlas guess for thin blocks'}
 
 def verify_legacy_roofs(blocks: dict, roof_report: dict, pack):
     """Recheck Bedrock corner constraints *after* all facing changes have run.

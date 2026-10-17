@@ -1319,6 +1319,14 @@ def main(argv: list[str] | None = None) -> int:
                 report["final_stair_roof_consistency"] = verify_legacy_roofs(
                     blocks, report["stair_roof_refinement"], pack)
             report["block_counts"] = dict(collections.Counter(blocks.values()))
+        if args.geometry_evidence and not args.stair_orientation_only:
+            from sketchrip_shape_evidence import refine_thin_layers
+            thin_changes, thin_report = refine_thin_layers(
+                meshes, blocks, report["scale_model_units_per_block"], args.up_axis)
+            blocks.update(thin_changes)
+            report["thin_block_geometry"] = thin_report
+            report["requires_review"] = report.get("requires_review", False) or bool(thin_changes)
+            report["block_counts"] = dict(collections.Counter(blocks.values()))
         report["texture_uncertainty_policy"] = ("Geometry-only: original texture guesses unchanged"
             if args.refine_schematic is not None else
             "Strictly block if >0.05% of faces are uncertain; smaller counts are exported with a review warning.")
