@@ -102,6 +102,7 @@ public final class WorkerSession {
                 case "open_world" -> openWorld(id, request);
                 case "compose_regions" -> composeRegions(id, request);
                 case "surface_raster" -> surfaceRaster(request);
+                case "survey_region" -> gg.swim.chunkdaddy.worker.document.RegionSurvey.inspect(document(request).snapshot());
                 case "verify_regions" -> verifyRegions(request);
                 case "realign_block_entities" -> realignBlockEntities(request);
                 case "inspect_bedrock_records" -> inspectBedrockRecords(request);
@@ -179,7 +180,7 @@ public final class WorkerSession {
         schemas.add("sponge-v2");
         schemas.add("sponge-v3");
         result.add("schematicSchemas", schemas);
-        result.add("regionFeatures", Json.ofStrings(List.of("compose_regions", "relative-json", "shared-palettes", "surface_raster", "verify_regions", "realign_block_entities", "inspect_bedrock_records", "merge_bedrock_chunks", "align_bedrock_region", "replace_bedrock_regions")));
+        result.add("regionFeatures", Json.ofStrings(List.of("compose_regions", "relative-json", "shared-palettes", "surface_raster", "survey_region", "verify_regions", "realign_block_entities", "inspect_bedrock_records", "merge_bedrock_chunks", "align_bedrock_region", "replace_bedrock_regions")));
 
         JsonArray profiles = new JsonArray();
         for (TargetProfile profile : TargetProfile.all()) {

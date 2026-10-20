@@ -44,3 +44,15 @@ If Python is already installed, `python build.py --run` works too (`python3` on 
 and automatically invokes the appropriate setup first.
 
 See [the build guide](../docs/BuildAndRun.md) for supported systems and troubleshooting.
+
+## Map zoo exports
+
+`build_map_zoo.py --source Maps.zip --workspace <folder> --destination <savedWorlds>/MAP_ZOO.zip --publish`
+uses the CLI worker to survey and combine each nested `.mcworld` once, in a six-column
+chunk-aligned grid with at least ten empty chunks between footprints. `--columns` and
+`--gap-chunks` configure the layout. It preserves map heights, translates centers into a
+parseable `MAP_ZOO.json`, verifies every exported region, and includes the same JSON inside
+the ZIP. Terrain bounds ignore empty generated columns; bundled packs and ordinary entities
+are excluded. Use a fresh workspace, or pass `--inventory` from a previous survey of the
+identical source archive to reuse its bounds. The standalone MapZooViewer sibling project
+can browse these destinations without changes to any gameplay plugin.
