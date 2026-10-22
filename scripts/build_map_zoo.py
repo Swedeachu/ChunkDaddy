@@ -1,7 +1,8 @@
 #!/usr/bin/env python3
-"""Compose every world in an archive into a named, chunk-aligned map zoo with teleport JSON."""
+"""Compose every mcworld in an archive or directory into a chunk-aligned world with region JSON."""
 from __future__ import annotations
 import argparse
+import hashlib
 import json
 import math
 import os
@@ -29,6 +30,16 @@ def labels(path, root):
     return name.strip(), category, relative
 
 
+def source_hash(path):
+    if path.is_file():
+        return sha256(path)
+    digest = hashlib.sha256()
+    for source in sorted(path.rglob('*.mcworld')):
+        digest.update(source.relative_to(path).as_posix().encode('utf-8') + b'\0')
+        digest.update(bytes.fromhex(sha256(source)))
+    return digest.hexdigest()
+
+
 def main():
     if os.name != 'nt': raise RuntimeError('Run locally on Windows')
     repo = Path(__file__).resolve().parents[1]
@@ -36,6 +47,9 @@ def main():
     parser.add_argument('--source', type=Path, required=True)
     parser.add_argument('--workspace', type=Path, required=True)
     parser.add_argument('--destination', type=Path, required=True)
+    parser.add_argument('--world', default='MAP_ZOO', help='Output world and teleport-index name')
+    parser.add_argument('--category', help='Override the source folder category')
+    parser.add_argument('--title-case', action='store_true', help='Capitalize display names from lowercase filenames')
     parser.add_argument('--java', default=str(repo / 'local/jdk/jdk-21.0.8+9/bin/java.exe'))
     parser.add_argument('--classpath', default=str(repo / 'worker/build/dist/chunkdaddy-worker.jar'))
     parser.add_argument('--heap', default='18g')
@@ -46,15 +60,20 @@ def main():
     parser.add_argument('--inventory', type=Path, help='Reuse a prior survey for identical source archives')
     args = parser.parse_args()
     if args.columns < 1 or args.gap_chunks < 1: parser.error('Columns and gap must be positive')
+    if not re.fullmatch(r'[A-Za-z0-9][A-Za-z0-9_-]*', args.world): parser.error('World name must be a safe folder name')
+    if args.destination.name != args.world + '.zip': parser.error('Destination filename must match --world')
     args.workspace.mkdir(parents=True, exist_ok=True)
-    archive_hash = sha256(args.source)
+    archive_hash = source_hash(args.source)
     records = []
     worker = Worker(args.classpath, args.workspace, args.java, ['-Xmx' + args.heap], args.workspace / 'worker.log')
     try:
         features = worker.send({'type': 'capabilities'})['regionFeatures']
         if 'survey_region' not in features: raise ValueError('Rebuild ChunkDaddy: survey_region is required')
-        extraction = worker.send({'type': 'inspect_source', 'path': str(args.source)})
-        root = Path(extraction['scanRoot'])
+        if args.source.is_dir():
+            root = args.source.resolve()
+        else:
+            extraction = worker.send({'type': 'inspect_source', 'path': str(args.source)})
+            root = Path(extraction['scanRoot'])
         sources = sorted(root.rglob('*.mcworld'))
         if not sources: raise ValueError('Archive contains no mcworld sources')
         cached = json.loads(args.inventory.read_text()) if args.inventory else {}
@@ -63,6 +82,9 @@ def main():
         ids = set()
         for index, path in enumerate(sources, 1):
             name, category, relative = labels(path, root)
+            category = args.category or (category if category != '.' else 'Maps')
+            if args.title_case:
+                name = name.title().replace('Cs Office', 'CS Office')
             slug = re.sub('[^a-z0-9]+', '-', name.lower()).strip('-')
             identity = re.sub('[^a-z0-9]+', '-', category.lower()).strip('-') + '/' + slug
             if identity in ids: raise ValueError('Duplicate map identifier: ' + identity)
@@ -117,13 +139,14 @@ def main():
                 gap_x = max(a['minChunkX'] - b['maxChunkX'] - 1, b['minChunkX'] - a['maxChunkX'] - 1, 0)
                 gap_z = max(a['minChunkZ'] - b['maxChunkZ'] - 1, b['minChunkZ'] - a['maxChunkZ'] - 1, 0)
                 if max(gap_x, gap_z) < args.gap_chunks: raise ValueError('Map footprints violate requested spacing')
-        index = {'schemaVersion': 1, 'world': 'MAP_ZOO', 'spacingChunks': args.gap_chunks, 'spacingBlocks': args.gap_chunks * 16,
-                 'columns': args.columns, 'rows': rows, 'sourceArchiveSha256': archive_hash, 'maps': entries}
-        write_json(args.workspace / 'MAP_ZOO.json', index)
-        plan = {'type': 'compose_regions', 'name': 'MAP_ZOO', 'profileId': args.profile, 'sources': sources_plan,
+        index = {'schemaVersion': 1, 'world': args.world, 'spacingChunks': args.gap_chunks, 'spacingBlocks': args.gap_chunks * 16,
+                 'columns': args.columns, 'rows': rows, 'sourceSha256': archive_hash, 'maps': entries}
+        index_path = args.workspace / (args.world + '.json')
+        write_json(index_path, index)
+        plan = {'type': 'compose_regions', 'name': args.world, 'profileId': args.profile, 'sources': sources_plan,
                 'layout': {'columns': args.columns, 'rows': rows, 'minimumGapBlocks': args.gap_chunks * 16}}
         write_json(args.workspace / 'compose-plan.json', plan)
-        result = worker.send(plan, progress_printer('MAP_ZOO composition'), timeout=7200)
+        result = worker.send(plan, progress_printer(args.world + ' composition'), timeout=7200)
         manifest = json.loads(Path(result['regionManifestPath']).read_text())
         if len(manifest['instances']) != len(sources) or len(manifest['templates']) != len(sources): raise ValueError('Missing map')
         for entry, instance in zip(entries, manifest['instances']):
@@ -132,13 +155,13 @@ def main():
             if expected != entry['center']: raise ValueError('Teleport coordinates disagree with physical placement')
         first = entries[0]['center']
         worker.send({'type': 'set_world_spawn', 'documentId': result['documentId'], **first})
-        staged = args.workspace / 'MAP_ZOO.zip'
-        worker.send({'type': 'export_world', 'documentId': result['documentId'], 'destination': str(staged), 'mode': 'ZIP', 'worldName': 'MAP_ZOO',
-                     'writeVoidColumns': False, 'voidCleaner': True, 'writeCompanionJson': False}, progress_printer('MAP_ZOO export'), timeout=7200)
+        staged = args.workspace / (args.world + '.zip')
+        worker.send({'type': 'export_world', 'documentId': result['documentId'], 'destination': str(staged), 'mode': 'ZIP', 'worldName': args.world,
+                     'writeVoidColumns': False, 'voidCleaner': True, 'writeCompanionJson': False}, progress_printer(args.world + ' export'), timeout=7200)
         worker.send({'type': 'close_document', 'documentId': result['documentId']})
         # The same parseable index travels inside the ZIP and beside it for the independent viewer.
         with zipfile.ZipFile(staged, 'a', compression=zipfile.ZIP_DEFLATED, compresslevel=1) as output:
-            output.writestr('MAP_ZOO.json', (args.workspace / 'MAP_ZOO.json').read_bytes())
+            output.writestr(args.world + '.json', index_path.read_bytes())
             output.writestr('tungsten_world.json', '{"generator":"void"}\n')
         with zipfile.ZipFile(staged) as archive:
             if archive.testzip() is not None: raise ValueError('Corrupt export ZIP')
@@ -146,10 +169,11 @@ def main():
         verification = worker.send({'type': 'verify_regions', 'path': str(staged)}, timeout=3600)
         if verification['verifiedInstances'] != len(sources): raise ValueError('Incomplete region verification')
         write_json(args.workspace / 'verification.json', verification)
-        if sha256(args.source) != archive_hash: raise ValueError('Input archive changed during composition')
+        if source_hash(args.source) != archive_hash: raise ValueError('Input sources changed during composition')
         if args.publish:
             args.destination.parent.mkdir(parents=True, exist_ok=True)
-            for source, destination in [(staged, args.destination), (args.workspace / 'MAP_ZOO.json', args.destination.with_suffix('.json'))]:
+            for source, destination in [(staged, args.destination), (index_path, args.destination.with_suffix('.json')),
+                                        (Path(result['regionManifestPath']), args.destination.with_suffix('.regions.json'))]:
                 pending = destination.with_name(destination.name + '.pending')
                 shutil.copy2(source, pending)
                 if sha256(source) != sha256(pending): raise ValueError('Publication checksum mismatch')

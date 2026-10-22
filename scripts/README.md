@@ -56,3 +56,20 @@ the ZIP. Terrain bounds ignore empty generated columns; bundled packs and ordina
 are excluded. Use a fresh workspace, or pass `--inventory` from a previous survey of the
 identical source archive to reuse its bounds. The standalone MapZooViewer sibling project
 can browse these destinations without changes to any gameplay plugin.
+
+For a directory of `.mcworld` files, use `--source <directory> --world PEVENT`
+and `--destination <savedWorlds>/PEVENT.zip`. `--category` assigns a category to
+all inputs, and `--title-case` cleans up lowercase display names. For example:
+
+```powershell
+python scripts/build_map_zoo.py `
+  --source 'C:/Users/camde/Downloads/temp/hive java/bedrock' `
+  --world PEVENT --category 'Hive Maps' --title-case `
+  --columns 5 --gap-chunks 10 --workspace local/pevent `
+  --destination ../SwimCorePvP/TungstenServerRelease/savedWorlds/PEVENT.zip --publish
+```
+
+Every output ZIP contains Chunk Daddy's canonical `regions.json`. Publishing also
+writes `<world>.regions.json` beside the ZIP, byte-for-byte identical to that manifest,
+and `<world>.json` with the flattened, translated teleport coordinates. The viewer's
+world picker reads the canonical template metadata and adds each instance offset.
