@@ -1,0 +1,13 @@
+{
+  "schemaVersion": 1,
+  "minX": -16,
+  "minZ": -160,
+  "width": 176,
+  "depth": 160,
+  "operations": [
+    {
+      "match": ["DIRT"],
+      "palette": [{"type": "CRIMSON_NYLIUM"}]
+    }
+  ]
+}

@@ -45,6 +45,13 @@ and automatically invokes the appropriate setup first.
 
 See [the build guide](../docs/BuildAndRun.md) for supported systems and troubleshooting.
 
+## Terrain leveling
+
+For terrain analysis, rigid group selection and reviewed leveling, see
+[Terrain leveling](../docs/TerrainLeveling.md). `terrain_level.py` imports/exports through
+the worker, `terrain_plan.py` authors grouped displacement fields, and `terrain_verify.py`
+checks the edited document against its reopened export.
+
 ## Map zoo exports
 
 `build_map_zoo.py --source Maps.zip --workspace <folder> --destination <savedWorlds>/MAP_ZOO.zip --publish`
@@ -73,3 +80,7 @@ Every output ZIP contains Chunk Daddy's canonical `regions.json`. Publishing als
 writes `<world>.regions.json` beside the ZIP, byte-for-byte identical to that manifest,
 and `<world>.json` with the flattened, translated teleport coordinates. The viewer's
 world picker reads the canonical template metadata and adds each instance offset.
+
+## Block replacement
+
+`replace_world_blocks.py` applies a JSON recipe through the worker, exports a separate world, reopens it, and audits every voxel and block entity position. It requires `terrain-requirements.txt`. See [Block replacement and erosion](../docs/BlockReplacement.md) and `examples/terrain/build73-polish.json` for coherent material splotches and iterative water shaving.

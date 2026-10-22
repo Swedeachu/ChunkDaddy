@@ -41,6 +41,8 @@ behind the job it is cancelling.
 | `capabilities` | Protocol version, worker build, Chunker revision, supported schemas, target profiles |
 | `inspect_source` | Extract a container if needed and list the world roots inside it |
 | `survey_region` | Survey an open document's non-air content bounds and an above-center spectator viewpoint |
+| `terrain_volume` | Export a bounded semantic block volume and palette for terrain analysis; see [TerrainLeveling](TerrainLeveling.md) |
+| `terrain_displace` | Validate or atomically apply a fingerprinted vertical displacement field, preserving block states and positional records |
 | `align_bedrock_region` | Match edited terrain to an existing footprint and verify translation; see [MapReplacement](MapReplacement.md) |
 | `replace_bedrock_regions` | Replace full occupied footprints, including air, preserving unrelated records and metadata |
 | `new_document` | Create a void Bedrock world |
@@ -128,3 +130,7 @@ Clients split large views into bounded batches instead of refusing to render the
 view when it exceeds 4,096 columns. The native viewport sends at most one request at a
 time, coalesces navigation changes, and discards replies for an obsolete document,
 revision, height setting, or resolution. It deletes consumed and discarded tile files.
+
+## Material replacement
+
+`replace_blocks` takes a `documentId`, an absolute recipe path in `recipe`, and optional `validateOnly`. It supports ordered material/noise replacements and iterative air-side erosion as one atomic, undoable edit. See [Block replacement and erosion](BlockReplacement.md) for the schema and CLI workflow.

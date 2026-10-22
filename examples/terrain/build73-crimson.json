@@ -1,0 +1,10 @@
+{
+  "schemaVersion": 1,
+  "expectAbsent": ["COARSE_DIRT"],
+  "operations": [
+    {
+      "match": ["COARSE_DIRT"],
+      "palette": [{"type": "CRIMSON_NYLIUM"}]
+    }
+  ]
+}

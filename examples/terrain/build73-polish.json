@@ -1,0 +1,18 @@
+{
+  "schemaVersion": 1,
+  "clearWaterlogged": true,
+  "expectAbsent": ["WATER", "WATER_CAULDRON", "SOUL_SOIL", "SOUL_SAND", "COBWEB", "LILY_PAD"],
+  "operations": [
+    {"match": ["COBWEB", "LILY_PAD"], "palette": [{"type": "AIR"}]},
+    {"mode": "erode", "match": ["WATER"], "faces": "horizontal"},
+    {
+      "match": ["WATER"], "scale": 5.5, "seed": 73022,
+      "palette": [{"type": "BLUE_STAINED_GLASS"}, {"type": "CYAN_STAINED_GLASS"}]
+    },
+    {
+      "match": ["SOUL_SOIL", "SOUL_SAND"], "scale": 6, "seed": 73119,
+      "palette": [{"type": "DIRT", "weight": 0.55}, {"type": "COARSE_DIRT", "weight": 0.45}]
+    },
+    {"match": ["WATER_CAULDRON"], "palette": [{"type": "CAULDRON"}]}
+  ]
+}

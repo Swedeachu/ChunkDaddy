@@ -1,0 +1,85 @@
+{
+  "floorBand": [
+    53,
+    60
+  ],
+  "foundationY": 51,
+  "foundationMaterial": "BLACKSTONE",
+  "targetY": 55,
+  "border": 5,
+  "maximumInferenceDistance": 10,
+  "maximumGroupBlocks": 30000,
+  "maximumGroupWidth": 80,
+  "maximumGroupHeight": 60,
+  "terrainGroups": [
+    {
+      "name": "green",
+      "materials": [
+        "GREEN_CONCRETE",
+        "GREEN_CONCRETE_POWDER",
+        "GRASS_BLOCK",
+        "LIME_TERRACOTTA",
+        "TUFF",
+        "DIRT_PATH",
+        "DIRT"
+      ],
+      "edit": true
+    },
+    {
+      "name": "ice",
+      "materials": [
+        "SNOW_BLOCK",
+        "PACKED_ICE"
+      ],
+      "edit": true
+    },
+    {
+      "name": "end",
+      "materials": [
+        "END_STONE",
+        "BIRCH_PLANKS",
+        "SMOOTH_SANDSTONE"
+      ],
+      "edit": true
+    },
+    {
+      "name": "nether",
+      "materials": [
+        "NETHERRACK",
+        "SOUL_SOIL",
+        "RED_STAINED_GLASS",
+        "NETHER_WART_BLOCK",
+        "BLACK_STAINED_GLASS"
+      ],
+      "edit": false
+    }
+  ],
+  "transparentGroundOverlays": [
+    "AIR",
+    "SNOW",
+    "FERN",
+    "LARGE_FERN",
+    "SHORT_GRASS",
+    "DEAD_BUSH",
+    "WHITE_TULIP",
+    "AZURE_BLUET",
+    "OXEYE_DAISY",
+    "DANDELION",
+    "RED_MUSHROOM",
+    "BROWN_MUSHROOM",
+    "COBWEB",
+    "LILY_PAD",
+    "PEONY",
+    "GRAY_CARPET",
+    "BLACK_CARPET",
+    "GREEN_CARPET",
+    "WHITE_CARPET",
+    "YELLOW_CARPET",
+    "LIGHT_BLUE_CARPET"
+  ],
+  "liquids": [
+    "WATER",
+    "LAVA"
+  ],
+  "minimumFloorY": 54
+}
