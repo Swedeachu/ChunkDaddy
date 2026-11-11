@@ -102,6 +102,7 @@ public final class WorkerSession {
                 case "open_world" -> openWorld(id, request);
                 case "compose_regions" -> composeRegions(id, request);
                 case "surface_raster" -> surfaceRaster(request);
+                case "render_map" -> renderMap(request);
                 case "terrain_volume" -> gg.swim.chunkdaddy.worker.terrain.TerrainVolume.dump(document(request), request);
                 case "replace_blocks" -> gg.swim.chunkdaddy.worker.terrain.BlockReplacement.apply(document(request), request, blockEntityResolver(document(request)));
                 case "terrain_displace" -> gg.swim.chunkdaddy.worker.terrain.TerrainDisplacement.apply(document(request), request, blockEntityResolver(document(request)));
@@ -109,6 +110,8 @@ public final class WorkerSession {
                 case "verify_regions" -> verifyRegions(request);
                 case "realign_block_entities" -> realignBlockEntities(request);
                 case "inspect_bedrock_records" -> inspectBedrockRecords(request);
+                case "read_signs" -> readSigns(request);
+                case "translate_bedrock_chunks" -> translateBedrockChunks(request);
                 case "merge_bedrock_chunks" -> mergeBedrockChunks(request);
                 case "align_bedrock_region" -> alignBedrockRegion(id, request);
                 case "replace_bedrock_regions" -> replaceBedrockRegions(request);
@@ -183,7 +186,7 @@ public final class WorkerSession {
         schemas.add("sponge-v2");
         schemas.add("sponge-v3");
         result.add("schematicSchemas", schemas);
-        result.add("regionFeatures", Json.ofStrings(List.of("compose_regions", "relative-json", "shared-palettes", "surface_raster", "terrain_volume", "terrain_displace", "replace_blocks", "survey_region", "verify_regions", "realign_block_entities", "inspect_bedrock_records", "merge_bedrock_chunks", "align_bedrock_region", "replace_bedrock_regions")));
+        result.add("regionFeatures", Json.ofStrings(List.of("compose_regions", "relative-json", "shared-palettes", "surface_raster", "render_map", "terrain_volume", "terrain_displace", "replace_blocks", "survey_region", "verify_regions", "realign_block_entities", "inspect_bedrock_records", "merge_bedrock_chunks", "align_bedrock_region", "replace_bedrock_regions")));
 
         JsonArray profiles = new JsonArray();
         for (TargetProfile profile : TargetProfile.all()) {
@@ -244,6 +247,34 @@ public final class WorkerSession {
 
     private JsonObject inspectBedrockRecords(JsonObject request) throws Exception {
         return gg.swim.chunkdaddy.worker.bedrock.BedrockChunkMerger.inspect(singleBedrockRoot(Json.string(request, "path")));
+    }
+
+    /** Every sign's position, text and block state, read from the raw database without importing. */
+    private JsonObject readSigns(JsonObject request) throws Exception {
+        Path world = singleBedrockRoot(Json.string(request, "path"));
+        ChunkRect area = Json.optionalChunkRect(request, "rectangle");
+        boolean includeEmpty = request.has("includeEmpty") && request.get("includeEmpty").getAsBoolean();
+        boolean blockState = !request.has("blockState") || request.get("blockState").getAsBoolean();
+        return gg.swim.chunkdaddy.worker.bedrock.SignReader.read(world, area, includeEmpty, blockState);
+    }
+
+    /** Raw chunk-aligned move of a whole world into a fresh overlay, optionally clearing blocks. */
+    private JsonObject translateBedrockChunks(JsonObject request) throws Exception {
+        Path source = singleBedrockRoot(Json.string(request, "path"));
+        List<int[]> removals = new ArrayList<>();
+        if (request.has("removeBlocks")) {
+            for (JsonElement entry : Json.array(request, "removeBlocks")) {
+                JsonObject block = entry.getAsJsonObject();
+                removals.add(new int[] {Json.integer(block, "x"), Json.integer(block, "y"), Json.integer(block, "z")});
+            }
+        }
+        Path destination = Path.of(Json.string(request, "destination"));
+        return gg.swim.chunkdaddy.worker.bedrock.ChunkTranslator.translate(
+                source,
+                destination,
+                Json.integer(request, "deltaChunkX"),
+                Json.integer(request, "deltaChunkZ"),
+                removals);
     }
 
     private JsonObject mergeBedrockChunks(JsonObject request) throws Exception {
@@ -691,6 +722,13 @@ public final class WorkerSession {
 
     private JsonObject surfaceRaster(JsonObject request) throws Exception {
         return gg.swim.chunkdaddy.worker.preview.SurfaceRaster.write(document(request).snapshot(), request);
+    }
+
+    private JsonObject renderMap(JsonObject request) throws Exception {
+        WorldDocument document = document(request);
+        synchronized (document) {
+            return gg.swim.chunkdaddy.worker.preview.MapRenderer.render(document.snapshot(), document.name(), request);
+        }
     }
 
     private JsonObject undo(JsonObject request) {

@@ -242,6 +242,51 @@ record is compared with the merged result before atomic publication. The result
 includes record counts and `verifiedDirectory`. This is the path for adding a map
 without round-tripping the base world through the document importer.
 
+`translate_bedrock_chunks` builds such an overlay without Chunker: it takes
+`path` (an extracted Bedrock world directory), `destination` (must not exist),
+`deltaChunkX`, `deltaChunkZ` and optional `removeBlocks` (`[{x,y,z}]` in source
+coordinates). It copies `level.dat`, then copies every Overworld chunk record
+shifted by whole chunks. Sub-chunk bytes are position independent, so blocks
+newer than any conversion profile survive unchanged. Block-entity `x`/`z` (and
+`pairx`/`pairz`) are rewritten. Ordinary entities, actor digests, pending/random
+ticks and structure bounds are dropped, which keeps the overlay acceptable to
+`merge_bedrock_chunks`. Each `removeBlocks` position becomes air in every storage
+layer of its version 8/9 sub-chunk and loses its block entity. The request fails
+if any position is outside stored sub-chunks. The result reports `records`,
+`recordsDropped`, `blockEntities`, `blockEntitiesRemoved`, `blocksRemoved` and the
+translated chunk `rectangle`. The merge still requires the overlay's
+NetworkVersion to be no newer than the base world's.
+
+### Reading label signs
+
+`read_signs` lists every sign in a Bedrock world's raw database, so a map
+designer can label a world with signs ("NPC: replay", "LB: top kills") and an
+agent or script can turn each one into placed content. Nothing is imported or
+written.
+
+| field | meaning |
+|---|---|
+| `path` REQ | extracted Bedrock world directory (the one holding `db/`) |
+| `rectangle` | optional chunk rectangle to limit the scan |
+| `includeEmpty` | include signs with no text (default false) |
+| `blockState` | decode the sign block's state and facing (default true) |
+
+It returns `blockEntitiesScanned`, `signCount` and `signs`, sorted by x, z, then y.
+Each sign has `x`, `y`, `z`, `type` (`Sign` or `HangingSign`), `front`, `back`,
+`text` (both sides joined), `waxed` and, with `blockState`, `block`, `states` and
+`facingYaw`. `facingYaw` uses the Minecraft yaw convention (0 = south/+Z,
+90 = west/-X): standing signs give `ground_sign_direction` × 22.5, wall signs map
+`facing_direction` 2/3/4/5 to 180/0/90/270. It is the direction the front text
+faces, so an NPC placed at the sign with that yaw faces the reader.
+
+A typical labelling pass: `read_signs` on the designer's world, map each sign to
+content, then `translate_bedrock_chunks` with every sign position in
+`removeBlocks`, and finally `merge_bedrock_chunks` into the live world.
+
+```bash
+python3 scripts/chunkdaddy_cli.py call read_signs path=/worlds/new_hub
+```
+
 ### World settings
 
 | type | fields |
@@ -257,6 +302,7 @@ without round-tripping the base world through the document importer.
 | type | fields | returns |
 |---|---|---|
 | `preview_tiles` | `documentId` REQ, `area` REQ, `sliceY` (320), `pixelsPerChunk` (1/4/16, default 16), `heightMode` (`HIGHEST_SURFACE`/`SLICE`) | `{path, revision}` — a binary `.cdat` tile file in the workspace |
+| `render_map` | `documentId` REQ, `destination` REQ (`.png`), `blocksPerPixel` (1/2/4/8/16, default 2), `area` (default: content bounds plus `marginChunks`, 4), `markers[]` (`label`, `group`, block `x`, `z`), `regions[]` (`label`, `group`, chunk `rectangle`), `groups[]` (`name`, `rgb` as `"#RRGGBB"`), `title`, `clusterGapChunks` (1), `markerReachChunks` (4), `ignoreBlocks[]`, `chunkGrid`, `gridMajorChunks` (32), `groupCaptions` (true), `legendWidth` (460) | `path`, `width`, `height`, `area`, `contentColumns`, `clusters`, `groups[]`, `unlabeled[]`, `missedMarkers[]`, `sharedClusters[]`, `surfaceBlocks[]` |
 
 `area` is capped at 4096 columns per call.
 

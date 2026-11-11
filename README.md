@@ -78,6 +78,12 @@ instances of each selected template, regenerates its shared map binary in the or
 coordinate frame, checks copies/PocketMine loading, and backs up both worlds and assets
 before publication. See [the CLI workflow](docs/MapReplacement.md).
 
+To add a new map beside existing ones, `translate_bedrock_chunks` shifts a world's raw chunk
+records by whole chunks (optionally clearing listed blocks) and `merge_bedrock_chunks` adds
+them only where the base world has no columns. `read_signs` lists every sign with its text
+and facing, so a designer can label a map with signs and a script or agent can place content
+from them. See [the worker CLI reference](docs/WORKER-CLI.md#editing).
+
 ## Releasing
 
 Double-click `scripts\release-windows.bat`, or run `bash scripts/release-linux.sh`. Each

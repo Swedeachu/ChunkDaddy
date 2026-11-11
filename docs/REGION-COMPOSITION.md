@@ -27,6 +27,34 @@ terrain. Supply `documentId`, `destination`, `minX`, `minZ`, optional dimensions
 `contains` terms and either an RGB integer or `ignore: true`. The same raster
 request can be attached to a composition source as `raster`.
 
+`render_map` draws a whole document top down into one labelled PNG, for seeing what
+a world holds and where. Each pixel shows the highest block that isn't ignored, and is
+shaded by height and slope. By default barrier, structure void, light and invisible
+blocks are ignored, so an arena's barrier roof doesn't hide the arena; replace that
+list with `ignoreBlocks`. Chunk lines are drawn when a chunk is 8 pixels or more, with
+a stronger line and axis label every `gridMajorChunks`. A legend panel on the right
+lists each group.
+
+Labels come from `markers` and `regions`:
+
+- **Markers** are block positions, such as an arena's spawn. The worker joins content
+  chunks that are no more than `clusterGapChunks` empty chunks apart into clusters,
+  then merges clusters whose bounding boxes overlap. A cluster split by void cleaning
+  stays one place. Each marker labels the cluster that contains it or is nearest, up
+  to `markerReachChunks` away.
+- **Regions** are explicit chunk rectangles. They take in any cluster that lies wholly
+  inside them.
+
+Each group gets a colour (from `groups`, or else a built-in palette) and a caption
+above its extent. The result lists:
+
+- `unlabeled`: clusters no label reached. They are also drawn as dashed grey boxes.
+- `missedMarkers`: markers with no cluster in reach.
+- `sharedClusters`: clusters that more than one marker landed in.
+- `surfaceBlocks`: the 20 most common visible blocks.
+
+Together these make a stray chunk, or a missing or merged arena, easy to see.
+
 `verify_regions` takes `path` to an exported world archive. It independently reads
 the database, compares subchunks and biome/height records for every translated
 copy, verifies block entities belong to their physical chunks, and compares their
