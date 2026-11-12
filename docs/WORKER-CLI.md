@@ -244,7 +244,7 @@ without round-tripping the base world through the document importer.
 
 `translate_bedrock_chunks` builds such an overlay without Chunker: it takes
 `path` (an extracted Bedrock world directory), `destination` (must not exist),
-`deltaChunkX`, `deltaChunkZ` and optional `removeBlocks` (`[{x,y,z}]` in source
+`deltaChunkX`, `deltaChunkZ` and optional `removeBlocks`, `rectangle` and `deltaY` (`[{x,y,z}]` in source
 coordinates). It copies `level.dat`, then copies every Overworld chunk record
 shifted by whole chunks. Sub-chunk bytes are position independent, so blocks
 newer than any conversion profile survive unchanged. Block-entity `x`/`z` (and
@@ -256,6 +256,24 @@ if any position is outside stored sub-chunks. The result reports `records`,
 `recordsDropped`, `blockEntities`, `blockEntitiesRemoved`, `blocksRemoved` and the
 translated chunk `rectangle`. The merge still requires the overlay's
 NetworkVersion to be no newer than the base world's.
+
+Two optional fields make it a lift tool too. `rectangle` (chunk rectangle in
+source coordinates) copies only the columns inside it. `deltaY` moves every
+block up (or down, if negative) by any number of blocks, not only whole
+sub-chunks: each column's version 8/9 sub-chunks are decoded, shifted and
+re-encoded with compact palettes, block-entity `y`/`pairy` move with them, and
+the Data3D/Data2D heightmaps are shifted (biomes stay as stored). Checksum
+records are dropped since the sub-chunk bytes change. The request fails if a
+non-air block would leave the Overworld build range (y -64..319). The result
+adds `deltaY`, `subChunksIn` and `subChunksOut`. To raise an area of a world in
+place, translate it with `deltaChunkX`/`deltaChunkZ` 0, a `deltaY` and its
+`rectangle`, then `replace_bedrock_regions` the overlay into the world with the
+same rectangle:
+
+```jsonl
+{"type":"translate_bedrock_chunks","path":"/worlds/world","destination":"/tmp/lifted","deltaChunkX":0,"deltaChunkZ":0,"deltaY":92,"rectangle":{"minChunkX":-102,"minChunkZ":-28,"maxChunkX":-50,"maxChunkZ":19}}
+{"type":"replace_bedrock_regions","basePath":"/worlds/world","overlayPath":"/tmp/lifted","rectangles":[{"minChunkX":-102,"minChunkZ":-28,"maxChunkX":-50,"maxChunkZ":19}],"destination":"/worlds/world_lifted","mode":"DIRECTORY"}
+```
 
 ### Reading label signs
 

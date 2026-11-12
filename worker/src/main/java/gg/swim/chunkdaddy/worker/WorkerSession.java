@@ -272,8 +272,10 @@ public final class WorkerSession {
         return gg.swim.chunkdaddy.worker.bedrock.ChunkTranslator.translate(
                 source,
                 destination,
-                Json.integer(request, "deltaChunkX"),
-                Json.integer(request, "deltaChunkZ"),
+                Json.integer(request, "deltaChunkX", 0),
+                Json.integer(request, "deltaChunkZ", 0),
+                Json.integer(request, "deltaY", 0),
+                Json.optionalChunkRect(request, "rectangle"),
                 removals);
     }
 

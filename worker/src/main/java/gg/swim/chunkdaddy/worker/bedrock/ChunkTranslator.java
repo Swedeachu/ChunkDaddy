@@ -3,6 +3,7 @@ package gg.swim.chunkdaddy.worker.bedrock;
 import com.google.gson.JsonObject;
 import com.hivemc.chunker.nbt.tags.Tag;
 import com.hivemc.chunker.nbt.tags.collection.CompoundTag;
+import gg.swim.chunkdaddy.worker.util.ChunkRect;
 import org.iq80.leveldb.DB;
 import org.iq80.leveldb.DBIterator;
 import org.iq80.leveldb.WriteBatch;
@@ -20,6 +21,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.TreeMap;
 
 /**
  * Copies a Bedrock world's Overworld chunk records to a new world shifted by whole chunks,
@@ -30,12 +32,20 @@ import java.util.Set;
  * <p>Optional {@code removeBlocks} positions (source coordinates) become air in every
  * storage layer and lose their block entity, which is how label signs placed by a map
  * designer are cleared while the map is moved. The output is an overlay for
- * {@link BedrockChunkMerger#merge}.</p>
+ * {@link BedrockChunkMerger#merge} or {@link BedrockRegionReplacer#replace}.</p>
+ *
+ * <p>{@code deltaY} also moves every block up (or down) by any number of blocks: each
+ * column's sub-chunks are re-encoded by {@link VerticalShifter}, block entity {@code y}
+ * moves with them, the Data3D/Data2D heightmap moves, and sub-chunk checksums are
+ * dropped. An optional source {@code rectangle} limits the copy to those columns.</p>
  */
 public final class ChunkTranslator {
     private static final int SUBCHUNK = 0x2F;
     private static final int BLOCK_ENTITY = 0x31;
     private static final Set<Integer> DROPPED = Set.of(0x32, 0x33, 0x39, 0x3A);
+    private static final int DATA_3D = 0x2B;
+    private static final int DATA_2D = 0x2D;
+    private static final int CHECKSUMS = 0x3B;
     private static final int[] BIT_SIZES = {1, 2, 3, 4, 5, 6, 8, 16};
 
     private record Position(int x, int y, int z) {}
@@ -48,6 +58,22 @@ public final class ChunkTranslator {
             Path destination,
             int deltaChunkX,
             int deltaChunkZ,
+            List<int[]> removeBlocks
+    ) throws IOException {
+        return translate(source, destination, deltaChunkX, deltaChunkZ, 0, null, removeBlocks);
+    }
+
+    /**
+     * @param deltaY    blocks to move every block up (negative: down); 0 keeps heights
+     * @param rectangle source chunk columns to copy, or null for every Overworld column
+     */
+    public static JsonObject translate(
+            Path source,
+            Path destination,
+            int deltaChunkX,
+            int deltaChunkZ,
+            int deltaY,
+            ChunkRect rectangle,
             List<int[]> removeBlocks
     ) throws IOException {
         if (Files.exists(destination)) {
@@ -71,6 +97,11 @@ public final class ChunkTranslator {
         long blockEntities = 0;
         long blockEntitiesRemoved = 0;
         long blocksRemoved = 0;
+        long sectionsIn = 0;
+        long sectionsOut = 0;
+        // With a vertical shift, sub-chunks are gathered per column and re-encoded at the end.
+        Map<Long, Map<Integer, byte[]>> columns = new TreeMap<>();
+        Map<Long, byte[]> keyPrefixes = new HashMap<>();
         int minX = Integer.MAX_VALUE;
         int minZ = Integer.MAX_VALUE;
         int maxX = Integer.MIN_VALUE;
@@ -91,6 +122,13 @@ public final class ChunkTranslator {
 
                     int chunkX = (int) (key.column() >> 32);
                     int chunkZ = (int) key.column();
+                    if (rectangle != null && !rectangle.contains(chunkX, chunkZ)) {
+                        continue;
+                    }
+                    if (deltaY != 0 && key.tag() == CHECKSUMS) {
+                        dropped++;
+                        continue;
+                    }
                     byte[] value = entry.getValue();
                     if (key.tag() == BLOCK_ENTITY) {
                         ByteArrayOutputStream rewritten = new ByteArrayOutputStream();
@@ -107,7 +145,11 @@ public final class ChunkTranslator {
                                 continue;
                             }
                             tag.put("x", at.x() + deltaX);
+                            tag.put("y", at.y() + deltaY);
                             tag.put("z", at.z() + deltaZ);
+                            if (tag.contains("pairy")) {
+                                tag.put("pairy", tag.getInt("pairy", 0) + deltaY);
+                            }
                             if (tag.contains("pairx")) {
                                 tag.put("pairx", tag.getInt("pairx", 0) + deltaX);
                             }
@@ -127,6 +169,14 @@ public final class ChunkTranslator {
                             value = clearBlocks(value, inSection);
                             blocksRemoved += inSection.size();
                         }
+                        if (deltaY != 0) {
+                            sectionsIn++;
+                            columns.computeIfAbsent(key.column(), k -> new TreeMap<>()).put(section, value);
+                            keyPrefixes.putIfAbsent(key.column(), entry.getKey().clone());
+                            continue;
+                        }
+                    } else if (deltaY != 0 && (key.tag() == DATA_3D || key.tag() == DATA_2D)) {
+                        value = VerticalShifter.shiftHeightMap(value, deltaY);
                     }
 
                     byte[] newKey = entry.getKey().clone();
@@ -141,6 +191,33 @@ public final class ChunkTranslator {
                         output.write(batch);
                         batch.close();
                         batch = output.createWriteBatch();
+                    }
+                }
+                for (var column : columns.entrySet()) {
+                    int chunkX = (int) (column.getKey() >> 32);
+                    int chunkZ = (int) (long) column.getKey();
+                    Map<Integer, byte[]> shifted;
+                    try {
+                        shifted = VerticalShifter.shiftColumn(column.getValue(), deltaY);
+                    } catch (IOException e) {
+                        throw new IOException("Chunk " + chunkX + "," + chunkZ + ": " + e.getMessage(), e);
+                    }
+                    for (var section : shifted.entrySet()) {
+                        byte[] newKey = keyPrefixes.get(column.getKey()).clone();
+                        writeLe32(newKey, 0, chunkX + deltaChunkX);
+                        writeLe32(newKey, 4, chunkZ + deltaChunkZ);
+                        newKey[newKey.length - 1] = (byte) (int) section.getKey();
+                        batch.put(newKey, section.getValue());
+                        sectionsOut++;
+                        minX = Math.min(minX, chunkX + deltaChunkX);
+                        minZ = Math.min(minZ, chunkZ + deltaChunkZ);
+                        maxX = Math.max(maxX, chunkX + deltaChunkX);
+                        maxZ = Math.max(maxZ, chunkZ + deltaChunkZ);
+                        if ((++records & 4095) == 0) {
+                            output.write(batch);
+                            batch.close();
+                            batch = output.createWriteBatch();
+                        }
                     }
                 }
                 output.write(batch);
@@ -160,6 +237,9 @@ public final class ChunkTranslator {
         result.addProperty("blockEntities", blockEntities);
         result.addProperty("blockEntitiesRemoved", blockEntitiesRemoved);
         result.addProperty("blocksRemoved", blocksRemoved);
+        result.addProperty("deltaY", deltaY);
+        result.addProperty("subChunksIn", sectionsIn);
+        result.addProperty("subChunksOut", sectionsOut);
         JsonObject bounds = new JsonObject();
         bounds.addProperty("minChunkX", minX);
         bounds.addProperty("minChunkZ", minZ);
