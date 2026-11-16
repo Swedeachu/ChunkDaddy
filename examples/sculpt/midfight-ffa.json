@@ -1,0 +1,48 @@
+{
+  "note": "Midfight FFA: a flat 150x120 meadow inside barrier walls with a red concrete rim, ringed by mountains.",
+  "size": [250, 96, 220],
+  "origin": [0, 0, 0],
+  "ops": [
+    {"op": "heightfield", "note": "meadow floor and mountain ring", "base": 30, "floor": 18,
+     "amplitude": 62, "scale": 90, "octaves": 5, "ridged": true, "detail": 0.12, "seed": 4242,
+     "avoidRect": [47, 47, 202, 172], "rampStart": 2, "rampEnd": 32, "rampPower": 1.35, "footWobble": 3, "edgeFalloff": 16, "edgeDrop": 6,
+     "top": "grass_block", "soil": [["dirt", 5], ["coarse_dirt", 1]], "soilDepth": 3,
+     "stone": [["stone", 6], ["andesite", 3], ["tuff", 1]], "stoneNoise": 9,
+     "cliff": [["stone", 5], ["andesite", 4], ["tuff", 2], ["gravel", 1], ["cobblestone", 1]], "cliffNoise": 5,
+     "cliffSlope": 3, "snow": "snow_block", "snowLine": 74},
+
+    {"op": "surface_paint", "note": "arena floor patches", "rect": [50, 50, 199, 169], "match": ["grass_block"],
+     "noise": 7, "seed": 77,
+     "palette": [["grass_block", 12], ["moss_block", 1.6], ["coarse_dirt", 1.2], ["podzol", 0.8], ["rooted_dirt", 0.5]]},
+    {"op": "surface_paint", "note": "meadow outside the walls", "rect": [0, 0, 249, 219], "match": ["grass_block"],
+     "maxSlope": 1, "noise": 9, "seed": 79,
+     "palette": [["grass_block", 14], ["moss_block", 1], ["coarse_dirt", 1], ["podzol", 1]]},
+    {"op": "surface_paint", "note": "scree on steep faces", "match": ["grass_block"], "minSlope": 2, "chance": 0.5,
+     "seed": 80, "palette": [["andesite", 2], ["gravel", 1], ["stone", 2]]},
+
+    {"op": "scatter", "note": "boulders, first, so the forest grows round them", "count": 28, "minSpacing": 9, "seed": 92,
+     "avoid": [[48, 48, 201, 171]], "on": ["grass_block", "podzol", "moss_block", "coarse_dirt", "andesite", "gravel", "stone"],
+     "yMax": 56, "objects": [{"boulder": 2.4, "sink": 1, "palette": [["stone", 3], ["andesite", 3], ["mossy_cobblestone", 2], ["cobblestone", 1]]}]},
+    {"op": "scatter", "note": "low forest", "count": 115, "minSpacing": 6, "seed": 90, "on": ["grass_block", "podzol", "moss_block", "coarse_dirt"],
+     "maxSlope": 1, "yMax": 50, "avoid": [[46, 46, 203, 173]],
+     "objects": [{"tree": "oak", "weight": 4}, {"tree": "birch", "weight": 3}, {"tree": "bush", "weight": 2}]},
+    {"op": "scatter", "note": "high forest", "count": 100, "minSpacing": 5, "seed": 91, "on": ["grass_block", "podzol", "moss_block", "coarse_dirt"],
+     "maxSlope": 2, "yMin": 44, "yMax": 68, "avoid": [[46, 46, 203, 173]],
+     "objects": [{"tree": "spruce"}]},
+
+    {"op": "scatter", "note": "arena grass tufts", "rect": [50, 50, 199, 169], "density": 0.05, "seed": 93,
+     "on": ["grass_block", "moss_block"],
+     "objects": [{"block": "short_grass", "weight": 10}, {"block": "dandelion", "weight": 0.6},
+                 {"block": "poppy", "weight": 0.5}, {"block": "azure_bluet", "weight": 0.5}, {"block": "oxeye_daisy", "weight": 0.4}]},
+    {"op": "scatter", "note": "hillside grass and flowers", "density": 0.12, "seed": 94, "avoid": [[50, 50, 199, 169]],
+     "on": ["grass_block", "moss_block"], "maxSlope": 1,
+     "objects": [{"block": "short_grass", "weight": 10}, {"block": "fern", "weight": 3},
+                 {"block": "poppy", "weight": 0.6}, {"block": "dandelion", "weight": 0.7}, {"block": "cornflower", "weight": 0.5}]},
+
+    {"op": "box", "note": "red concrete rim in the floor under the walls", "min": [49, 30, 49], "max": [200, 30, 170], "walls": true, "block": "red_concrete"},
+    {"op": "box", "note": "barrier walls", "min": [49, 31, 49], "max": [200, 95, 170], "walls": true, "block": "barrier"},
+
+    {"op": "marker", "name": "centre", "pos": [125, 31, 110], "tags": ["centre"]},
+    {"op": "region", "name": "arena", "min": [50, 31, 50], "max": [199, 95, 169], "floorY": 30}
+  ]
+}

@@ -1,0 +1,652 @@
+{
+ "note": "Skywars FFA: one central island (radius 51) and a ring of ten spawn islands, all floating. Surface redstone ore is mined for absorption.",
+ "size": [
+  280,
+  140,
+  280
+ ],
+ "origin": [
+  0,
+  0,
+  0
+ ],
+ "ops": [
+  {
+   "op": "island",
+   "note": "centre island",
+   "name": "centre",
+   "center": [
+    140,
+    140
+   ],
+   "radius": 51,
+   "surfaceY": 108,
+   "depth": 30,
+   "spikes": 21,
+   "rim": 5,
+   "relief": 0.55,
+   "reliefScale": 27,
+   "plateau": 1,
+   "wobble": 0.14,
+   "seed": 101,
+   "top": "grass_block",
+   "soil": [
+    [
+     "dirt",
+     6
+    ],
+    [
+     "coarse_dirt",
+     2
+    ],
+    [
+     "rooted_dirt",
+     1
+    ]
+   ],
+   "stone": [
+    [
+     "stone",
+     6
+    ],
+    [
+     "andesite",
+     3
+    ],
+    [
+     "tuff",
+     2
+    ],
+    [
+     "gravel",
+     0.6
+    ]
+   ],
+   "strata": [
+    [
+     "stone",
+     3
+    ],
+    [
+     "andesite",
+     3
+    ],
+    [
+     "tuff",
+     2
+    ],
+    [
+     "dripstone_block",
+     1
+    ]
+   ],
+   "strataHeight": 3,
+   "underside": [
+    [
+     "andesite",
+     3
+    ],
+    [
+     "tuff",
+     3
+    ],
+    [
+     "stone",
+     2
+    ],
+    [
+     "cobblestone",
+     1
+    ],
+    [
+     "mossy_cobblestone",
+     1
+    ]
+   ]
+  },
+  {
+   "op": "ring",
+   "note": "spawn islands",
+   "center": [
+    140,
+    140
+   ],
+   "count": 10,
+   "radius": 108,
+   "angleOffset": 18,
+   "ops": [
+    {
+     "op": "island",
+     "name": "=f'spawn{i+1}'",
+     "center": [
+      "=x",
+      "=z"
+     ],
+     "radius": 22,
+     "surfaceY": 108,
+     "depth": 20,
+     "spikes": 18,
+     "rim": 4,
+     "relief": 0.3,
+     "reliefScale": 24,
+     "wobble": 0.14,
+     "seed": "=300 + i * 17",
+     "top": "grass_block",
+     "soil": [
+      [
+       "dirt",
+       6
+      ],
+      [
+       "coarse_dirt",
+       2
+      ]
+     ],
+     "stone": [
+      [
+       "stone",
+       6
+      ],
+      [
+       "andesite",
+       3
+      ],
+      [
+       "tuff",
+       2
+      ]
+     ],
+     "strata": [
+      [
+       "stone",
+       3
+      ],
+      [
+       "andesite",
+       3
+      ],
+      [
+       "tuff",
+       2
+      ],
+      [
+       "dripstone_block",
+       1
+      ]
+     ],
+     "strataHeight": 2.5,
+     "underside": [
+      [
+       "andesite",
+       3
+      ],
+      [
+       "tuff",
+       3
+      ],
+      [
+       "stone",
+       2
+      ],
+      [
+       "mossy_cobblestone",
+       1
+      ]
+     ]
+    }
+   ]
+  },
+  {
+   "op": "surface_paint",
+   "note": "worn patches",
+   "match": [
+    "grass_block"
+   ],
+   "noise": 7,
+   "seed": 7,
+   "palette": [
+    [
+     "grass_block",
+     14
+    ],
+    [
+     "coarse_dirt",
+     1.1
+    ],
+    [
+     "moss_block",
+     1.4
+    ],
+    [
+     "podzol",
+     0.7
+    ]
+   ]
+  },
+  {
+   "op": "ring",
+   "note": "centre trees, inner band (jittered, one per sector)",
+   "center": [
+    140,
+    140
+   ],
+   "count": 5,
+   "radius": 20,
+   "angleOffset": 10,
+   "angleJitter": 13,
+   "radiusJitter": 6,
+   "jitterSeed": 77,
+   "ops": [
+    {
+     "op": "scatter",
+     "rect": [
+      "=x-2",
+      "=z-2",
+      "=x+2",
+      "=z+2"
+     ],
+     "count": 1,
+     "seed": "=77+i",
+     "on": [
+      "grass_block",
+      "moss_block",
+      "coarse_dirt",
+      "podzol"
+     ],
+     "maxSlope": 1,
+     "objects": [
+      {
+       "tree": "=['oak','birch','bush','oak','birch'][i]"
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "op": "ring",
+   "note": "centre trees, outer band (jittered, between the inner ones)",
+   "center": [
+    140,
+    140
+   ],
+   "count": 5,
+   "radius": 38,
+   "angleOffset": 46,
+   "angleJitter": 13,
+   "radiusJitter": 6,
+   "jitterSeed": 78,
+   "ops": [
+    {
+     "op": "scatter",
+     "rect": [
+      "=x-2",
+      "=z-2",
+      "=x+2",
+      "=z+2"
+     ],
+     "count": 1,
+     "seed": "=78+i",
+     "on": [
+      "grass_block",
+      "moss_block",
+      "coarse_dirt",
+      "podzol"
+     ],
+     "maxSlope": 1,
+     "objects": [
+      {
+       "tree": "=['birch','oak','oak','bush','oak'][i]"
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "op": "scatter",
+   "note": "centre rocks",
+   "circle": [
+    140,
+    140,
+    45
+   ],
+   "count": 5,
+   "minSpacing": 16,
+   "seed": 12,
+   "on": [
+    "grass_block",
+    "moss_block",
+    "coarse_dirt"
+   ],
+   "objects": [
+    {
+     "boulder": 2.4,
+     "palette": [
+      [
+       "stone",
+       3
+      ],
+      [
+       "andesite",
+       3
+      ],
+      [
+       "mossy_cobblestone",
+       2
+      ],
+      [
+       "cobblestone",
+       1
+      ]
+     ]
+    }
+   ]
+  },
+  {
+   "op": "ring",
+   "note": "a tree on every spawn island",
+   "center": [
+    140,
+    140
+   ],
+   "count": 10,
+   "radius": 118,
+   "angleOffset": 18,
+   "ops": [
+    {
+     "op": "scatter",
+     "rect": [
+      "=x-3",
+      "=z-3",
+      "=x+3",
+      "=z+3"
+     ],
+     "count": 1,
+     "seed": "=900+i",
+     "on": [
+      "grass_block",
+      "moss_block",
+      "coarse_dirt",
+      "podzol"
+     ],
+     "objects": [
+      {
+       "tree": "=['oak','birch','spruce','oak','birch'][i % 5]"
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "op": "scatter",
+   "note": "redstone ore on the centre island",
+   "circle": [
+    140,
+    140,
+    47
+   ],
+   "count": 74,
+   "minSpacing": 6,
+   "seed": 41,
+   "on": [
+    "grass_block",
+    "moss_block",
+    "coarse_dirt",
+    "podzol"
+   ],
+   "maxSlope": 1,
+   "objects": [
+    {
+     "surface": "redstone_ore"
+    }
+   ]
+  },
+  {
+   "op": "ring",
+   "note": "redstone ore on each spawn island",
+   "center": [
+    140,
+    140
+   ],
+   "count": 10,
+   "radius": 108,
+   "angleOffset": 18,
+   "ops": [
+    {
+     "op": "scatter",
+     "circle": [
+      "=x",
+      "=z",
+      18
+     ],
+     "count": 12,
+     "minSpacing": 5,
+     "seed": "=500+i",
+     "on": [
+      "grass_block",
+      "moss_block",
+      "coarse_dirt",
+      "podzol"
+     ],
+     "maxSlope": 1,
+     "avoidCircles": [
+      [
+       235,
+       171,
+       3
+      ],
+      [
+       199,
+       221,
+       3
+      ],
+      [
+       140,
+       240,
+       3
+      ],
+      [
+       81,
+       221,
+       3
+      ],
+      [
+       45,
+       171,
+       3
+      ],
+      [
+       45,
+       109,
+       3
+      ],
+      [
+       81,
+       59,
+       3
+      ],
+      [
+       140,
+       40,
+       3
+      ],
+      [
+       199,
+       59,
+       3
+      ],
+      [
+       235,
+       109,
+       3
+      ]
+     ],
+     "objects": [
+      {
+       "surface": "redstone_ore"
+      }
+     ]
+    }
+   ]
+  },
+  {
+   "op": "scatter",
+   "note": "grass and flowers",
+   "density": 0.025,
+   "seed": 21,
+   "on": [
+    "grass_block",
+    "moss_block"
+   ],
+   "avoidCircles": [
+    [
+     235,
+     171,
+     3
+    ],
+    [
+     199,
+     221,
+     3
+    ],
+    [
+     140,
+     240,
+     3
+    ],
+    [
+     81,
+     221,
+     3
+    ],
+    [
+     45,
+     171,
+     3
+    ],
+    [
+     45,
+     109,
+     3
+    ],
+    [
+     81,
+     59,
+     3
+    ],
+    [
+     140,
+     40,
+     3
+    ],
+    [
+     199,
+     59,
+     3
+    ],
+    [
+     235,
+     109,
+     3
+    ]
+   ],
+   "objects": [
+    {
+     "block": "short_grass",
+     "weight": 10
+    },
+    {
+     "block": "fern",
+     "weight": 1.5
+    },
+    {
+     "block": "poppy",
+     "weight": 0.7
+    },
+    {
+     "block": "dandelion",
+     "weight": 0.8
+    },
+    {
+     "block": "azure_bluet",
+     "weight": 0.6
+    },
+    {
+     "block": "oxeye_daisy",
+     "weight": 0.5
+    },
+    {
+     "block": "cornflower",
+     "weight": 0.4
+    }
+   ]
+  },
+  {
+   "op": "hang",
+   "note": "roots under the soil",
+   "block": "hanging_roots",
+   "on": [
+    "dirt",
+    "coarse_dirt",
+    "rooted_dirt"
+   ],
+   "chance": 0.25,
+   "length": 1,
+   "seed": 31
+  },
+  {
+   "op": "ring",
+   "note": "spawn markers (inner side of each spawn island, facing the centre)",
+   "center": [
+    140,
+    140
+   ],
+   "count": 10,
+   "radius": 100,
+   "angleOffset": 18,
+   "ops": [
+    {
+     "op": "marker",
+     "name": "=f'spawn{i+1}'",
+     "pos": [
+      "=x",
+      0,
+      "=z"
+     ],
+     "snap": true,
+     "yaw": "=yaw",
+     "tags": [
+      "spawn"
+     ]
+    }
+   ]
+  },
+  {
+   "op": "marker",
+   "name": "centre",
+   "pos": [
+    140,
+    0,
+    140
+   ],
+   "snap": true,
+   "tags": [
+    "centre"
+   ]
+  },
+  {
+   "op": "region",
+   "name": "play",
+   "min": [
+    0,
+    0,
+    0
+   ],
+   "max": [
+    279,
+    139,
+    279
+   ],
+   "voidY": 40
+  }
+ ]
+}

@@ -84,6 +84,11 @@ them only where the base world has no columns. `read_signs` lists every sign wit
 and facing, so a designer can label a map with signs and a script or agent can place content
 from them. See [the worker CLI reference](docs/WORKER-CLI.md#editing).
 
+To build a new map from scratch, `scripts/sculpt.py` runs a JSON spec of terrain operations
+(islands, heightfields, boxes, scatter, rings) into a block volume, `sculpt.py render` draws it
+textured (including a player's-eye view), and `stamp_volume` writes it into a document for
+export and merge. See [Sculpting](docs/Sculpting.md).
+
 ## Releasing
 
 Double-click `scripts\release-windows.bat`, or run `bash scripts/release-linux.sh`. Each

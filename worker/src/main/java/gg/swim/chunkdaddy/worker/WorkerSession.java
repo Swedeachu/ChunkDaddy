@@ -104,6 +104,7 @@ public final class WorkerSession {
                 case "surface_raster" -> surfaceRaster(request);
                 case "render_map" -> renderMap(request);
                 case "terrain_volume" -> gg.swim.chunkdaddy.worker.terrain.TerrainVolume.dump(document(request), request);
+                case "stamp_volume" -> gg.swim.chunkdaddy.worker.terrain.StampVolume.apply(document(request), request);
                 case "replace_blocks" -> gg.swim.chunkdaddy.worker.terrain.BlockReplacement.apply(document(request), request, blockEntityResolver(document(request)));
                 case "terrain_displace" -> gg.swim.chunkdaddy.worker.terrain.TerrainDisplacement.apply(document(request), request, blockEntityResolver(document(request)));
                 case "survey_region" -> gg.swim.chunkdaddy.worker.document.RegionSurvey.inspect(document(request).snapshot());

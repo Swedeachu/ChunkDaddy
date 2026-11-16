@@ -206,6 +206,13 @@ the whole Y extent must fit the profile's block range or the request is refused 
 | `clear_selection` | `documentId` REQ, `add[]`/`subtract[]` — **deletes those chunks** |
 | `undo` / `redo` | `documentId` REQ |
 
+`stamp_volume` takes `documentId`, `directory` (a volume folder: `volume.json` and
+`blocks.u16.gz`, the format `terrain_volume` writes), optional `offsetX/Y/Z` added
+to the volume's own `minX/minY/minZ`, and `writeAir` (default false: palette index
+0, the volume's air, leaves the document's block alone). Columns that do not exist yet are
+created empty. It is one revision, so one `undo` takes it back. Volumes are built
+with `scripts/sculpt.py`; see [Sculpting](Sculpting.md).
+
 A **selection** is `add[]` and optional `subtract[]`, each an array of chunk rectangles.
 Selections always cover whole vertical columns.
 
