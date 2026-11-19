@@ -7,6 +7,10 @@ Set-Location $root
 [Net.ServicePointManager]::SecurityProtocol = [Net.SecurityProtocolType]::Tls12
 $env:UV_PYTHON_INSTALL_DIR = "$root\local\python"
 $env:UV_CACHE_DIR = "$root\local\uv-cache"
+# Astral's release mirror: GitHub answers anonymous release downloads from busy shared IPs
+# (CI runners) with 403 now and then. uv fetches its Python builds from here too.
+$astralMirror = 'https://releases.astral.sh/github'
+$env:UV_PYTHON_INSTALL_MIRROR = "$astralMirror/python-build-standalone/releases/download"
 New-Item -ItemType Directory -Force "$root\local" | Out-Null
 
 function Invoke-Checked {
@@ -44,7 +48,23 @@ Enter-VsDevShell -VsInstallPath $vs -SkipAutomaticLocation -DevCmdArguments '-ar
 
 if (-not (Test-Path "$root\local\uv\uv.exe")) {
     Write-Host 'Downloading the project-local Python bootstrap tool...'
-    Invoke-WebRequest -UseBasicParsing 'https://github.com/astral-sh/uv/releases/download/0.8.22/uv-x86_64-pc-windows-msvc.zip' -OutFile "$root\local\uv.zip"
+    $uvAsset = 'uv/releases/download/0.8.22/uv-x86_64-pc-windows-msvc.zip'
+    $uvSha256 = '5049375aa2a5162f132b2c1cb992e25d42d47d934cab8c174dbe6f60973dcc12'
+    $downloaded = $false
+    foreach ($base in @($astralMirror, 'https://github.com/astral-sh')) {
+        for ($attempt = 1; $attempt -le 5 -and -not $downloaded; $attempt++) {
+            try {
+                Invoke-WebRequest -UseBasicParsing "$base/$uvAsset" -OutFile "$root\local\uv.zip"
+                $downloaded = (Get-FileHash -Algorithm SHA256 "$root\local\uv.zip").Hash -eq $uvSha256
+                if (-not $downloaded) { Write-Host "uv from $base failed its checksum." }
+            } catch {
+                Write-Host "uv download from $base failed (attempt $attempt): $($_.Exception.Message)"
+                Start-Sleep -Seconds (3 * $attempt)
+            }
+        }
+        if ($downloaded) { break }
+    }
+    if (-not $downloaded) { throw 'uv download failed from every source.' }
     Expand-Archive "$root\local\uv.zip" -DestinationPath "$root\local\uv" -Force
 }
 $uv = "$root\local\uv\uv.exe"

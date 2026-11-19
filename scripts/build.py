@@ -11,6 +11,7 @@ import subprocess
 import sys
 import tarfile
 import tempfile
+import time
 import urllib.request
 import zipfile
 
@@ -38,12 +39,22 @@ def sha256(path: Path) -> str:
         return hashlib.file_digest(source, 'sha256').hexdigest()
 
 
-def download(url: str, destination: Path):
+def download(url: str, destination: Path, attempts: int = 5):
+    # GitHub answers anonymous release downloads from busy shared IPs (CI runners) with 403
+    # or 429 now and then, so every failure gets a few more tries before the build gives up.
     print(f'Downloading {url}', flush=True)
     partial = destination.with_suffix(destination.suffix + '.part')
-    with urllib.request.urlopen(url, timeout=120) as response, partial.open('wb') as out:
-        shutil.copyfileobj(response, out)
-    partial.replace(destination)
+    for attempt in range(1, attempts + 1):
+        try:
+            with urllib.request.urlopen(url, timeout=120) as response, partial.open('wb') as out:
+                shutil.copyfileobj(response, out)
+            partial.replace(destination)
+            return
+        except OSError as error:
+            if attempt == attempts:
+                raise
+            print(f'Download failed (attempt {attempt} of {attempts}): {error}; retrying', flush=True)
+            time.sleep(3 * attempt)
 
 
 def chunker():

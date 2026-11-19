@@ -27,15 +27,33 @@ if [[ "${CHUNKDADDY_SKIP_SYSTEM_DEPS:-0}" != 1 ]]; then
 fi
 export UV_PYTHON_INSTALL_DIR="$root/local/linux/python"
 export UV_CACHE_DIR="$root/local/linux/uv-cache"
+# Astral's release mirror: GitHub answers anonymous release downloads from busy shared IPs
+# (CI runners) with 403 now and then. uv fetches its Python builds from here too.
+astral_mirror=https://releases.astral.sh/github
+export UV_PYTHON_INSTALL_MIRROR="$astral_mirror/python-build-standalone/releases/download"
 mkdir -p "$root/local/linux/uv"
 case "$(uname -m)" in
-    x86_64) uv_arch=x86_64 ;;
-    aarch64) uv_arch=aarch64 ;;
+    x86_64) uv_arch=x86_64; uv_sha256=741ff1f5742c5a4a25d2f829e8395355e43f7a5ae2ebc6368e9ae2df0efb69cf ;;
+    aarch64) uv_arch=aarch64; uv_sha256=726b72a137fda33565143325f7d31c42cd30ff9ccdf067e00d124d37b4081cb2 ;;
     *) echo 'Supported Linux architectures: x86_64 and aarch64.' >&2; exit 1 ;;
 esac
 if [[ ! -x "$root/local/linux/uv/uv" ]]; then
-    curl --fail --location --retry 3 "https://github.com/astral-sh/uv/releases/download/0.8.22/uv-${uv_arch}-unknown-linux-gnu.tar.gz" -o "$root/local/linux/uv.tar.gz"
-    tar -xzf "$root/local/linux/uv.tar.gz" --strip-components=1 -C "$root/local/linux/uv"
+    uv_asset="uv/releases/download/0.8.22/uv-${uv_arch}-unknown-linux-gnu.tar.gz"
+    uv_archive="$root/local/linux/uv.tar.gz"
+    downloaded=0
+    for base in "$astral_mirror" https://github.com/astral-sh; do
+        # --retry-all-errors: a 403 or 429 from a throttled host is worth another try too.
+        if curl --fail --location --retry 5 --retry-all-errors --retry-delay 3 "$base/$uv_asset" -o "$uv_archive"             && echo "$uv_sha256  $uv_archive" | sha256sum --check --status; then
+            downloaded=1
+            break
+        fi
+        echo "Could not download uv from $base; trying the next source." >&2
+    done
+    if (( ! downloaded )); then
+        echo 'uv download failed from every source.' >&2
+        exit 1
+    fi
+    tar -xzf "$uv_archive" --strip-components=1 -C "$root/local/linux/uv"
 fi
 if [[ ! -x "$root/local/linux/tools/bin/python" ]]; then
     "$root/local/linux/uv/uv" venv --python 3.12.11 --managed-python "$root/local/linux/tools"
