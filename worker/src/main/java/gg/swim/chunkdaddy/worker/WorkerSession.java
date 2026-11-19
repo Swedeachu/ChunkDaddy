@@ -113,6 +113,7 @@ public final class WorkerSession {
                 case "inspect_bedrock_records" -> inspectBedrockRecords(request);
                 case "read_signs" -> readSigns(request);
                 case "translate_bedrock_chunks" -> translateBedrockChunks(request);
+                case "set_bedrock_blocks" -> setBedrockBlocks(request);
                 case "merge_bedrock_chunks" -> mergeBedrockChunks(request);
                 case "align_bedrock_region" -> alignBedrockRegion(id, request);
                 case "replace_bedrock_regions" -> replaceBedrockRegions(request);
@@ -187,7 +188,7 @@ public final class WorkerSession {
         schemas.add("sponge-v2");
         schemas.add("sponge-v3");
         result.add("schematicSchemas", schemas);
-        result.add("regionFeatures", Json.ofStrings(List.of("compose_regions", "relative-json", "shared-palettes", "surface_raster", "render_map", "terrain_volume", "terrain_displace", "replace_blocks", "survey_region", "verify_regions", "realign_block_entities", "inspect_bedrock_records", "merge_bedrock_chunks", "align_bedrock_region", "replace_bedrock_regions")));
+        result.add("regionFeatures", Json.ofStrings(List.of("compose_regions", "relative-json", "shared-palettes", "surface_raster", "render_map", "terrain_volume", "terrain_displace", "replace_blocks", "survey_region", "verify_regions", "realign_block_entities", "inspect_bedrock_records", "set_bedrock_blocks", "merge_bedrock_chunks", "align_bedrock_region", "replace_bedrock_regions")));
 
         JsonArray profiles = new JsonArray();
         for (TargetProfile profile : TargetProfile.all()) {
@@ -278,6 +279,15 @@ public final class WorkerSession {
                 Json.integer(request, "deltaY", 0),
                 Json.optionalChunkRect(request, "rectangle"),
                 removals);
+    }
+
+    /** Sets single blocks in a copy of a Bedrock world, rewriting only the sub-chunks that hold them. */
+    private JsonObject setBedrockBlocks(JsonObject request) throws Exception {
+        Path source = singleBedrockRoot(Json.string(request, "path"));
+        return gg.swim.chunkdaddy.worker.bedrock.BlockSetter.set(
+                source,
+                Path.of(Json.string(request, "destination")),
+                gg.swim.chunkdaddy.worker.bedrock.BlockSetter.parse(Json.array(request, "edits")));
     }
 
     private JsonObject mergeBedrockChunks(JsonObject request) throws Exception {

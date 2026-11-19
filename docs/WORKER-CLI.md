@@ -282,6 +282,38 @@ same rectangle:
 {"type":"replace_bedrock_regions","basePath":"/worlds/world","overlayPath":"/tmp/lifted","rectangles":[{"minChunkX":-102,"minChunkZ":-28,"maxChunkX":-50,"maxChunkZ":19}],"destination":"/worlds/world_lifted","mode":"DIRECTORY"}
 ```
 
+### Setting single blocks
+
+`set_bedrock_blocks` changes individual Overworld blocks in a copy of a Bedrock world without
+round-tripping it through Chunker: the whole world folder at `path` is copied to `destination`
+(which must not exist), and only the sub-chunk records holding the edited blocks are decoded,
+changed and re-encoded. Entities, block entities elsewhere, other dimensions, `level.dat` and
+every other record stay byte-for-byte. It is the tool for small repairs to a live map, such as
+shaving a decoration off a floor and patching the floor under it.
+
+| Field | Meaning |
+| --- | --- |
+| `path` REQ | extracted Bedrock world directory (the one holding `db/`); never written |
+| `destination` REQ | where the edited copy goes; must not exist |
+| `edits` REQ | `[{x, y, z, copyFrom: {x, y, z}}]` or `[{x, y, z, block: {name, states}}]` |
+
+`copyFrom` clones another position's block in every storage layer (so a waterlogged block
+keeps its water), with its block entity if it has one. Sources are read from the world as it
+was before any edit, so edits never chain. `block` writes a Bedrock block state: `name`
+(`minecraft:` is added if missing) and `states` (strings, numbers become ints, booleans
+bytes), e.g. `{"name": "air"}`; its other layers become air. A target's own block entity is
+always removed, a position may appear only once, and every position must be in a stored
+sub-chunk. Legacy checksum records (tag `0x3B`) of touched columns are dropped. The result
+reports `edits`, `blocksChanged` (layer 0 positions whose block actually changed),
+`subChunksRewritten`, `blockEntitiesRemoved` and `blockEntitiesCopied`.
+
+```jsonl
+{"type":"set_bedrock_blocks","path":"/scratch/world","destination":"/scratch/world-edited","edits":[{"x":-10,"y":197,"z":-20,"block":{"name":"air"}},{"x":-10,"y":196,"z":-20,"copyFrom":{"x":-12,"y":196,"z":-20}}]}
+```
+
+To apply the result to a live world, stop its server, back the world up, and replace its `db/`
+with the edited copy's.
+
 ### Reading label signs
 
 `read_signs` lists every sign in a Bedrock world's raw database, so a map

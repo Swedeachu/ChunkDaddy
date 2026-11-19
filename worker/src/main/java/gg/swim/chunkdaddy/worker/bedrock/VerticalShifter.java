@@ -32,10 +32,10 @@ public final class VerticalShifter {
     }
 
     /** One decoded storage layer of one sub-chunk: 4096 palette indices (x, z, y order) and the palette. */
-    private record Layer(int[] indices, List<CompoundTag> palette, String[] keys) {}
+    record Layer(int[] indices, List<CompoundTag> palette, String[] keys) {}
 
     /** A decoded sub-chunk: its version and its storage layers. */
-    private record Section(int version, List<Layer> layers) {}
+    record Section(int version, List<Layer> layers) {}
 
     /**
      * @param sections the column's sub-chunk values by signed sub-chunk index
@@ -148,7 +148,7 @@ public final class VerticalShifter {
         return out;
     }
 
-    private static CompoundTag air(int version) {
+    static CompoundTag air(int version) {
         CompoundTag tag = new CompoundTag();
         tag.put("name", "minecraft:air");
         tag.put("states", new CompoundTag());
@@ -160,11 +160,11 @@ public final class VerticalShifter {
         return "minecraft:air".equals(state.getString("name", ""));
     }
 
-    private static String identity(CompoundTag state) throws IOException {
+    static String identity(CompoundTag state) throws IOException {
         return Arrays.toString(Tag.writeBedrockNBT(state));
     }
 
-    private static Section decode(byte[] value) throws IOException {
+    static Section decode(byte[] value) throws IOException {
         ByteBuffer input = ByteBuffer.wrap(value).order(ByteOrder.LITTLE_ENDIAN);
         int version = input.get() & 0xFF;
         if (version != 8 && version != 9) {
@@ -215,7 +215,7 @@ public final class VerticalShifter {
         return new Section(version, out);
     }
 
-    private static byte[] encode(int version, int index, List<int[]> layerIndices, List<List<CompoundTag>> palettes) throws IOException {
+    static byte[] encode(int version, int index, List<int[]> layerIndices, List<List<CompoundTag>> palettes) throws IOException {
         List<byte[]> paletteBytes = new ArrayList<>();
         int size = 3;
         for (int layer = 0; layer < layerIndices.size(); layer++) {
