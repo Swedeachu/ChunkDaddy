@@ -1,3 +1,12 @@
+// The plugin portal no longer serves Maven Central's artifacts, so the shadow plugin's own
+// dependencies (commons-io, log4j, ant, ...) have to come from Maven Central directly.
+pluginManagement {
+    repositories {
+        gradlePluginPortal()
+        mavenCentral()
+    }
+}
+
 rootProject.name = "chunkdaddy-worker"
 
 dependencyResolutionManagement {
