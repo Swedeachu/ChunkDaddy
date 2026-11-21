@@ -37,6 +37,29 @@ stand-ins, `--fov`). `--textures` points at an unpacked vanilla resource pack's
 `textures/blocks`; without it blocks are flat colours. `--cut-below Y` drops what
 is under a height so a map does not read as a diorama.
 
+## 3D view (`view3d.py`)
+
+`scripts/view3d.py` looks at any volume directory (a sculpt volume or a `terrain_volume`
+dump) together with gameplay markers, to eyeball spawn/objective placements:
+
+```bash
+# N perspective PNGs orbiting a focus point, markers as coloured pillars with labels
+python scripts/view3d.py orbit <vol> --out shots/funfair --points points.json --map hive-maps/funfair \
+    --views 4 --pitch 45 --distance 120 [--focus x,y,z] [--start 45] [--size 960x540]
+# one self-contained interactive page (three.js r128 from cdnjs, inline orbit controls)
+python scripts/view3d.py html <vol> --out funfair.html --points points.json --map hive-maps/funfair
+```
+
+Marker and focus coordinates are world block coordinates (volume.json's `minX/minY/minZ`
+place the volume). `--points` reads a party/event `points.json` (teams' spawn/base/shop/
+upgrades, hill ring, FFA spawns, each team in its own colour); `--markers M.json` adds a
+plain list of `{"label","x","y","z","colour","radius"?}` (a `radius` draws a ring).
+`orbit` writes `<out>_<k>.png`, ray-traced with the `pov` renderer in flat average-texture
+colours; the focus defaults to the hill, else the volume centre. `html` keeps only blocks
+with an exposed face (fully enclosed ones are culled), draws them as instanced cubes, and
+shows labelled pillars, facing arrows and the hill ring; drag to orbit, right/shift-drag
+to pan, wheel to zoom, and toggle labels / FFA spawns in the corner panel.
+
 ## A spec
 
 ```json
